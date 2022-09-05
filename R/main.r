@@ -1,45 +1,29 @@
-library(R6)
-library(RCurl)
-library(lubridate) # for working with dates
-library(ggplot2) # for creating graphs
-library(scales) # to access breaks/formatting functions
-library(gridExtra) # for arranging plots
-library(grid) # for arranging plots
-library(dplyr) # for subsetting by season
-require(raster)
-require(sp)
-require(rgdal)
-require(rts)
-require(RCurl)
-require(dplyr)
-require(tidyr)
-library(gdalUtils)
 
-Resource <- R6Class(
+# Never use library() or require() in a R package!
+#' @export
+Resource <- R6::R6Class( # nolint
     classname = "resource",
     public = list(
         api_url = NULL,
         local_destination = NULL,
         output_destination = NULL,
         data = NULL,
-        local_file_type = NULL,
         initialize = function(is_online,
                               is_batch,
                               api_url,
                               local_destination,
                               local_file_type,
                               output_destination) {
-            self$is_online <- is_online
-            self$is_batch <- is_batch
+            private$is_online <- is_online
+            private$is_batch <- is_batch
             self$api_url <- api_url
             self$local_destination <- local_destination
             self$output_destination <- output_destination
+            private$local_file_type <- local_file_type
             # check file type, type should be either csv/shapefile/raster
             if (
                 is.null(
-                    self$check_local_file_type(
-                        local_file_type
-                    )
+                    private$check_local_file_type()
                 )
             ) {
                 stop(
@@ -50,7 +34,6 @@ Resource <- R6Class(
                     )
                 )
             }
-            self$local_file_type <- local_file_type
         },
         download = function() {
             if (!self$is_online) {
@@ -101,8 +84,9 @@ Resource <- R6Class(
     private = list(
         is_online = NULL,
         is_batch = NULL,
+        local_file_type = NULL,
         check_local_file_type = function() {
-            type <- switch(self$local_file_type,
+            type <- switch(private$local_file_type,
                 "csv" = "csv",
                 "shapefile" = "shapefile",
                 "raster" = "raster"
@@ -210,7 +194,7 @@ Resource <- R6Class(
     )
 )
 
-Rainfall <- R6Class(
+Rainfall <- R6::R6Class( # nolint
     classname = "Rainfall",
     inherit = Resource,
     public = list(
@@ -261,13 +245,13 @@ Rainfall <- R6Class(
             }
             invisible(self)
         },
-        load <- function(country_shapefile_resource,
-                         country_adm2_code_resource) {
+        load = function(country_shapefile_resource,
+                        country_adm2_code_resource) {
             self$stack(country_shapefile_resource)
             self$get_adm1_from_country(country_adm2_code_resource)
             invisible(self)
         },
-        clean <- function() {
+        clean = function() {
         },
         export = function(type, filename) {
             setwd(self$output_destination)
@@ -355,11 +339,16 @@ Rainfall <- R6Class(
     )
 )
 
-CountryShapeFile <- R6Class(
+CountryShapeFile <- R6::R6Class( # nolint
     "Country_Shapefile",
     inherit = Resource,
     public = list(
-        stacked_data = NULL,
+        is_online = NULL,
+        is_batch = NULL,
+        api_url = NULL,
+        local_destination = NULL,
+        local_file_type = NULL,
+        output_destination = NULL,
         initialize = function(is_online = FALSE,
                               is_batch = FALSE,
                               api_url = NULL,
@@ -382,12 +371,12 @@ CountryShapeFile <- R6Class(
 # Download rainfall data
 gha_shapefile <- CountryShapeFile$new(
     local_destination = "/Users/sepmein/Library/CloudStorage/OneDrive-共享的库-WorldHealthOrganization/GMP-SIR\ -\ Country_Analytical_Support/Countries/BDI/2020_SNT/Analysis/orig/data/shapefiles/Province_EPSG4326.shp",
+    output_destination = "."
 )
 
 rainfall <- Rainfall$new(
     local_destination = "",
     output_destination = "",
-    downloaded=TRUE
 )$
     download(
     target = "africa",
@@ -401,7 +390,7 @@ rainfall <- Rainfall$new(
     start_date = 2021.05,
     end_date = 2022.06
 )
-##rainfall$download()
+## rainfall$download()
 rainfall$
     load(
     country_shapefile_resource = gha_shapefile,
