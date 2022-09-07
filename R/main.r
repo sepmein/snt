@@ -125,7 +125,8 @@ Resource <- R6::R6Class( # nolint
         },
         load_local = function() {},
         load_local_batch = function() {},
-        download_single = function() {
+        download_single = function(api_url, select_files) {
+
         },
         download_batch = function(api_url, select_files) {
             download_method <- self$choose_download_method()
@@ -189,11 +190,28 @@ Resource <- R6::R6Class( # nolint
                 ignore.case = TRUE
             )) {
                 return("ftp")
+            } else if (startsWith(
+                self$api_url,
+                "https",
+                ignore.case = TRUE
+            )) {
+                return("https")
+            } else if (startsWith(
+                self$api_url,
+                "http",
+                ignore.case = TRUE
+            )) {
+                return("http")
             }
+        },
+        unzip = function(zip, to) {
+            # unzip downloaded file
+            return()
         }
     )
 )
 
+#' @export
 Rainfall <- R6::R6Class( # nolint
     classname = "Rainfall",
     inherit = Resource,
@@ -224,7 +242,7 @@ Rainfall <- R6::R6Class( # nolint
             if (target == "africa") {
                 super$download(
                     api_url = self$africa_api,
-                    select_files = self.select_files(
+                    select_files = self$select_files(
                         start_date,
                         end_date
                     )
@@ -339,6 +357,7 @@ Rainfall <- R6::R6Class( # nolint
     )
 )
 
+#' @export
 CountryShapeFile <- R6::R6Class( # nolint
     "Country_Shapefile",
     inherit = Resource,
@@ -367,35 +386,16 @@ CountryShapeFile <- R6::R6Class( # nolint
     )
 )
 
-# implementation
-# Download rainfall data
-gha_shapefile <- CountryShapeFile$new(
-    local_destination = "/Users/sepmein/Library/CloudStorage/OneDrive-共享的库-WorldHealthOrganization/GMP-SIR\ -\ Country_Analytical_Support/Countries/BDI/2020_SNT/Analysis/orig/data/shapefiles/Province_EPSG4326.shp",
-    output_destination = "."
+#' @export
+Prevalence <- R6::R6Class(
+    classname = "Prevalence",
+    inherit = Resource,
+    public = list(
+        api_url = NULL,
+        initialize = function(...) {
+            super$initialize(...)
+            self$api_url <- "https://malariaatlas.org/wp-content/uploads/2022-gbd2020/PfPR.zip"
+        },
+    ),
+    private = list()
 )
-
-rainfall <- Rainfall$new(
-    local_destination = "",
-    output_destination = "",
-)$
-    download(
-    target = "africa",
-    path_to_save = "./africa",
-    start_date = 2021.05,
-    end_date = 2022.06
-)$
-    download(
-    target = "global",
-    path_to_save = "./global",
-    start_date = 2021.05,
-    end_date = 2022.06
-)
-## rainfall$download()
-rainfall$
-    load(
-    country_shapefile_resource = gha_shapefile,
-    country_adm2_code_resource = "/Users/sepmein/Library/CloudStorage/OneDrive- 共享的库-WorldHealthOrganization/GMP-SIR\ -\ Country_Analytical_Support/Countries/BDI/2020_SNT/Analysis/orig/data/country_adm2_codes.dta"
-)
-rainfall$plot()
-# extract csv
-# summary
