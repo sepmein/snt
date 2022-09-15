@@ -1,6 +1,8 @@
 # snt
 Global Malaria Programme Data Working Pipelines
 
+Maintainer: Bea & Spencer
+
 ## OOP - object oriented programming
 
 
