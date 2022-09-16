@@ -727,7 +727,7 @@ PlasmodiumIndex <- R6::R6Class(
 #' @export
 PfPrevalence <- R6::R6Class(
   "PlasmodiunIndex",
-  inherit = Resource,
+  inherit = PlasmodiumIndex,
   public = list(
     api_url = NULL,
     is_online = NULL,
@@ -945,7 +945,7 @@ PvPrevalence <- R6::R6Class(
 #' @export
 PvIncidence <- R6::R6Class(
   "PVIncidence",
-  inherit = Resource,
+  inherit = PlasmodiumIndex,
   public = list(
     api_url = NULL,
     is_online = NULL,
