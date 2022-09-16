@@ -20,21 +20,16 @@ bdi_shapefile2 <- CountryShapeFile$new(local_destination = paste(
   sep = "/"
 ))
 # PfPR
-Pf_prevalence <- PfPrevalence$new(
-  local_destination = "",
-  output_destination = ""
-)
+pfpr <- PfPrevalence$new()$load_csv()
 # Pf_prevalence$download(destfile = "pfPR.zip")
 # added time when generated these data
-Pf_prevalence$load(country_shape_file = bdi_shapefile)$export()
+# Pf_prevalence$load(country_shape_file = bdi_shapefile)$export()
 # TODO
 # for each districts
 # shadows for ci
-Pf_prevalence$plot_line(
-
-)
+pfpr$plot_line()
 # generate a map per year for mean, lci & uci
-Pf_prevalence$plot_map(
+pfpr$plot_map(
   year = 2017,
   color = "Grean",
   categories = 6,
