@@ -719,6 +719,9 @@ PlasmodiumIndex <- R6::R6Class(
           ggplot2::labs(y = self$plasmodium_index, title = snt_country) +
           ggplot2::facet_wrap(~district, ncol = 5)
       }
+    },
+    plot_map = function(year, color, categories, label = True) {
+
     }
   )
 )
