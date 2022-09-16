@@ -8,22 +8,11 @@ set_country(
 
 bdi_shapefile <-
     CountryShapeFile$new()
-bdi_shapefile2 <- CountryShapeFile$new(local_destination = paste(
-  "Countries",
-  snt_country,
-  "2020_SNT",
-  "Analysis",
-  "orig",
-  "data",
-  "shapefiles",
-  "BDI_HFs_2013.shp",
-  sep = "/"
-))
 # PfPR
 pfpr <- PfPrevalence$new()$load_csv()
 # Pf_prevalence$download(destfile = "pfPR.zip")
 # added time when generated these data
-# Pf_prevalence$load(country_shape_file = bdi_shapefile)$export()
+# pfpr$load(country_shape_file = bdi_shapefile)$export()
 # TODO
 # for each districts
 # shadows for ci

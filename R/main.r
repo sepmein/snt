@@ -34,7 +34,7 @@ Resource <- R6::R6Class(
       # check file type, type should be either csv/shapefile/raster
       if (is.null(private$check_local_file_type())) {
         stop(
-          paste(
+          paste0(
             "Creating Resource Object: ",
             "Type of local file should be ",
             "csv, shapefile or raster"
@@ -44,7 +44,7 @@ Resource <- R6::R6Class(
     },
     download = function(select_files, destfile = NULL) {
       if (!(private$is_online)) {
-        stop(paste(
+        stop(paste0(
           "Resource calling download. ",
           "But it is not an online resource"
         ))
@@ -67,7 +67,7 @@ Resource <- R6::R6Class(
         private$load_csv()
       } else {
         stop(
-          paste(
+          paste0(
             "Resource loading raster files",
             ", but local_file_type is not raster/shapefile/csv."
           )
@@ -82,7 +82,7 @@ Resource <- R6::R6Class(
     },
     get_file_list = function() {
       # if (!(private$is_batch)) {
-      #   stop(paste(
+      #   stop(paste0(
       #     "Resource get_file_list. ",
       #     "Should be batch"
       #   ))
@@ -102,7 +102,7 @@ Resource <- R6::R6Class(
       # load resource data
       # resource data type should be raster
       if (!(private$local_file_type == "raster")) {
-        stop(paste(
+        stop(paste0(
           "CountryShapeFile stack with raster ",
           ", resource file type should be raster"
         ))
@@ -271,7 +271,7 @@ Resource <- R6::R6Class(
 
       } else if (download_method == "http") {
         # TODO add download method for http
-        stop(paste(
+        stop(paste0(
           "Resource download method ",
           "for http has not been implemented yet."
         ))
@@ -285,7 +285,7 @@ Resource <- R6::R6Class(
           file_ext <- dest_file_path
         } else {
           stop(
-            paste(
+            paste0(
               "File does not exists, ",
               "maybe download failed or user have removed file. ",
               "File path: ",
@@ -349,7 +349,7 @@ Resource <- R6::R6Class(
         }
       } else if (download_method == "http") {
         # TODO add download method for http
-        stop(paste(
+        stop(paste0(
           "Resource download method ",
           "for http has not been implemented yet."
         ))
@@ -437,7 +437,7 @@ Rainfall <- R6::R6Class(
           )
         )
       } else {
-        stop(paste(
+        stop(paste0(
           "Rainfall Resource Download, ",
           "target should be africa or global"
         ))
@@ -565,43 +565,43 @@ PlasmodiumIndex <- R6::R6Class(
         stop("Plasmodium should be pf or pv")
       }
       if (index == "prevalence") {
-        self$plasmodium_index <- paste(plasmodium, "PR")
+        self$plasmodium_index <- paste0(plasmodium, "PR")
       } else if (index == "incidence") {
-        self$plasmodium_index <- paste(plasmodium, "IC")
+        self$plasmodium_index <- paste0(plasmodium, "IC")
       } else if (index == "mortality") {
-        self$plasmodium_index <- paste(plasmodium, "MT")
+        self$plasmodium_index <- paste0(plasmodium, "MT")
       } else {
         stop("Index should be prevalence, incidence or mortality")
       }
       if (with_95CI) {
         local_destination <- list(
-          paste(
-            "Global/Data/MAP/2022_GBD_", plasmodium_index,
-            "_estimates/Raster Data/", plasmodium_index, "_lci"
+          paste0(
+            "Global/Data/MAP/2022_GBD_", self$plasmodium_index,
+            "_estimates/Raster Data/", self$plasmodium_index, "_lci"
           ),
-          paste(
-            "Global/Data/MAP/2022_GBD_", plasmodium_index,
-            "_estimates/Raster Data/", plasmodium_index, "_rmean"
+          paste0(
+            "Global/Data/MAP/2022_GBD_", self$plasmodium_index,
+            "_estimates/Raster Data/", self$plasmodium_index, "_rmean"
           ),
-          paste(
-            "Global/Data/MAP/2022_GBD_", plasmodium_index,
-            "_estimates/Raster Data/", plasmodium_index, "_uci"
+          paste0(
+            "Global/Data/MAP/2022_GBD_", self$plasmodium_index,
+            "_estimates/Raster Data/", self$plasmodium_index, "_uci"
           )
         )
       } else {
         local_destination <-
-          paste(
-            "Global/Data/MAP/2022_GBD_", plasmodium_index,
-            "_estimates/Raster Data/", plasmodium_index, "_rmean"
+          paste0(
+            "Global/Data/MAP/2022_GBD_", self$plasmodium_index,
+            "_estimates/Raster Data/", self$plasmodium_index, "_rmean"
           )
       }
       # TODO change the year 2020 to the current year
       output_destination <- file.path(
         "Countries", snt_country, "2020_SNT",
-        "Analysis", "output", plasmodium_index
+        "Analysis", "output", self$plasmodium_index
       )
       download_to <- file.path(
-        "Global", "Data", "MAP", "2022_GBD_", plasmodium_index, "_estimates"
+        "Global", "Data", "MAP", "2022_GBD_", self$plasmodium_index, "_estimates"
       )
       super$initialize(
         is_online,
@@ -613,9 +613,9 @@ PlasmodiumIndex <- R6::R6Class(
         download_to
       )
       self$api_url <-
-        paste(
+        paste0(
           "https://malariaatlas.org/wp-content/uploads/2022-gbd2020/",
-          plasmodium_index, ".zip"
+          self$plasmodium_index, ".zip"
         )
       self$with_95CI <- with_95CI
       invisible(self)
@@ -716,7 +716,7 @@ PlasmodiumIndex <- R6::R6Class(
             ),
             alpha = 0.2
           ) +
-          ggplot2::labs(x = self$plasmodium_index, title = snt_country) +
+          ggplot2::labs(y = self$plasmodium_index, title = snt_country) +
           ggplot2::facet_wrap(~district, ncol = 5)
       }
     }
@@ -741,13 +741,13 @@ PfPrevalence <- R6::R6Class(
                           local_file_type = "raster",
                           with_95CI = TRUE) {
       super$initialize(
-                          is_online = TRUE,
-                          is_batch = FALSE,
-                          api_url = NULL,
-                          local_file_type = "raster",
-                          with_95CI = TRUE,
-                          plasmodium = "pf",
-                          index = "prevalence"
+        is_online = TRUE,
+        is_batch = FALSE,
+        api_url = NULL,
+        local_file_type = "raster",
+        with_95CI = TRUE,
+        plasmodium = "pf",
+        index = "prevalence"
       )
       invisible(self)
     },
@@ -794,14 +794,15 @@ PfIncidence <- R6::R6Class(
                           is_batch = FALSE,
                           api_url = NULL,
                           local_file_type = "raster",
-                          with_95CI = TRUE) {      super$initialize(
-                          is_online = TRUE,
-                          is_batch = FALSE,
-                          api_url = NULL,
-                          local_file_type = "raster",
-                          with_95CI = TRUE,
-                          plasmodium = "pf",
-                          index = "incidence"
+                          with_95CI = TRUE) {
+      super$initialize(
+        is_online = TRUE,
+        is_batch = FALSE,
+        api_url = NULL,
+        local_file_type = "raster",
+        with_95CI = TRUE,
+        plasmodium = "pf",
+        index = "incidence"
       )
       invisible(self)
     },
@@ -849,14 +850,15 @@ PfMortality <- R6::R6Class(
                           is_batch = FALSE,
                           api_url = NULL,
                           local_file_type = "raster",
-                          with_95CI = TRUE) {      super$initialize(
-                          is_online = TRUE,
-                          is_batch = FALSE,
-                          api_url = NULL,
-                          local_file_type = "raster",
-                          with_95CI = TRUE,
-                          plasmodium = "pf",
-                          index = "mortality"
+                          with_95CI = TRUE) {
+      super$initialize(
+        is_online = TRUE,
+        is_batch = FALSE,
+        api_url = NULL,
+        local_file_type = "raster",
+        with_95CI = TRUE,
+        plasmodium = "pf",
+        index = "mortality"
       )
       invisible(self)
     },
@@ -903,14 +905,15 @@ PvPrevalence <- R6::R6Class(
                           is_batch = FALSE,
                           api_url = NULL,
                           local_file_type = "raster",
-                          with_95CI = TRUE) {      super$initialize(
-                          is_online = TRUE,
-                          is_batch = FALSE,
-                          api_url = NULL,
-                          local_file_type = "raster",
-                          with_95CI = TRUE,
-                          plasmodium = "pv",
-                          index = "prevalence"
+                          with_95CI = TRUE) {
+      super$initialize(
+        is_online = TRUE,
+        is_batch = FALSE,
+        api_url = NULL,
+        local_file_type = "raster",
+        with_95CI = TRUE,
+        plasmodium = "pv",
+        index = "prevalence"
       )
       invisible(self)
     },
@@ -957,14 +960,15 @@ PvIncidence <- R6::R6Class(
                           is_batch = FALSE,
                           api_url = NULL,
                           local_file_type = "raster",
-                          with_95CI = TRUE) {      super$initialize(
-                          is_online = TRUE,
-                          is_batch = FALSE,
-                          api_url = NULL,
-                          local_file_type = "raster",
-                          with_95CI = TRUE,
-                          plasmodium = "pf",
-                          index = "prevalence"
+                          with_95CI = TRUE) {
+      super$initialize(
+        is_online = TRUE,
+        is_batch = FALSE,
+        api_url = NULL,
+        local_file_type = "raster",
+        with_95CI = TRUE,
+        plasmodium = "pf",
+        index = "prevalence"
       )
       invisible(self)
     },
