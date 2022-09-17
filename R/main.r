@@ -75,10 +75,13 @@ Resource <- R6::R6Class(
       }
     },
     clean = function() {
+
     },
     export = function() {
+
     },
     plot_line = function() {
+
     },
     get_file_list = function() {
       # if (!(private$is_batch)) {
@@ -98,14 +101,17 @@ Resource <- R6::R6Class(
         return(file_list)
       }
     },
-    stack = function(country_resource, raster_to_dataframe_row_fn) {
+    stack = function(country_resource,
+                     raster_to_dataframe_row_fn) {
       # load resource data
       # resource data type should be raster
       if (!(private$local_file_type == "raster")) {
-        stop(paste0(
-          "CountryShapeFile stack with raster ",
-          ", resource file type should be raster"
-        ))
+        stop(
+          paste0(
+            "CountryShapeFile stack with raster ",
+            ", resource file type should be raster"
+          )
+        )
       }
       resource_file_list <- self$get_file_list()
       # for debug
@@ -122,12 +128,8 @@ Resource <- R6::R6Class(
           resource_rasters <- NULL
           # browser()
           for (j in seq_along(resource_file_list[[i]])) {
-            extracted <- raster::raster(
-              file.path(
-                self$local_destination[[i]],
-                resource_file_list[[i]][[j]]
-              )
-            )
+            extracted <- raster::raster(file.path(self$local_destination[[i]],
+                                                  resource_file_list[[i]][[j]]))
             if (is.null(resource_rasters)) {
               resource_rasters <- extracted
             } else {
@@ -137,19 +139,13 @@ Resource <- R6::R6Class(
           stacked <- NULL
           # Extract raster values to list object
           for (k in seq_along(resource_file_list[[i]])) {
-            extracted <- raster::raster(
-              file.path(
-                self$local_destination[[i]],
-                resource_file_list[[i]][[k]]
-              )
-            )
+            extracted <- raster::raster(file.path(self$local_destination[[i]],
+                                                  resource_file_list[[i]][[k]]))
             # browser()
-            long <- raster_to_dataframe_row_fn(
-              extracted,
-              country_shapefile,
-              resource_file_list[[i]][[k]],
-              index = i
-            )
+            long <- raster_to_dataframe_row_fn(extracted,
+                                               country_shapefile,
+                                               resource_file_list[[i]][[k]],
+                                               index = i)
             stacked <- rbind(stacked, long)
           }
 
@@ -191,7 +187,8 @@ Resource <- R6::R6Class(
     is_batch = NULL,
     local_file_type = NULL,
     check_local_file_type = function() {
-      type <- switch(private$local_file_type,
+      type <- switch(
+        private$local_file_type,
         "csv" = "csv",
         "shapefile" = "shapefile",
         "raster" = "raster"
@@ -214,10 +211,8 @@ Resource <- R6::R6Class(
             for (j in seq_along(raster_file_lists)) {
               target_raster <- raster::raster(raster_file_lists[j])
               raster_file_lists_stack <-
-                raster::stack(
-                  raster_file_lists_stack,
-                  target_raster
-                )
+                raster::stack(raster_file_lists_stack,
+                              target_raster)
             }
             # store the stacked raster files into self$data as a list
             self$data[[i]] <- raster_file_lists_stack
@@ -228,10 +223,8 @@ Resource <- R6::R6Class(
           for (i in seq_along(raster_file_lists)) {
             target_raster <- raster::raster(raster_file_lists[i])
             raster_file_lists_stack <-
-              raster::stack(
-                raster_file_lists_stack,
-                target_raster
-              )
+              raster::stack(raster_file_lists_stack,
+                            target_raster)
           }
           self$data <- raster_file_lists_stack
         }
@@ -260,10 +253,8 @@ Resource <- R6::R6Class(
     download_single = function(api_url, select_files, destfile = NULL) {
       download_method <- private$choose_download_method(api_url)
       print(download_method)
-      dest_file_path <- file.path(
-        self$download_to,
-        destfile
-      )
+      dest_file_path <- file.path(self$download_to,
+                                  destfile)
       if (missing(api_url)) {
         api_url <- self$api_url
       }
@@ -277,9 +268,8 @@ Resource <- R6::R6Class(
         ))
       } else if (download_method == "https") {
         download.file(api_url,
-          dest_file_path,
-          mode = "wb"
-        )
+                      dest_file_path,
+                      mode = "wb")
         # get file ext
         if (file.exists(dest_file_path)) {
           file_ext <- dest_file_path
@@ -296,10 +286,8 @@ Resource <- R6::R6Class(
 
         # if zip file
         if (file_ext == "zip") {
-          private$unzip(
-            dest_file_path,
-            exdir = self$download_to
-          )
+          private$unzip(dest_file_path,
+                        exdir = self$download_to)
         }
       }
     },
@@ -312,14 +300,12 @@ Resource <- R6::R6Class(
       if (download_method == "ftp") {
         # get files to be download
         filenames <- RCurl::getURL(api_url,
-          ftp.use.epsv = FALSE,
-          dirlistonly = TRUE
-        )
+                                   ftp.use.epsv = FALSE,
+                                   dirlistonly = TRUE)
         # Deal with newlines as \n or \r\n. (BDR)
         filenames <- paste(api_url,
-          strsplit(filenames, "\r*\n")[[1]],
-          sep = ""
-        )
+                           strsplit(filenames, "\r*\n")[[1]],
+                           sep = "")
 
         if (!is.null(select_files)) {
           filenames <- select_files(filenames)
@@ -329,18 +315,15 @@ Resource <- R6::R6Class(
         # returned in the directory listing and in filenames will disappear
         # when we go back to get them.
         # So we use a try() in the call getURL.
-        contents <- sapply(
-          filenames,
-          function(x) {
-            try(RCurl::getBinaryURL(x, curl = con))
-          }
-        )
+        contents <- sapply(filenames,
+                           function(x) {
+                             try(RCurl::getBinaryURL(x, curl = con))
+                           })
         names(contents) <- filenames[seq_along(contents)]
 
         for (j in seq_along(contents)) {
           writeBin(as.vector(contents[[j]]),
-            con = basename(filenames[j])
-          )
+                   con = basename(filenames[j]))
         }
 
         files <- str_sub(filenames, end = -1)
@@ -355,32 +338,23 @@ Resource <- R6::R6Class(
         ))
       } else if (download_method == "https") {
         download.file(api_url,
-          file.path(self$download_to, destfile),
-          mode = "wb"
-        )
+                      file.path(self$download_to, destfile),
+                      mode = "wb")
         # if zip file
-        private$unzip(
-          file.path(self$download_to, destfile),
-          exdir = self$local_destination
-        )
+        private$unzip(file.path(self$download_to, destfile),
+                      exdir = self$local_destination)
       }
     },
     choose_download_method = function(api_url) {
       # Download FTP
-      if (startsWith(
-        api_url,
-        "ftp"
-      )) {
+      if (startsWith(api_url,
+                     "ftp")) {
         return("ftp")
-      } else if (startsWith(
-        api_url,
-        "https"
-      )) {
+      } else if (startsWith(api_url,
+                            "https")) {
         return("https")
-      } else if (startsWith(
-        api_url,
-        "http"
-      )) {
+      } else if (startsWith(api_url,
+                            "http")) {
         return("http")
       }
     },
@@ -423,19 +397,13 @@ Rainfall <- R6::R6Class(
       if (target == "africa") {
         super$download_batch(
           api_url = self$africa_api,
-          select_files = self$select_files(
-            start_date,
-            end_date
-          )
+          select_files = self$select_files(start_date,
+                                           end_date)
         )
       } else if (target == "global") {
-        super$download_batch(
-          api_url = self$africa_api,
-          select_files = self.select_files(
-            start_date,
-            end_date
-          )
-        )
+        super$download_batch(api_url = self$africa_api,
+                             select_files = self.select_files(start_date,
+                                                              end_date))
       } else {
         stop(paste0(
           "Rainfall Resource Download, ",
@@ -461,11 +429,9 @@ Rainfall <- R6::R6Class(
     },
     plot = function() {
       ggplot(self$data) +
-        geom_line(aes(
-          x = date,
-          y = rain
-        )) +
-        facet_wrap(~adm1)
+        geom_line(aes(x = date,
+                      y = rain)) +
+        facet_wrap(~ adm1)
       invisible(self)
     }
   ),
@@ -485,15 +451,13 @@ Rainfall <- R6::R6Class(
       self$data <- rename(self$data, amd2 = district)
       self$data <- rename(self$data, rain = unlistrmeans)
       self$data$date <- str_c(self$data$year,
-        str_pad(self$data$month, 2, pad = 0),
-        sep = "-"
-      )
+                              str_pad(self$data$month, 2, pad = 0),
+                              sep = "-")
       self$data$date <- as.Date(sef.data$date)
       country_adm2 <- read_dta(path_to_country_adm2)
       rainfall_data_with_adm1 <- merge(self$data,
-        country_adm2,
-        by = "adm2"
-      )
+                                       country_adm2,
+                                       by = "adm2")
     }
   )
 )
@@ -576,33 +540,50 @@ PlasmodiumIndex <- R6::R6Class(
       if (with_95CI) {
         local_destination <- list(
           paste0(
-            "Global/Data/MAP/2022_GBD_", self$plasmodium_index,
-            "_estimates/Raster Data/", self$plasmodium_index, "_lci"
+            "Global/Data/MAP/2022_GBD_",
+            self$plasmodium_index,
+            "_estimates/Raster Data/",
+            self$plasmodium_index,
+            "_lci"
           ),
           paste0(
-            "Global/Data/MAP/2022_GBD_", self$plasmodium_index,
-            "_estimates/Raster Data/", self$plasmodium_index, "_rmean"
+            "Global/Data/MAP/2022_GBD_",
+            self$plasmodium_index,
+            "_estimates/Raster Data/",
+            self$plasmodium_index,
+            "_rmean"
           ),
           paste0(
-            "Global/Data/MAP/2022_GBD_", self$plasmodium_index,
-            "_estimates/Raster Data/", self$plasmodium_index, "_uci"
+            "Global/Data/MAP/2022_GBD_",
+            self$plasmodium_index,
+            "_estimates/Raster Data/",
+            self$plasmodium_index,
+            "_uci"
           )
         )
       } else {
         local_destination <-
           paste0(
-            "Global/Data/MAP/2022_GBD_", self$plasmodium_index,
-            "_estimates/Raster Data/", self$plasmodium_index, "_rmean"
+            "Global/Data/MAP/2022_GBD_",
+            self$plasmodium_index,
+            "_estimates/Raster Data/",
+            self$plasmodium_index,
+            "_rmean"
           )
       }
       # TODO change the year 2020 to the current year
-      output_destination <- file.path(
-        "Countries", snt_country, "2020_SNT",
-        "Analysis", "output", self$plasmodium_index
-      )
-      download_to <- file.path(
-        "Global", "Data", "MAP", "2022_GBD_", self$plasmodium_index, "_estimates"
-      )
+      output_destination <- file.path("Countries",
+                                      snt_country,
+                                      "2020_SNT",
+                                      "Analysis",
+                                      "output",
+                                      self$plasmodium_index)
+      download_to <- file.path("Global",
+                               "Data",
+                               "MAP",
+                               "2022_GBD_",
+                               self$plasmodium_index,
+                               "_estimates")
       super$initialize(
         is_online,
         is_batch,
@@ -615,7 +596,8 @@ PlasmodiumIndex <- R6::R6Class(
       self$api_url <-
         paste0(
           "https://malariaatlas.org/wp-content/uploads/2022-gbd2020/",
-          self$plasmodium_index, ".zip"
+          self$plasmodium_index,
+          ".zip"
         )
       self$with_95CI <- with_95CI
       invisible(self)
@@ -639,89 +621,142 @@ PlasmodiumIndex <- R6::R6Class(
         for (i in seq_along(self$local_destination)) {
           if (i == 1) {
             # LCI
-            write.csv(
-              self$data[[i]],
-              file = file.path(
-                self$output_destination,
-                paste(self$plasmodium_index,
-                  snt_country, "LCI.csv",
-                  sep = "_"
-                )
-              )
-            )
+            write.csv(self$data[[i]],
+                      file = file.path(
+                        self$output_destination,
+                        paste(self$plasmodium_index,
+                              snt_country, "LCI.csv",
+                              sep = "_")
+                      ))
           } else if (i == 2) {
             # rMean
-            write.csv(
-              self$data[[i]],
-              file = file.path(
-                self$output_destination,
-                paste(self$plasmodium_index,
-                  snt_country, "MEAN.csv",
-                  sep = "_"
-                )
-              )
-            )
+            write.csv(self$data[[i]],
+                      file = file.path(
+                        self$output_destination,
+                        paste(self$plasmodium_index,
+                              snt_country, "MEAN.csv",
+                              sep = "_")
+                      ))
           } else if (i == 3) {
             # UCI
-            write.csv(
-              self$data[[i]],
-              file = file.path(
-                self$output_destination,
-                paste(self$plasmodium_index,
-                  snt_country, "UCI.csv",
-                  sep = "_"
-                )
-              )
-            )
+            write.csv(self$data[[i]],
+                      file = file.path(
+                        self$output_destination,
+                        paste(self$plasmodium_index,
+                              snt_country, "UCI.csv",
+                              sep = "_")
+                      ))
           }
         }
       } else {
-        write.csv(
-          self$data,
-          file = file.path(
-            self$output_destination,
-            paste(self$plasmodium_index,
-              snt_country,
-              ".csv",
-              sep = "_"
-            )
-          )
-        )
+        write.csv(self$data,
+                  file = file.path(
+                    self$output_destination,
+                    paste(self$plasmodium_index,
+                          snt_country,
+                          ".csv",
+                          sep = "_")
+                  ))
       }
       invisible(self)
     },
     load_csv = function() {
-      self$data <- read.csv(
-        file = file.path(
-          self$output_destination,
-          paste(self$plasmodium_index,
-            snt_country,
-            ".csv",
-            sep = "_"
-          )
-        )
-      )
+      self$data <- read.csv(file = file.path(
+        self$output_destination,
+        paste(self$plasmodium_index,
+              snt_country,
+              ".csv",
+              sep = "_")
+      ))
     },
     plot_line = function() {
       # if with uncertainty
       # self$data will be a list
       if (self$with_95CI) {
         ggplot2::ggplot(self$data) +
-          ggplot2::geom_line(
-            ggplot2::aes(y = MEAN, x = year)
-          ) +
-          ggplot2::geom_ribbon(
-            ggplot2::aes(
-              ymin = LCI, ymax = UCI, y = MEAN, x = year
-            ),
-            alpha = 0.2
-          ) +
+          ggplot2::geom_line(ggplot2::aes(y = MEAN, x = year)) +
+          ggplot2::geom_ribbon(ggplot2::aes(
+            ymin = LCI,
+            ymax = UCI,
+            y = MEAN,
+            x = year
+          ),
+          alpha = 0.2) +
           ggplot2::labs(y = self$plasmodium_index, title = snt_country) +
-          ggplot2::facet_wrap(~district, ncol = 5)
+          ggplot2::facet_wrap(~ district, ncol = 5)
       }
     },
-    plot_map = function(year, color, categories, label = True) {
-
+    plot_map = function(year = NULL,
+                        palette = "YlGn",
+                        reverse_color_order = FALSE,
+                        categories = 5,
+                        label = TRUE,
+                        district_shapefile = NULL,
+                        province_shapefile = NULL,
+                        province_border_thickness = 4) {
+      if (missing(district_shapefile)) {
+        district_shapefile <- file.path(
+          "Countries",
+          snt_country,
+          "2020_SNT/Analysis/orig/data/shapefiles/District_sante_EPSG4326.shp"
+        )
+      }
+      if (missing(province_shapefile)) {
+        province_shapefile <- file.path(
+          "Countries",
+          snt_country,
+          "2020_SNT/Analysis/orig/data/shapefiles/Province_EPSG4326.shp"
+        )
+      }
+      # merge shape file with data
+      district_shapefile <- sf::st_read(district_shapefile)
+      province_shapefile <- sf::st_read(province_shapefile)
+      my_data <-
+        dplyr::rename(self$data, !!self$plasmodium_index := MEAN)
+      district_shapefile <-
+        dplyr::rename(district_shapefile, district = NOM_DS)
+      if (missing(year)) {
+        # Join map and data
+        map_and_data <-
+          dplyr::inner_join(district_shapefile, my_data)
+        tmap::tmap_mode("plot")
+        map <- tmap::tm_shape(map_and_data) +
+          tmap::tm_borders() +
+          tmap::tm_fill(
+            self$plasmodium_index,
+            n = categories,
+            palette = rev(grDevices::hcl.colors(categories,
+                                                palette))
+          ) +
+          tmap::tm_facets(by = "year")+
+          tmap::tm_shape(province_shapefile) +
+          tmap::tm_borders(lwd = province_border_thickness/1.5) +
+          tmap::tm_layout(title = snt_country)
+        print(map)
+      } else {
+        my_data <- dplyr::filter(my_data, year == year)
+        map_and_data <-
+          dplyr::inner_join(district_shapefile, my_data)
+        # plot specified year
+        tmap::tmap_mode("view")
+        map  <- tmap::tm_shape(map_and_data) +
+          tmap::tm_borders() +
+          tmap::tm_fill(
+            self$plasmodium_index,
+            n = categories,
+            palette = rev(grDevices::hcl.colors(categories,
+                                                palette))
+          ) +
+          tmap::tm_shape(province_shapefile) +
+          tmap::tm_borders(lwd = province_border_thickness) +
+          tmap::tm_layout(title = paste(snt_country, year, sep = "-"))
+        print(map)
+      }
+      # tmap::tmap_last()
+      # if (label) {
+      #   # TODO add label feature
+      #   print(label)
+      # }
     }
   )
 )

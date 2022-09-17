@@ -1,29 +1,22 @@
 library(snt)
 
 # add year to this function
-set_country(
-    root_folder = "/Users/sepmein/dev/working/snt-data",
-    country = "BDI"
-)
-
+set_country(root_folder = "/Users/sepmein/dev/working/snt-data",
+            country = "BDI")
 bdi_shapefile <-
-    CountryShapeFile$new()
+  CountryShapeFile$new()
+
 # PfPR
-pfpr <- PfPrevalence$new()$load_csv()
+pfpr <- PfPrevalence$new()
 # Pf_prevalence$download(destfile = "pfPR.zip")
 # added time when generated these data
 # pfpr$load(country_shape_file = bdi_shapefile)$export()
-# TODO
-# for each districts
-# shadows for ci
+pfpr$load_csv()
 pfpr$plot_line()
 # generate a map per year for mean, lci & uci
-pfpr$plot_map(
-  year = 2017,
-  color = "Grean",
-  categories = 6,
-  labels = TRUE/FALSE
-)
+pfpr$plot_map(year = 2013, categories = 6)
+# plot all years
+pfpr$plot_map(categories = 8)
 
 # PfIC
 Pf_incidence <- PfIncidence$new()
