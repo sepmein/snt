@@ -1039,3 +1039,30 @@ PvIncidence <- R6::R6Class(
   )
 )
 
+#' @export
+smart_get_file_list <- function(smart_path) {
+  # detect country code
+  # find special character in special path parameter
+  # loop through file path in the path.list
+  # return valid file
+  pattern  <- "(\\*yyyy\\*)"
+  detected_pattern  <- stringr::str_detect(smart_path,pattern) 
+  if (!(detected_pattern)) {
+    stop("path do not contain pattern, please modify the year into *yyyy*")
+  }
+  target_years  <- 1980:2030
+  result_file_list  <- c()
+  for (i in seq_along(target_years)) {
+    replacement_year <- as.character(target_years[i])
+    target_file_path <- file.path(
+      stringr::str_replace(
+        smart_path,
+        pattern, replacement_year
+      )
+    )
+    if (file.exists(target_file_path)) {
+      result_file_list <- append(result_file_list, target_file_path)
+    }
+  }
+  return(result_file_list)
+}
