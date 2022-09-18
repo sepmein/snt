@@ -107,7 +107,7 @@ Resource <- R6::R6Class(
       # resource data type should be raster
       if (!(private$local_file_type == "raster")) {
         stop(
-          paste0(
+          paste(
             "CountryShapeFile stack with raster ",
             ", resource file type should be raster"
           )
@@ -126,7 +126,6 @@ Resource <- R6::R6Class(
         self$data <- list()
         for (i in seq_along(self$local_destination)) {
           resource_rasters <- NULL
-          # browser()
           for (j in seq_along(resource_file_list[[i]])) {
             extracted <- raster::raster(file.path(self$local_destination[[i]],
                                                   resource_file_list[[i]][[j]]))
@@ -141,7 +140,6 @@ Resource <- R6::R6Class(
           for (k in seq_along(resource_file_list[[i]])) {
             extracted <- raster::raster(file.path(self$local_destination[[i]],
                                                   resource_file_list[[i]][[k]]))
-            # browser()
             long <- raster_to_dataframe_row_fn(extracted,
                                                country_shapefile,
                                                resource_file_list[[i]][[k]],
@@ -530,10 +528,13 @@ PlasmodiumIndex <- R6::R6Class(
       }
       if (index == "prevalence") {
         self$plasmodium_index <- paste0(plasmodium, "PR")
+        plasmodium_index_local_destination <- paste0(plasmodium, "PR")
       } else if (index == "incidence") {
         self$plasmodium_index <- paste0(plasmodium, "IC")
+        plasmodium_index_local_destination <- paste0(plasmodium, "_", index, "_rate")
       } else if (index == "mortality") {
         self$plasmodium_index <- paste0(plasmodium, "MT")
+        plasmodium_index_local_destination <- paste0(plasmodium, "_", index, "_rate")
       } else {
         stop("Index should be prevalence, incidence or mortality")
       }
@@ -543,21 +544,21 @@ PlasmodiumIndex <- R6::R6Class(
             "Global/Data/MAP/2022_GBD_",
             self$plasmodium_index,
             "_estimates/Raster Data/",
-            self$plasmodium_index,
+            plasmodium_index_local_destination,
             "_lci"
           ),
           paste0(
             "Global/Data/MAP/2022_GBD_",
             self$plasmodium_index,
             "_estimates/Raster Data/",
-            self$plasmodium_index,
+            plasmodium_index_local_destination,
             "_rmean"
           ),
           paste0(
             "Global/Data/MAP/2022_GBD_",
             self$plasmodium_index,
             "_estimates/Raster Data/",
-            self$plasmodium_index,
+            plasmodium_index_local_destination,
             "_uci"
           )
         )
@@ -567,7 +568,7 @@ PlasmodiumIndex <- R6::R6Class(
             "Global/Data/MAP/2022_GBD_",
             self$plasmodium_index,
             "_estimates/Raster Data/",
-            self$plasmodium_index,
+            plasmodium_index_local_destination,
             "_rmean"
           )
       }
@@ -862,10 +863,10 @@ PfIncidence <- R6::R6Class(
         # PfPR_UCI_Global_admin0_2000.tif
         # PfPR_LCI_Global_admin0_2000.tif
         colnames(long)[1] <- substr(long$name, 16, 18)
-        long$year <- as.numeric(substr(long$name, 24, 27))
+        long$year <- as.numeric(substr(long$name, 34, 37))
       } else if (index == 2) {
         colnames(long)[1] <- "MEAN"
-        long$year <- as.numeric(substr(long$name, 26, 29))
+        long$year <- as.numeric(substr(long$name, 39, 42))
       }
       return(long)
     }
@@ -917,10 +918,10 @@ PfMortality <- R6::R6Class(
         # PfMT_UCI_Global_admin0_2000.tif
         # PfMT_LCI_Global_admin0_2000.tif
         colnames(long)[1] <- substr(long$name, 16, 18)
-        long$year <- as.numeric(substr(long$name, 24, 27))
+        long$year <- as.numeric(substr(long$name, 34, 37))
       } else if (index == 2) {
         colnames(long)[1] <- "MEAN"
-        long$year <- as.numeric(substr(long$name, 26, 29))
+        long$year <- as.numeric(substr(long$name, 39, 42))
       }
       return(long)
     }
@@ -1028,12 +1029,13 @@ PvIncidence <- R6::R6Class(
         # PvPR_UCI_Global_admin0_2000.tif
         # PvPR_LCI_Global_admin0_2000.tif
         colnames(long)[1] <- substr(long$name, 16, 18)
-        long$year <- as.numeric(substr(long$name, 24, 27))
+        long$year <- as.numeric(substr(long$name, 34, 37))
       } else if (index == 2) {
         colnames(long)[1] <- "MEAN"
-        long$year <- as.numeric(substr(long$name, 26, 29))
+        long$year <- as.numeric(substr(long$name, 39, 42))
       }
       return(long)
     }
   )
 )
+
