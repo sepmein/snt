@@ -24,3 +24,4 @@ BDI,Provinces,adm1
 BDI,Districts,adm2_ds
 BDI,Centresdesanté,hfname
 BDI,Village,adm3
+BDI,Aires de responsailité,hfca

@@ -1142,11 +1142,9 @@ smart_read_excel <- function(smart_path, skip = 0) {
       ~ readxl::read_excel(.x, skip = 2)
     )
   # create a nested tibble
-  b <- tibble::tibble(
+  result <- tibble::tibble(
     year = file_list$years,
     data = data_tables
   )
-  result <- b %>%
-    tidyr::unnest(data)
   return(result)
 }
