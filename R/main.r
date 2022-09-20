@@ -106,12 +106,10 @@ Resource <- R6::R6Class(
       # load resource data
       # resource data type should be raster
       if (!(private$local_file_type == "raster")) {
-        stop(
-          paste0(
-            "CountryShapeFile stack with raster ",
-            ", resource file type should be raster"
-          )
-        )
+        stop(paste(
+          "CountryShapeFile stack with raster ",
+          ", resource file type should be raster"
+        ))
       }
       resource_file_list <- self$get_file_list()
       # for debug
@@ -126,7 +124,6 @@ Resource <- R6::R6Class(
         self$data <- list()
         for (i in seq_along(self$local_destination)) {
           resource_rasters <- NULL
-          # browser()
           for (j in seq_along(resource_file_list[[i]])) {
             extracted <- raster::raster(file.path(self$local_destination[[i]],
                                                   resource_file_list[[i]][[j]]))
@@ -141,7 +138,6 @@ Resource <- R6::R6Class(
           for (k in seq_along(resource_file_list[[i]])) {
             extracted <- raster::raster(file.path(self$local_destination[[i]],
                                                   resource_file_list[[i]][[k]]))
-            # browser()
             long <- raster_to_dataframe_row_fn(extracted,
                                                country_shapefile,
                                                resource_file_list[[i]][[k]],
@@ -395,11 +391,9 @@ Rainfall <- R6::R6Class(
                         end_date) {
       setwd(path_to_save)
       if (target == "africa") {
-        super$download_batch(
-          api_url = self$africa_api,
-          select_files = self$select_files(start_date,
-                                           end_date)
-        )
+        super$download_batch(api_url = self$africa_api,
+                             select_files <- self$select_files(start_date,
+                                                               end_date))
       } else if (target == "global") {
         super$download_batch(api_url = self$africa_api,
                              select_files = self.select_files(start_date,
@@ -431,7 +425,7 @@ Rainfall <- R6::R6Class(
       ggplot(self$data) +
         geom_line(aes(x = date,
                       y = rain)) +
-        facet_wrap(~ adm1)
+        facet_wrap( ~ adm1)
       invisible(self)
     }
   ),
@@ -530,10 +524,16 @@ PlasmodiumIndex <- R6::R6Class(
       }
       if (index == "prevalence") {
         self$plasmodium_index <- paste0(plasmodium, "PR")
+        plasmodium_index_local_destination <-
+          paste0(plasmodium, "PR")
       } else if (index == "incidence") {
         self$plasmodium_index <- paste0(plasmodium, "IC")
+        plasmodium_index_local_destination <-
+          paste0(plasmodium, "_", index, "_rate")
       } else if (index == "mortality") {
         self$plasmodium_index <- paste0(plasmodium, "MT")
+        plasmodium_index_local_destination <-
+          paste0(plasmodium, "_", index, "_rate")
       } else {
         stop("Index should be prevalence, incidence or mortality")
       }
@@ -543,21 +543,21 @@ PlasmodiumIndex <- R6::R6Class(
             "Global/Data/MAP/2022_GBD_",
             self$plasmodium_index,
             "_estimates/Raster Data/",
-            self$plasmodium_index,
+            plasmodium_index_local_destination,
             "_lci"
           ),
           paste0(
             "Global/Data/MAP/2022_GBD_",
             self$plasmodium_index,
             "_estimates/Raster Data/",
-            self$plasmodium_index,
+            plasmodium_index_local_destination,
             "_rmean"
           ),
           paste0(
             "Global/Data/MAP/2022_GBD_",
             self$plasmodium_index,
             "_estimates/Raster Data/",
-            self$plasmodium_index,
+            plasmodium_index_local_destination,
             "_uci"
           )
         )
@@ -567,7 +567,7 @@ PlasmodiumIndex <- R6::R6Class(
             "Global/Data/MAP/2022_GBD_",
             self$plasmodium_index,
             "_estimates/Raster Data/",
-            self$plasmodium_index,
+            plasmodium_index_local_destination,
             "_rmean"
           )
       }
@@ -683,7 +683,7 @@ PlasmodiumIndex <- R6::R6Class(
           ),
           alpha = 0.2) +
           ggplot2::labs(y = self$plasmodium_index, title = snt_country) +
-          ggplot2::facet_wrap(~ district, ncol = 5)
+          ggplot2::facet_wrap( ~ district, ncol = 5)
       }
     },
     plot_map = function(year = NULL,
@@ -722,15 +722,13 @@ PlasmodiumIndex <- R6::R6Class(
         tmap::tmap_mode("plot")
         map <- tmap::tm_shape(map_and_data) +
           tmap::tm_borders() +
-          tmap::tm_fill(
-            self$plasmodium_index,
-            n = categories,
-            palette = rev(grDevices::hcl.colors(categories,
-                                                palette))
-          ) +
-          tmap::tm_facets(by = "year")+
+          tmap::tm_fill(self$plasmodium_index,
+                        n = categories,
+                        palette <- rev(grDevices::hcl.colors(categories,
+                                                             palette))) +
+          tmap::tm_facets(by = "year") +
           tmap::tm_shape(province_shapefile) +
-          tmap::tm_borders(lwd = province_border_thickness/1.5) +
+          tmap::tm_borders(lwd = province_border_thickness / 1.5) +
           tmap::tm_layout(title = snt_country)
         print(map)
       } else {
@@ -739,14 +737,12 @@ PlasmodiumIndex <- R6::R6Class(
           dplyr::inner_join(district_shapefile, my_data)
         # plot specified year
         tmap::tmap_mode("view")
-        map  <- tmap::tm_shape(map_and_data) +
+        map <- tmap::tm_shape(map_and_data) +
           tmap::tm_borders() +
-          tmap::tm_fill(
-            self$plasmodium_index,
-            n = categories,
-            palette = rev(grDevices::hcl.colors(categories,
-                                                palette))
-          ) +
+          tmap::tm_fill(self$plasmodium_index,
+                        n = categories,
+                        palette <- rev(grDevices::hcl.colors(categories,
+                                                             palette))) +
           tmap::tm_shape(province_shapefile) +
           tmap::tm_borders(lwd = province_border_thickness) +
           tmap::tm_layout(title = paste(snt_country, year, sep = "-"))
@@ -862,10 +858,10 @@ PfIncidence <- R6::R6Class(
         # PfPR_UCI_Global_admin0_2000.tif
         # PfPR_LCI_Global_admin0_2000.tif
         colnames(long)[1] <- substr(long$name, 16, 18)
-        long$year <- as.numeric(substr(long$name, 24, 27))
+        long$year <- as.numeric(substr(long$name, 34, 37))
       } else if (index == 2) {
         colnames(long)[1] <- "MEAN"
-        long$year <- as.numeric(substr(long$name, 26, 29))
+        long$year <- as.numeric(substr(long$name, 39, 42))
       }
       return(long)
     }
@@ -917,10 +913,10 @@ PfMortality <- R6::R6Class(
         # PfMT_UCI_Global_admin0_2000.tif
         # PfMT_LCI_Global_admin0_2000.tif
         colnames(long)[1] <- substr(long$name, 16, 18)
-        long$year <- as.numeric(substr(long$name, 24, 27))
+        long$year <- as.numeric(substr(long$name, 34, 37))
       } else if (index == 2) {
         colnames(long)[1] <- "MEAN"
-        long$year <- as.numeric(substr(long$name, 26, 29))
+        long$year <- as.numeric(substr(long$name, 39, 42))
       }
       return(long)
     }
@@ -1028,12 +1024,79 @@ PvIncidence <- R6::R6Class(
         # PvPR_UCI_Global_admin0_2000.tif
         # PvPR_LCI_Global_admin0_2000.tif
         colnames(long)[1] <- substr(long$name, 16, 18)
-        long$year <- as.numeric(substr(long$name, 24, 27))
+        long$year <- as.numeric(substr(long$name, 34, 37))
       } else if (index == 2) {
         colnames(long)[1] <- "MEAN"
-        long$year <- as.numeric(substr(long$name, 26, 29))
+        long$year <- as.numeric(substr(long$name, 39, 42))
       }
       return(long)
     }
   )
 )
+
+#' @export
+smart_get_file_list <- function(smart_path) {
+  # detect country code
+  # find special character in special path parameter
+  # loop through file path in the path.list
+  # return valid file
+  pattern <- "(\\*yyyy\\*)"
+  detected_pattern <- stringr::str_detect(smart_path, pattern)
+  if (!(detected_pattern)) {
+    stop("path do not contain pattern, please modify the year into *yyyy*")
+  }
+  target_years <- 1980:2030
+  result_file_list <- c()
+  result_years <- c()
+  for (i in seq_along(target_years)) {
+    replacement_year <- as.character(target_years[i])
+    target_file_path <- file.path(stringr::str_replace(smart_path,
+                                                       pattern, replacement_year))
+    if (file.exists(target_file_path)) {
+      result_file_list <- append(result_file_list, target_file_path)
+      result_years <- append(result_years, target_years[i])
+    }
+  }
+  return(list(files = result_file_list,
+              years = result_years))
+}
+
+#' @export
+smart_read_excel <-
+  function(smart_path,
+           skip = 0,
+           clean = TRUE,
+           country = snt_country) {
+    if (is.null(snt_country)) {
+      warning("snt::set_country method has not runned yet, this will cause problem.")
+    }
+    file_list <-
+      snt::smart_get_file_list(smart_path)
+    data_tables <-
+      purrr::map(file_list$files,
+                 ~ readxl::read_excel(.x, skip = skip))
+    # create a nested tibble
+    result <- tibble::tibble(year = file_list$years,
+                             data = data_tables)
+    if (clean) {
+      result <- result %>%
+        # rename using internal rename database
+        mutate(data = map(data, ~ routine_rename(.x, country = country))) %>%
+        # replace using internal replace database
+        mutate(data = map(data, ~ routine_replace(.x, country = country)))
+    }
+    return(result)
+  }
+
+#' @export
+update_database <- function() {
+  import_routine_rename <- readr::read_csv("inst//extdata//routine//01_rename.csv")
+  usethis::use_data(import_routine_rename, overwrite = TRUE)
+  import_routine_replace <- readr::read_csv("inst//extdata//routine//02_replace.csv")
+  usethis::use_data(import_routine_replace, overwrite = TRUE)
+  import_routine_replace_hfname <- readr::read_csv("inst//extdata//routine//03_replace_hfname.csv")
+  usethis::use_data(import_routine_replace_hfname, overwrite = TRUE)
+  import_routine_set_cluster <- readr::read_csv("inst//extdata//routine//04_cluster.csv")
+  usethis::use_data(import_routine_set_cluster, overwrite = TRUE)
+  devtools::load_all()
+}
