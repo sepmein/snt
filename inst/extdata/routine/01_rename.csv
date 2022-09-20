@@ -1,4 +1,4 @@
-﻿country,from,to
+country,from,to
 BDI,Janvier,1
 BDI,Février,2
 BDI,Mars,3
@@ -25,3 +25,5 @@ BDI,Districts,adm2_ds
 BDI,Centresdesanté,hfname
 BDI,Village,adm3
 BDI,Aires de responsailité,hfca
+BDI,Aires de responsabilité,hfca
+BDI,Centres de santé,hfname
