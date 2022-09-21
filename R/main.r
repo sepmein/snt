@@ -1100,3 +1100,63 @@ update_database <- function() {
   usethis::use_data(import_routine_set_cluster, overwrite = TRUE)
   devtools::load_all()
 }
+
+#' @export
+find_outiler <-
+  function(df,
+           columns = c(
+             "susp",
+             "test_rdt",
+             "test_mic",
+             "test_rdt_lab",
+             "test",
+             "abn_mic",
+             "abn_rdt",
+             "conf_rdt",
+             "maltreat_u5",
+             "maltreat_ov5",
+             "maltreat",
+             "maldth"
+           ),
+           alpha = 0.999,
+           both_sides = FALSE) {
+    result <- tibble::tibble(ID = integer(),
+                             value = numeric(),
+                             index = character())
+    for (column in columns) {
+      ### algorithm upper bound
+      upper_bound <- quantile(df[[column]], alpha, na.rm = TRUE)
+      outlier_index <-
+        which(routine_monthly[[column]] > upper_bound)
+      df_outlier_list <- df[outlier_index,] |>
+        # select id and target column
+        select(one_of(c("ID", column))) |>
+        mutate(index = !!column) |>
+        rename(value = {
+          {
+            column
+          }
+        })
+      result <- result |> full_join(df_outlier_list)
+    }
+    result <- result |> left_join(df) |> select(ID,
+                                                adm1,
+                                                adm2,
+                                                adm3,
+                                                hfca,
+                                                hfname,
+                                                hf ,
+                                                year,
+                                                month,
+                                                yearmon,
+                                                index,
+                                                value)
+    return(result)
+  }
+
+#' @export
+outliers_find_hf <- function(outliers) {
+  result <-
+    outliers |> group_by(hf) |> summarise(count = n()) |> arrange(desc(count))
+  return(result)
+}

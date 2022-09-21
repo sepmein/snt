@@ -18,10 +18,10 @@ susp <- smart_read_excel(
   clean = TRUE,
   country = "BDI"
 )
-susp <- susp %>%
-  mutate(data = map(data, ~ rename_with(.x, ~ str_remove(.x, " [12][0-9]{3}$")))) %>%
+susp <- susp |>
+  mutate(data = map(data, ~ rename_with(.x, ~ str_remove(.x, " [12][0-9]{3}$")))) |>
   # combine all susceptible data
-  unnest(data) %>% # reshape data
+  unnest(data) |> # reshape data
   pivot_longer(cols = 7:18,
                names_to = "month",
                values_to = "susp")
@@ -30,12 +30,12 @@ susp <- susp %>%
 testconf <- smart_read_excel(
   "Countries/BDI/2020_SNT/Analysis/orig/data/routine/monthly/TDR_et_GE_*yyyy*.xls"
 )
-testconf <- testconf %>%
-  unnest(data) %>%
+testconf <- testconf |>
+  unnest(data) |>
   pivot_longer(cols = 7:78,
                names_to = "index",
-               values_to = "testconf") %>%
-  separate(index, sep = "_(?!.*_)", into = c("index", "month")) %>%
+               values_to = "testconf") |>
+  separate(index, sep = "_(?!.*_)", into = c("index", "month")) |>
   pivot_wider(names_from = "index", values_from = "testconf")
 
 ### mal treat under 5
@@ -43,8 +43,8 @@ maltreat_u5 <- smart_read_excel(
   "countries/bdi/2020_snt/analysis/orig/data/routine/monthly/cas_traites_act_de_moins_de_5_ans_en_*yyyy*.xls",
   skip = 2
 )
-maltreat_u5 <- maltreat_u5 %>%
-  unnest(data) %>%
+maltreat_u5 <- maltreat_u5 |>
+  unnest(data) |>
   pivot_longer(cols = 7:18,
                names_to = "month",
                values_to = "maltreat_u5")
@@ -53,8 +53,8 @@ maltreat_u5 <- maltreat_u5 %>%
 maltreat_ov5 <- smart_read_excel(
   "Countries/BDI/2020_SNT/Analysis/orig/data/routine/monthly/CAS_TRAITES_ACT_5_ANS_ET_PLUS_*yyyy*.xls"
 )
-maltreat_ov5 <- maltreat_ov5 %>%
-  unnest(data) %>%
+maltreat_ov5 <- maltreat_ov5 |>
+  unnest(data) |>
   pivot_longer(cols = 7:18,
                names_to = "month",
                values_to = "maltreat_ov5")
@@ -104,12 +104,14 @@ routine_monthly <- routine_monthly |>
   mutate(adm2 = str_remove(adm2_ds, "DS\\s")) |>
   select(-adm2_ds) |>
   mutate(hf = paste(adm1, adm2, hfname, sep = "-")) |>
-  mutate(yearmon = str_c(year, str_pad(month, 2, pad = "0")))
+  mutate(yearmon = str_c(year, str_pad(month, 2, pad = "0"))) |>
+  rowid_to_column("ID")
 
 routine_monthly <- routine_monthly |>
   mutate(test = test_rdt + test_mic) |>
   mutate(maltreat = maltreat_u5 + maltreat_ov5) |>
   select(
+    ID,
     adm1,
     adm2,
     adm3,
@@ -134,7 +136,8 @@ routine_monthly <- routine_monthly |>
   )
 
 # get location info by reading and merging from hfs_2013.dta
-hfs <- haven::read_dta("Countries/BDI/2020_SNT/Analysis/dta/pri/hfs_2013.dta") |>
+hfs <-
+  haven::read_dta("Countries/BDI/2020_SNT/Analysis/dta/pri/hfs_2013.dta") |>
   select(Latitude, Longitude, hfname, adm1, adm2, hfid, hf)
 
 routine_monthly <- routine_monthly |>
@@ -161,4 +164,49 @@ ggplot(data = conf_rdt, aes(x = yearmon, y = conf_rdt, group = cluster)) +
 ### plot
 
 ### test
-EnvStats::rosnerTest(routine_monthly$maldth, 10000)
+outlier_test <- EnvStats::rosnerTest(routine_monthly$maldth, 10000)
+outlier_test$all.stats
+
+routine_monthly |>
+  select(
+    year,
+    susp,
+    test_rdt,
+    test_mic,
+    test_rdt_lab,
+    test,
+    abn_mic,
+    abn_rdt,
+    conf_rdt,
+    maltreat_u5,
+    maltreat_ov5,
+    maltreat,
+    maldth
+  ) |>
+  pivot_longer(cols = 2:13,
+               names_to = "index",
+               values_to = "value") |>
+  # mutate(year= factor(year)) |>
+  # ggplot(aes(x = value, y = index)) +
+  # geom_boxplot() +
+  # geom_point(aes(shape = year),alpha = 0.01)
+  ggstatsplot::ggbetweenstats(x = index,
+                              y = value,
+                              pairwise.comparisons = FALSE)
+
+
+out <- boxplot.stats(routine_monthly$susp)$out
+out_ind <- which(routine_monthly$susp %in% c(out))
+out_ind
+routine_monthly[out_ind, ]
+
+EnvStats::rosnerTest(routine_monthly$maldth,
+                     k = 20, alpha = 0.00001)
+
+
+
+
+outliers <- find_outiler(routine_monthly)
+
+
+outliers_find_hf(outliers)
