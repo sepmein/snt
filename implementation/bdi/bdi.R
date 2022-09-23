@@ -2,7 +2,8 @@
 library(snt)
 library(tidyverse)
 library(readxl)
-library(heaven)
+library(haven)
+library(tmap)
 
 set_country(root_folder = "/Users/sepmein/dev/working/snt-data",
             country = "BDI")
@@ -19,6 +20,7 @@ susp <- smart_read_excel(
   country = "BDI"
 )
 susp <- susp |>
+  # rename row title from
   mutate(data = map(data, ~ rename_with(.x, ~ str_remove(.x, " [12][0-9]{3}$")))) |>
   # combine all susceptible data
   unnest(data) |> # reshape data
@@ -162,11 +164,6 @@ ggplot(data = conf_rdt, aes(x = yearmon, y = conf_rdt, group = cluster)) +
 ##################
 
 ### plot
-
-### test
-outlier_test <- EnvStats::rosnerTest(routine_monthly$maldth, 10000)
-outlier_test$all.stats
-
 routine_monthly |>
   select(
     year,
@@ -194,19 +191,43 @@ routine_monthly |>
                               y = value,
                               pairwise.comparisons = FALSE)
 
-
-out <- boxplot.stats(routine_monthly$susp)$out
-out_ind <- which(routine_monthly$susp %in% c(out))
-out_ind
-routine_monthly[out_ind, ]
-
-EnvStats::rosnerTest(routine_monthly$maldth,
-                     k = 20, alpha = 0.00001)
-
-
-
-
+### generate outliers list
 outliers <- find_outiler(routine_monthly)
+outliers_by_hf <- outliers_find_hf(outliers)
 
+# outlier_test <- EnvStats::rosnerTest(routine_monthly$maldth, 10000)
+# outlier_test$all.stats
 
-outliers_find_hf(outliers)
+### plotting hf reporting status
+report_status_by_hf_and_date <- routine_monthly |>
+  group_by(hf, yearmon) |>
+  summarise(sum = sum(c_across(susp:maldth), na.rm = TRUE)) |>
+  mutate(reported = if_else(sum > 0, "Y", "N"))
+
+report_status_by_hf_and_date |>
+  ggplot(aes(x = yearmon, y = hf, fill = reported)) +
+  geom_tile() +
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  labs(title = "Report Status By Health Facilitis and Date",
+       y = "Health Facilities",
+       x = "Date") +
+  theme(axis.text.y = element_blank()) +
+  scale_fill_manual(values = c("N" = "white", "Y" = "blue"))
+
+### Calculate report rate
+report_rate_by_hf <- report_status_by_hf_and_date |>
+  mutate(reported_value = ifelse(reported == "Y", 1, 0)) |>
+  group_by(hf) |>
+  summarise(mean_report_rate = sum(reported_value) / n()) |>
+  arrange(mean_report_rate)
+View(report_rate_by_hf)
+
+### Spatial distribution of missingness
+report_rate_by_hf_coords <-
+  report_rate_by_hf |> inner_join(hfs) |>
+  mutate(Latitude = str_replace(Latitude, ",", ".")) |>
+  mutate(Longitude = str_replace(Longitude, ",", ".")) |>
+  st_as_sf(coords = c("Longitude", "Latitude"))
+
+tmap::tm_shape(report_rate_by_hf_coords) +
+  tmap::tm_dots(col = "mean_report_rate", size = 0.01, alpha = 0.5)
