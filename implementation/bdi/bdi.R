@@ -210,13 +210,13 @@ outliers_by_hf <- outliers_find_hf(outliers)
 # outlier_test <- EnvStats::rosnerTest(routine_monthly$maldth, 10000)
 # outlier_test$all.stats
 
-## 2.4 Health Facilities Reporting Status ----------------------------------
+## 2.4 Reporting Rates ----------------------------------
+
+### Plot by HF & Date -------------------------------------------------------
 report_status_by_hf_and_date <- routine_monthly |>
   group_by(hf, yearmon) |>
   summarise(sum = sum(c_across(susp:maldth), na.rm = TRUE)) |>
   mutate(reported = if_else(sum > 0, "Y", "N"))
-
-### Plot by HF & Date -------------------------------------------------------
 report_status_by_hf_and_date |>
   ggplot(aes(x = yearmon, y = hf, fill = reported)) +
   geom_tile() +
@@ -246,3 +246,42 @@ tmap::tm_shape(report_rate_by_hf_coords) +
   tmap::tm_dots(col = "mean_report_rate", size = 0.01, alpha = 0.5)
 
 
+### Plot Indicators & Date --------------------------------------------------
+report_status_by_indicators_and_date <- routine_monthly |>
+  pivot_longer(
+    cols = c("test", "susp", "maltreat", "maldth", "conf_rdt"),
+    names_to = "index",
+    values_to = "value"
+  ) |>
+  mutate(reported = if_else(value > 0, 1, 0)) |>
+  group_by(index, year) |>
+  summarise(reports = sum(reported, na.rm = TRUE), n = n()) |>
+  mutate(report_rate = reports / n)
+
+ggplot(report_status_by_indicators_and_date) +
+  geom_tile(aes(x = year, y = index, fill = report_rate)) +
+  scale_fill_viridis_c()
+
+### Plot By ADM2 and Date ---------------------------------------------------
+report_status_by_adm2_and_date <- routine_monthly |>
+  pivot_longer(
+    cols = susp:maldth,
+    names_to = "index",
+    values_to = "value"
+  ) |>
+  mutate(reported = if_else(value > 0, 1, 0)) |>
+  group_by(adm2, yearmon) |>
+  summarise(reports = sum(reported, na.rm = TRUE), n = n()) |>
+  mutate(report_rate = reports / n)
+
+ggplot(report_status_by_adm2_and_date) +
+  geom_tile(aes(x = yearmon, y = adm2, fill = report_rate)) +
+  scale_fill_viridis_c()+
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  labs(title = "Report Status By Adm2 and Date",
+       y = "Districts",
+       x = "Date")
+
+# TODO generate a list and export
+
+## 2.4 Consistency test --------------------------------------------------------
