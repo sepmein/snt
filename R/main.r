@@ -422,10 +422,10 @@ Rainfall <- R6::R6Class(
       }
     },
     plot = function() {
-      ggplot(self$data) +
-        geom_line(aes(x = date,
+      ggplot2::ggplot(self$data) +
+        ggplot2::geom_line(ggplot2::aes(x = date,
                       y = rain)) +
-        facet_wrap( ~ adm1)
+        ggplot2::facet_wrap( ~ adm1)
       invisible(self)
     }
   ),
