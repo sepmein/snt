@@ -156,7 +156,7 @@ routine_monthly <- routine_monthly |>
 #### 2.1.1 N/A values --------------------------------------------------------------
 View(routine_monthly |>
        na_if("") |>
-       map_df(~ sum(is.na(.))))
+       map_df( ~ sum(is.na(.))))
 
 #### 2.2.2 Summaries ---------------------------------------------------------
 routine_monthly |> select_if(is_numeric) |> skimr::skim()
@@ -173,11 +173,11 @@ ggplot(data = conf_rdt, aes(x = yearmon, y = conf_rdt, group = cluster)) +
   geom_line() +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(title = "Confirmed RDT tests by cluster", y = "Confirmed RDT Test") +
-  facet_wrap( ~ cluster, scales = "free")
+  facet_wrap(~ cluster, scales = "free")
 
 ### 2.3 Outliers ------------------------------------------------------------
 
-#### Plot --------------------------------------------------------------------
+#### 2.3.1 Plot --------------------------------------------------------------------
 routine_monthly |>
   select(
     year,
@@ -205,7 +205,7 @@ routine_monthly |>
                               y = value,
                               pairwise.comparisons = FALSE)
 
-#### List --------------------------------------------------------------------
+#### 2.3.2 List --------------------------------------------------------------------
 outliers <- find_outiler(routine_monthly)
 outliers_by_hf <- outliers_find_hf(outliers)
 
@@ -214,7 +214,7 @@ outliers_by_hf <- outliers_find_hf(outliers)
 
 ### 2.4 Reporting Rates ----------------------------------
 
-#### Plot by HF & Date -------------------------------------------------------
+#### 2.4.1 Plot by HF & Date -------------------------------------------------------
 report_status_by_hf_and_date <- routine_monthly |>
   group_by(hf, yearmon) |>
   summarise(sum = sum(c_across(susp:maldth), na.rm = TRUE)) |>
@@ -229,7 +229,7 @@ report_status_by_hf_and_date |>
   theme(axis.text.y = element_blank()) +
   scale_fill_manual(values = c("N" = "white", "Y" = "blue"))
 
-#### Report Rate Table -------------------------------------------------------
+#### 2.4.2 Report Rate Table -------------------------------------------------------
 report_rate_by_hf <- report_status_by_hf_and_date |>
   mutate(reported_value = ifelse(reported == "Y", 1, 0)) |>
   group_by(hf) |>
@@ -237,7 +237,7 @@ report_rate_by_hf <- report_status_by_hf_and_date |>
   arrange(mean_report_rate)
 View(report_rate_by_hf)
 
-#### Plot Map ----------------------------------------------------------------
+#### 2.4.3 Plot Map ----------------------------------------------------------------
 report_rate_by_hf_coords <-
   report_rate_by_hf |> inner_join(hfs) |>
   mutate(Latitude = str_replace(Latitude, ",", ".")) |>
@@ -248,7 +248,7 @@ tmap::tm_shape(report_rate_by_hf_coords) +
   tmap::tm_dots(col = "mean_report_rate", size = 0.01, alpha = 0.5)
 
 
-#### Plot Indicators & Date --------------------------------------------------
+#### 2.4.4 Plot Indicators & Date --------------------------------------------------
 report_status_by_indicators_and_date <- routine_monthly |>
   pivot_longer(
     cols = c(
@@ -278,7 +278,7 @@ ggplot(report_status_by_indicators_and_date) +
   geom_tile(aes(x = year, y = index, fill = report_rate)) +
   scale_fill_viridis_c()
 
-#### Plot By ADM2 and Date ---------------------------------------------------
+#### 2.4.5 Plot By ADM2 and Date ---------------------------------------------------
 report_status_by_adm2_and_date <- routine_monthly |>
   pivot_longer(cols = susp:maldth,
                names_to = "index",
@@ -298,7 +298,7 @@ ggplot(report_status_by_adm2_and_date) +
 
 # TODO generate a list and export
 
-### % Never Report HFs by Adm1 ------------------------------------------------------------
+#### 2.4.6 % Never Report HFs by Adm1 ------------------------------------------------------------
 report_rate_by_adm1 <- routine_monthly |>
   group_by(adm1, hf) |>
   summarise(sum = sum(c_across(susp:maldth), na.rm = TRUE)) |>
@@ -314,7 +314,7 @@ ggplot(report_rate_by_adm1) +
        y = "Adm1",
        x = "Percentage")
 
-#### Missing rate by indexes -------------------------------------------------
+#### 2.4.7 Missing rate by indexes -------------------------------------------------
 missing_rate_by_indexes <- routine_monthly |>
   pivot_longer(
     cols = c(
@@ -346,13 +346,6 @@ ggplot(missing_rate_by_indexes) +
        y = "Indexes",
        x = "Percentage")
 
-#### Confirm RDT Test Reporting Rate -----------------------------------------
-confirmed_rdt_test_reporting_rate <- routine_monthly |>
-  select(adm1, adm2, year, conf_rdt) |>
-  # TODO =0 missing?
-  mutate(reported = if_else(conf_rdt > 0 , 1, 0)) |>
-  group_by(adm2, year) |>
-  summarise(conf_rdt_report_rates = sum(reported, na.rm = TRUE) / n())
 
 ### 2.4 Consistency test --------------------------------------------------------
 
@@ -402,7 +395,7 @@ routine_monthly |>
     group = index
   )) +
   geom_line() +
-  facet_wrap(~ adm2, scales = "free_y") +
+  facet_wrap( ~ adm2, scales = "free_y") +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE))
 
 #### 2.4.5 Plot Test vs Test Conf Per Region -----------------------------------
@@ -421,7 +414,7 @@ routine_monthly |>
     group = index
   )) +
   geom_line() +
-  facet_wrap(~ adm2, scales = "free_y") +
+  facet_wrap( ~ adm2, scales = "free_y") +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE))
 
 #### 2.4.6 Plot Confirm vs Maltreat Per Region -----------------------------------
@@ -442,11 +435,14 @@ routine_monthly |>
     group = index
   )) +
   geom_line() +
-  facet_wrap(~ adm2, scales = "free_y") +
+  facet_wrap( ~ adm2, scales = "free_y") +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE))
 
 # Yearly Data -------------------------------------------------------------
 
+## 1. Importation -------------------------------------------------------------
+
+### 1.1 Merge -------------------------------------------------------------------
 # Summarise by using routine_monthly data
 routine_yearly <- routine_monthly |>
   group_by(adm1, adm2, year) |>
@@ -459,7 +455,8 @@ routine_yearly <- routine_yearly |> left_join(alldth_year_dis)
 
 # get population
 pop <-
-  haven::read_dta("Countries/BDI/2020_SNT/Analysis/dta/pri/pop.dta")
+  haven::read_dta("Countries/BDI/2020_SNT/Analysis/dta/pri/pop.dta") |>
+  select(-adm2_ds)
 routine_yearly <- routine_yearly |> left_join(pop)
 
 # get pres?
@@ -467,4 +464,39 @@ pres <-
   haven::read_dta("Countries/BDI/2020_SNT/Analysis/dta/pri/routine/pres.dta")
 routine_yearly <- routine_yearly |> left_join(pres)
 
-#
+# Confirm RDT Test Reporting Rate
+confirmed_rdt_test_reporting_rate <- routine_monthly |>
+  select(adm1, year, conf_rdt) |>
+  # TODO =0 missing?
+  mutate(reported = if_else(conf_rdt > 0 , 1, 0)) |>
+  group_by(adm1, year) |>
+  summarise(conf_rdt_report_rates = sum(reported, na.rm = TRUE) / n())
+routine_yearly <-
+  routine_yearly |> left_join(confirmed_rdt_test_reporting_rate)
+
+### 1.2 All-cause outpatients ---------------------------------------------------
+
+#### Health Center and Hospitals
+
+#### Community
+
+### 1.3 Suspected cases ---------------------------------------------------------
+
+#### Health Center and Hospitals
+
+#### Community
+
+## 2. Analysis ----------------------------------------------------------------
+
+### Consistency Test --------------------------------------------------------
+
+#### 2.4.1 Presumed Cases vs Presumed Treat ---------------------------------------------------
+prestreat <-
+  routine_yearly |>
+  mutate(prestreat = maltreat - conf_rdt ) |>
+  mutate(pres_lt_prestreat = if_else(pres < prestreat, TRUE, FALSE)) |>
+  ggplot() +
+  geom_point(aes(y = pres, x = prestreat, color = pres_lt_prestreat)) +
+  geom_abline(slope = 1)
+
+print(prestreat)
