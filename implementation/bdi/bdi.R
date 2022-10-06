@@ -11,7 +11,8 @@ set_country(root_folder = "/Users/sepmein/dev/working/snt-data",
 # Monthly Data --------------------------------------------------------
 ## 1. Importation ---------------------------------------------------------------
 ### 1.1 Suspect -------------------------------------------------------------
-susp <- smart_read_excel(
+susp <- smart_read_excel_by_year(
+  reader = smart_get_file_list_by_year,
   "Countries/BDI/2020_SNT/Analysis/orig/data/routine/monthly/CAS_SUSPECTES_PALU_EN_*yyyy*.xls",
   skip = 2,
   clean = TRUE,
@@ -27,7 +28,9 @@ susp <- susp |>
                values_to = "susp")
 
 ### 1.2 tested and confirmed -----------------------------------------------
-testconf <- smart_read_excel(
+testconf <- smart_read_excel_by_year(
+  reader = smart_get_file_list_by_year,
+
   "Countries/BDI/2020_SNT/Analysis/orig/data/routine/monthly/TDR_et_GE_*yyyy*.xls"
 )
 testconf <- testconf |>
@@ -39,7 +42,9 @@ testconf <- testconf |>
   pivot_wider(names_from = "index", values_from = "testconf")
 
 ### 1.3 Malaria Treatment Under 5 -------------------------------------------
-maltreat_u5 <- smart_read_excel(
+maltreat_u5 <- smart_read_excel_by_year(
+  reader = smart_get_file_list_by_year,
+
   "countries/bdi/2020_snt/analysis/orig/data/routine/monthly/cas_traites_act_de_moins_de_5_ans_en_*yyyy*.xls",
   skip = 2
 )
@@ -50,7 +55,9 @@ maltreat_u5 <- maltreat_u5 |>
                values_to = "maltreat_u5")
 
 ### 1.4 Malaria Treatment Over 5 --------------------------------------------
-maltreat_ov5 <- smart_read_excel(
+maltreat_ov5 <- smart_read_excel_by_year(
+  reader = smart_get_file_list_by_year,
+
   "Countries/BDI/2020_SNT/Analysis/orig/data/routine/monthly/CAS_TRAITES_ACT_5_ANS_ET_PLUS_*yyyy*.xls"
 )
 maltreat_ov5 <- maltreat_ov5 |>
@@ -60,7 +67,9 @@ maltreat_ov5 <- maltreat_ov5 |>
                values_to = "maltreat_ov5")
 
 ### 1.5 Malaria Death -------------------------------------------------------
-maldth <- smart_read_excel(
+maldth <- smart_read_excel_by_year(
+  reader = smart_get_file_list_by_year,
+
   "Countries/BDI/2020_SNT/Analysis/orig/data/routine/monthly/Decès_lié_au_palu_*yyyy*.xls"
 )
 # 2016 data structure is different from others deal with 2016 first
@@ -208,7 +217,7 @@ routine_monthly |>
 #### 2.3.2 List --------------------------------------------------------------------
 outliers <- find_outiler(routine_monthly)
 outliers_by_hf <- outliers_find_hf(outliers)
-
+# per health facilties
 # outlier_test <- EnvStats::rosnerTest(routine_monthly$maldth, 10000)
 # outlier_test$all.stats
 
@@ -263,8 +272,9 @@ report_status_by_indicators_and_date <- routine_monthly |>
       "maltreat_u5",
       "maltreat_ov5",
       "maltreat",
+      # hospital and health facilities
+      # uncomplicated vs severe(hospital with/without hf)
       "maldth",
-
     ),
     names_to = "index",
     values_to = "value"
@@ -360,6 +370,8 @@ consis_susp_test <-
 print(consis_susp_test)
 
 #### 2.4.2 test_rdt vs conf_rdt ---------------------------------------------------
+# change color
+# and the legend
 consis_test_conf_rdt <-
   routine_monthly |>
   mutate(test_rdt_lt_conf_rdt = if_else(test_rdt < conf_rdt, TRUE, FALSE)) |>

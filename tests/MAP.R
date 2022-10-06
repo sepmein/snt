@@ -1,24 +1,29 @@
 library(snt)
 
 # add year to this function
-set_country(
-  root_folder = "/Users/sepmein/dev/working/snt-data",
-  country = "BDI"
-)
+set_country(root_folder = "/Users/sepmein/dev/working/snt-data",
+            country = "BDI")
 bdi_shapefile <-
-  CountryShapeFile$new()
-
+  paste(
+    "Countries", "BDI", "2020_SNT", "Analysis", "orig", "data",
+    "shapefiles",
+    "District_sante_EPSG4326.shp",
+    sep = "/"
+  )
 # PfPR
-pfpr <- PfPrevalence$new()
-# Pf_prevalence$download(destfile = "pfPR.zip")
+pfpr <- PfPrevalence$new(api_url = "https://malariaatlas.org/wp-content/uploads/2022-gbd2020/pfpr.zip",
+                         with_95CI =  TRUE)
+# pfpr$download(destfile = "pfPR.zip")
 # added time when generated these data
-# pfpr$load(country_shape_file = bdi_shapefile)$export()
+pfpr$load(bdi_shapefile)$export()
 pfpr$load_csv()
+# per plot for province province_district in title
 pfpr$plot_line()
 # generate a map per year for mean, lci & uci
+# add manually breaks
 pfpr$plot_map(year = 2013, categories = 6)
 # plot all years
-pfpr$plot_map(categories = 8)
+pfpr$plot_map(categories = 8, palette = "viridis")
 
 # PfIC
 Pf_incidence <- PfIncidence$new()
@@ -41,4 +46,3 @@ Pv_prevalence$load(country_shape_file = bdi_shapefile)$export()
 Pv_incidence <- PvIncidence$new()
 # Pv_incidence$download(destfile = "PvIC.zip")
 Pv_incidence$load(country_shape_file = bdi_shapefile)$export()
-
