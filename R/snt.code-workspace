@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "snt",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"dataframe",
+			"shapefiles",
+			"tibble"
+		]
+	}
+}

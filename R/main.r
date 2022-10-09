@@ -699,7 +699,8 @@ RasterResource <- R6::R6Class(
                         adm3_border_thickness = 1,
                         adm1_name_in_shp = NULL,
                         adm2_name_in_shp = NULL,
-                        adm3_name_in_shp = NULL) {
+                        adm3_name_in_shp = NULL,
+                        title = FALSE) {
       # merge shape file with data
       index <- self$index_name
       my_data <- self$data
@@ -737,9 +738,14 @@ RasterResource <- R6::R6Class(
               palette
             )),
             breaks = breaks
-          ) +
-          tmap::tm_layout(title = paste(
-            snt_country, index, sep = "-"))
+          ) 
+          
+          if (is.logical(title)) {
+            if (title == TRUE) map <- map + tmap::tm_layout(title = paste(
+                                                       snt_country, index, sep = "-"))
+          } else if (is.character(title)) {
+            map  <- map + tmap::tm_layout(title = title)
+          }
 
         if (self$target_adm_level == 2) {
           if (!is.null(self$adm1_shapefile)) {
