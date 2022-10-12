@@ -121,7 +121,8 @@ Resource <- R6::R6Class(
     is_batch = NULL,
     local_file_type = NULL,
     check_local_file_type = function() {
-      type <- switch(private$local_file_type,
+      type <- switch(
+        private$local_file_type,
         "csv" = "csv",
         "shapefile" = "shapefile",
         "raster" = "raster"
@@ -148,10 +149,8 @@ Resource <- R6::R6Class(
     download_single = function(api_url, select_files, destfile = NULL) {
       download_method <- private$choose_download_method(api_url)
       print(download_method)
-      dest_file_path <- file.path(
-        self$download_to,
-        destfile
-      )
+      dest_file_path <- file.path(self$download_to,
+                                  destfile)
       if (missing(api_url)) {
         api_url <- self$api_url
       }
@@ -165,9 +164,8 @@ Resource <- R6::R6Class(
         ))
       } else if (download_method == "https") {
         download.file(api_url,
-          dest_file_path,
-          mode = "wb"
-        )
+                      dest_file_path,
+                      mode = "wb")
         # get file ext
         if (file.exists(dest_file_path)) {
           file_ext <- dest_file_path
@@ -185,8 +183,7 @@ Resource <- R6::R6Class(
         # if zip file
         if (file_ext == "zip") {
           private$unzip(dest_file_path,
-            exdir = self$download_to
-          )
+                        exdir = self$download_to)
         }
       }
     },
@@ -199,14 +196,12 @@ Resource <- R6::R6Class(
       if (download_method == "ftp") {
         # get files to be download
         filenames <- RCurl::getURL(api_url,
-          ftp.use.epsv = FALSE,
-          dirlistonly = TRUE
-        )
+                                   ftp.use.epsv = FALSE,
+                                   dirlistonly = TRUE)
         # Deal with newlines as \n or \r\n. (BDR)
         filenames <- paste(api_url,
-          strsplit(filenames, "\r*\n")[[1]],
-          sep = ""
-        )
+                           strsplit(filenames, "\r*\n")[[1]],
+                           sep = "")
 
         if (!is.null(select_files)) {
           filenames <- select_files(filenames)
@@ -216,18 +211,15 @@ Resource <- R6::R6Class(
         # returned in the directory listing and in filenames will disappear
         # when we go back to get them.
         # So we use a try() in the call getURL.
-        contents <- sapply(
-          filenames,
-          function(x) {
-            try(RCurl::getBinaryURL(x, curl = con))
-          }
-        )
+        contents <- sapply(filenames,
+                           function(x) {
+                             try(RCurl::getBinaryURL(x, curl = con))
+                           })
         names(contents) <- filenames[seq_along(contents)]
 
         for (j in seq_along(contents)) {
           writeBin(as.vector(contents[[j]]),
-            con = basename(filenames[j])
-          )
+                   con = basename(filenames[j]))
         }
 
         files <- str_sub(filenames, end = -1)
@@ -242,31 +234,23 @@ Resource <- R6::R6Class(
         ))
       } else if (download_method == "https") {
         download.file(api_url,
-          file.path(self$download_to, destfile),
-          mode = "wb"
-        )
+                      file.path(self$download_to, destfile),
+                      mode = "wb")
         # if zip file
         private$unzip(file.path(self$download_to, destfile),
-          exdir = self$local_destination
-        )
+                      exdir = self$local_destination)
       }
     },
     choose_download_method = function(api_url) {
       # Download FTP
-      if (startsWith(
-        api_url,
-        "ftp"
-      )) {
+      if (startsWith(api_url,
+                     "ftp")) {
         return("ftp")
-      } else if (startsWith(
-        api_url,
-        "https"
-      )) {
+      } else if (startsWith(api_url,
+                            "https")) {
         return("https")
-      } else if (startsWith(
-        api_url,
-        "http"
-      )) {
+      } else if (startsWith(api_url,
+                            "http")) {
         return("http")
       }
     },
@@ -308,22 +292,14 @@ Rainfall <- R6::R6Class(
                         end_date) {
       setwd(path_to_save)
       if (target == "africa") {
-        super$download_batch(
-          api_url = self$africa_api,
-          select_files <-
-            self$select_files(
-              start_date,
-              end_date
-            )
-        )
+        super$download_batch(api_url = self$africa_api,
+                             select_files <-
+                               self$select_files(start_date,
+                                                 end_date))
       } else if (target == "global") {
-        super$download_batch(
-          api_url = self$africa_api,
-          select_files = self.select_files(
-            start_date,
-            end_date
-          )
-        )
+        super$download_batch(api_url = self$africa_api,
+                             select_files = self.select_files(start_date,
+                                                              end_date))
       } else {
         stop(paste0(
           "Rainfall Resource Download, ",
@@ -349,11 +325,9 @@ Rainfall <- R6::R6Class(
     },
     plot = function() {
       ggplot2::ggplot(self$data) +
-        ggplot2::geom_line(ggplot2::aes(
-          x = date,
-          y = rain
-        )) +
-        ggplot2::facet_wrap(~adm1)
+        ggplot2::geom_line(ggplot2::aes(x = date,
+                                        y = rain)) +
+        ggplot2::facet_wrap( ~ adm1)
       invisible(self)
     }
   ),
@@ -373,15 +347,13 @@ Rainfall <- R6::R6Class(
       self$data <- rename(self$data, amd2 = district)
       self$data <- rename(self$data, rain = unlistrmeans)
       self$data$date <- str_c(self$data$year,
-        str_pad(self$data$month, 2, pad = 0),
-        sep = "-"
-      )
+                              str_pad(self$data$month, 2, pad = 0),
+                              sep = "-")
       self$data$date <- as.Date(sef.data$date)
       country_adm2 <- read_dta(path_to_country_adm2)
       rainfall_data_with_adm1 <- merge(self$data,
-        country_adm2,
-        by = "adm2"
-      )
+                                       country_adm2,
+                                       by = "adm2")
     }
   )
 )
@@ -564,10 +536,8 @@ RasterResource <- R6::R6Class(
       extracted_raster_data <-
         raster::extract(raster_data, loaded_shp)
       # aggregate
-      by_district <- self$get_district_raster_data(
-        method,
-        extracted_raster_data
-      )
+      by_district <- self$get_district_raster_data(method,
+                                                   extracted_raster_data)
       # tibble
       result <- tibble::as_tibble(unlist(by_district))
       # set file for tibble
@@ -601,8 +571,7 @@ RasterResource <- R6::R6Class(
                                         extracted_raster_data) {
       if (method == "mean") {
         result <- lapply(extracted_raster_data,
-          FUN = mean, na.rm = TRUE
-        )
+                         FUN = mean, na.rm = TRUE)
       }
       return(result)
     },
@@ -626,10 +595,8 @@ RasterResource <- R6::R6Class(
       result <- NULL
       # Extract raster values to list object
       for (j in seq_along(raster_files)) {
-        the_file <- file.path(
-          folder,
-          raster_files[j]
-        )
+        the_file <- file.path(folder,
+                              raster_files[j])
         loaded <- self$load_single_file(
           target_adm_level,
           adm1_name_in_shp,
@@ -697,6 +664,9 @@ RasterResource <- R6::R6Class(
                         adm1_border_thickness = 5,
                         adm2_border_thickness = 3,
                         adm3_border_thickness = 1,
+                        adm1_border_color = "black",
+                        adm2_border_color = "black",
+                        adm3_border_color = "grey",
                         adm1_name_in_shp = NULL,
                         adm2_name_in_shp = NULL,
                         adm3_name_in_shp = NULL,
@@ -722,48 +692,62 @@ RasterResource <- R6::R6Class(
       }
 
       if (file_test("-f", self$local_destination)) {
-        map_and_data <- switch(self$target_adm_level,
+        map_and_data <- switch(
+          self$target_adm_level,
           "1" = dplyr::inner_join(adm1_shapefile, my_data),
           "2" = dplyr::inner_join(adm2_shapefile, my_data),
           "3" = dplyr::inner_join(adm3_shapefile, my_data)
         )
+        main_color <- switch(
+          self$target_adm_level,
+          "1" = adm1_border_color,
+          "2" = adm2_border_color,
+          "3" = adm3_border_color,
+        )
+
+        if (length(palette) == 1) {
+          # if palette is "foo"
+          palette <- rev(grDevices::hcl.colors(categories,
+                                               palette))
+        } else if (length(palette) > 1) {
+          # if palette is c('foo','bar')
+          palette <- palette
+        }
+
         # plot specified year
         map <- tmap::tm_shape(map_and_data) +
-          tmap::tm_borders() +
-          tmap::tm_fill(
-            index,
-            n = categories,
-            palette = rev(grDevices::hcl.colors(
-              categories,
-              palette
-            )),
-            breaks = breaks
-          ) 
-          
-          if (is.logical(title)) {
-            if (title == TRUE) map <- map + tmap::tm_layout(title = paste(
-                                                       snt_country, index, sep = "-"))
-          } else if (is.character(title)) {
-            map  <- map + tmap::tm_layout(title = title)
+          tmap::tm_borders(col = main_color) +
+          tmap::tm_fill(index,
+                        n = categories,
+                        palette = palette,
+                        breaks = breaks)
+
+        if (is.logical(title)) {
+          if (title == TRUE) {
+            map <- map + tmap::tm_layout(title = paste(snt_country, index,
+                                                       sep = "-"))
           }
+        } else if (is.character(title)) {
+          map <- map + tmap::tm_layout(title = title)
+        }
 
         if (self$target_adm_level == 2) {
           if (!is.null(self$adm1_shapefile)) {
             map <- map +
               tmap::tm_shape(adm1_shapefile) +
-              tmap::tm_borders(lwd = adm1_border_thickness)
+              tmap::tm_borders(lwd = adm1_border_thickness, col = adm1_border_color)
           }
         }
         if (self$target_adm_level == 3) {
           if (!is.null(self$adm1_shapefile)) {
             map <- map +
               tmap::tm_shape(adm1_shapefile) +
-              tmap::tm_borders(lwd = adm1_border_thickness)
+              tmap::tm_borders(lwd = adm1_border_thickness, col = adm1_border_color)
           }
           if (!is.null(self$adm2_shapefile)) {
             map <- map +
               tmap::tm_shape(adm2_shapefile) +
-              tmap::tm_borders(lwd = adm2_border_thickness)
+              tmap::tm_borders(lwd = adm2_border_thickness, col = adm2_border_color)
           }
         }
         print(map)
@@ -870,14 +854,12 @@ MAPPlasmodiumIndex <- R6::R6Class(
         )
       }
       if (is.null(download_to)) {
-        download_to <- file.path(
-          "Global",
-          "Data",
-          "MAP",
-          "2022_GBD_",
-          self$plasmodium_index,
-          "_estimates"
-        )
+        download_to <- file.path("Global",
+                                 "Data",
+                                 "MAP",
+                                 "2022_GBD_",
+                                 self$plasmodium_index,
+                                 "_estimates")
       }
 
       super$initialize(
@@ -908,10 +890,9 @@ MAPPlasmodiumIndex <- R6::R6Class(
       self$data <- read.csv(file = file.path(
         self$output_destination,
         paste(self$plasmodium_index,
-          snt_country,
-          ".csv",
-          sep = "_"
-        )
+              snt_country,
+              ".csv",
+              sep = "_")
       ))
     },
     clean = function() {
@@ -934,17 +915,14 @@ MAPPlasmodiumIndex <- R6::R6Class(
         to <- self$output_destination
       }
       if (is.null(filename)) {
-        filename <- paste0(
-          "MAP_",
-          snt_country,
-          "_",
-          self$plasmodium_index,
-          ".csv"
-        )
+        filename <- paste0("MAP_",
+                           snt_country,
+                           "_",
+                           self$plasmodium_index,
+                           ".csv")
       }
       write.csv(self$data,
-        file = file.path(to, filename)
-      )
+                file = file.path(to, filename))
       invisible(self)
     },
     plot_line = function(save = TRUE) {
@@ -992,7 +970,8 @@ MAPPlasmodiumIndex <- R6::R6Class(
                         adm3_border_thickness = 1,
                         adm1_name_in_shp = NULL,
                         adm2_name_in_shp = NULL,
-                        adm3_name_in_shp = NULL) {
+                        adm3_name_in_shp = NULL,
+                        title = NULL) {
       # merge shape file with data
       if (!is.null(self$adm1_shapefile)) {
         adm1_shapefile <- sf::st_read(self$adm1_shapefile)
@@ -1010,9 +989,19 @@ MAPPlasmodiumIndex <- R6::R6Class(
       }
       my_data <- self$data
 
+      if (length(palette) == 1) {
+        # if palette is "foo"
+        palette <- rev(grDevices::hcl.colors(categories,
+                                             palette))
+      } else if (length(palette) > 1) {
+        # if palette is c('foo','bar')
+        palette <- palette
+      }
+
       if (missing(year)) {
         # Join map and data
-        map_and_data <- switch(self$target_adm_level,
+        map_and_data <- switch(
+          self$target_adm_level,
           "1" = dplyr::inner_join(adm1_shapefile, my_data),
           "2" = dplyr::inner_join(adm2_shapefile, my_data),
           "3" = dplyr::inner_join(adm3_shapefile, my_data)
@@ -1023,11 +1012,7 @@ MAPPlasmodiumIndex <- R6::R6Class(
           tmap::tm_fill(
             self$plasmodium_index,
             n = categories,
-            palette =
-              rev(grDevices::hcl.colors(
-                categories,
-                palette
-              )),
+            palette = palette ,
             breaks = breaks
           ) +
           tmap::tm_facets(by = "year") +
@@ -1055,7 +1040,8 @@ MAPPlasmodiumIndex <- R6::R6Class(
         print(map)
       } else {
         my_data <- dplyr::filter(my_data, year == !!year)
-        map_and_data <- switch(self$target_adm_level,
+        map_and_data <- switch(
+          self$target_adm_level,
           "1" = dplyr::inner_join(adm1_shapefile, my_data),
           "2" = dplyr::inner_join(adm2_shapefile, my_data),
           "3" = dplyr::inner_join(adm3_shapefile, my_data)
@@ -1066,13 +1052,21 @@ MAPPlasmodiumIndex <- R6::R6Class(
           tmap::tm_fill(
             self$plasmodium_index,
             n = categories,
-            palette = rev(grDevices::hcl.colors(
-              categories,
-              palette
-            )),
+            palette = palette,
             breaks = breaks
-          ) +
-          tmap::tm_layout(title = paste(snt_country, year, sep = "-"))
+          )
+
+        # if title is false, display no title
+        # if title is true, display default title
+        # if title is string, display the setted title
+        if (is.logical(title)) {
+          if (title == TRUE) {
+            map <- map + tmap::tm_layout(title = paste(snt_country, year,
+                                                       sep = "-"))
+          }
+        } else if (is.character(title)) {
+          map <- map + tmap::tm_layout(title = title)
+        }
 
         if (self$target_adm_level == 2) {
           if (!is.null(self$adm1_shapefile)) {
@@ -1427,13 +1421,11 @@ IHME_mortality <- R6::R6Class(
         from <- self$output_destination
       }
       if (is.null(filename)) {
-        filename <- paste0(
-          "IHME_",
-          snt_country,
-          "_",
-          self$index_name,
-          ".csv"
-        )
+        filename <- paste0("IHME_",
+                           snt_country,
+                           "_",
+                           self$index_name,
+                           ".csv")
       }
       self$data <- read.csv(file = file.path(from, filename))
     },
@@ -1458,17 +1450,14 @@ IHME_mortality <- R6::R6Class(
         to <- self$output_destination
       }
       if (is.null(filename)) {
-        filename <- paste0(
-          "IHME_",
-          snt_country,
-          "_",
-          self$index_name,
-          ".csv"
-        )
+        filename <- paste0("IHME_",
+                           snt_country,
+                           "_",
+                           self$index_name,
+                           ".csv")
       }
       write.csv(self$data,
-        file = file.path(to, filename)
-      )
+                file = file.path(to, filename))
       invisible(self)
     }
   )
@@ -1492,19 +1481,15 @@ smart_get_file_list_by_year <- function(smart_path) {
   result_years <- c()
   for (i in seq_along(target_years)) {
     replacement_year <- as.character(target_years[i])
-    target_file_path <- file.path(stringr::str_replace(
-      smart_path,
-      pattern, replacement_year
-    ))
+    target_file_path <- file.path(stringr::str_replace(smart_path,
+                                                       pattern, replacement_year))
     if (file.exists(target_file_path)) {
       result_file_list <- append(result_file_list, target_file_path)
       result_years <- append(result_years, target_years[i])
     }
   }
-  return(list(
-    files = result_file_list,
-    years = result_years
-  ))
+  return(list(files = result_file_list,
+              years = result_years))
 }
 
 #' @export
@@ -1520,15 +1505,11 @@ smart_read_excel_by_year <-
     file_list <-
       reader(smart_path)
     data_tables <-
-      purrr::map(
-        file_list$files,
-        ~ readxl::read_excel(.x, skip = skip)
-      )
+      purrr::map(file_list$files,
+                 ~ readxl::read_excel(.x, skip = skip))
     # create a nested tibble
-    result <- tibble::tibble(
-      year = file_list$years,
-      data = data_tables
-    )
+    result <- tibble::tibble(year = file_list$years,
+                             data = data_tables)
     if (clean) {
       result <- result |>
         # rename using internal rename database
@@ -1550,22 +1531,16 @@ smart_get_all_files_in_dir <-
     }
     file_list <- list.files(smart_path)
     # remove temp xlsx file "~$Bo District.xlsx"
-    file_list <- purrr::keep(
-      file_list,
-      ~ !stringr::str_starts(.x, "~")
-    )
+    file_list <- purrr::keep(file_list,
+                             ~ !stringr::str_starts(.x, "~"))
     # map get full path
     file_list <- file.path(smart_path, file_list)
     data_tables <-
-      purrr::map(
-        file_list,
-        ~ readxl::read_excel(.x, skip = skip)
-      )
+      purrr::map(file_list,
+                 ~ readxl::read_excel(.x, skip = skip))
     # create a nested tibble
-    result <- tibble::tibble(
-      file = file_list,
-      data = data_tables
-    )
+    result <- tibble::tibble(file = file_list,
+                             data = data_tables)
     if (clean) {
       result <- result %>%
         # rename using internal rename database
@@ -1613,39 +1588,39 @@ find_outlier <-
            ),
            alpha = 0.999,
            both_sides = FALSE) {
-    result <- tibble::tibble(
-      ID = integer(),
-      value = numeric(),
-      index = character()
-    )
+    result <- tibble::tibble(ID = integer(),
+                             value = numeric(),
+                             index = character())
     for (column in columns) {
       ### algorithm upper bound
       upper_bound <- quantile(df[[column]], alpha, na.rm = TRUE)
       outlier_index <-
         which(routine_monthly[[column]] > upper_bound)
-      df_outlier_list <- df[outlier_index, ] |>
+      df_outlier_list <- df[outlier_index,] |>
         # select id and target column
         select(dplyr::one_of(c("ID", column))) |>
         mutate(index = !!column) |>
-        rename(value = {{ column }})
+        rename(value = {
+          {
+            column
+          }
+        })
       result <- result |> full_join(df_outlier_list)
     }
     result <- result |>
       dplyr::left_join(df) |>
-      dplyr::select(
-        ID,
-        adm1,
-        adm2,
-        adm3,
-        hfca,
-        hfname,
-        hf,
-        year,
-        month,
-        yearmon,
-        index,
-        value
-      )
+      dplyr::select(ID,
+                    adm1,
+                    adm2,
+                    adm3,
+                    hfca,
+                    hfname,
+                    hf,
+                    year,
+                    month,
+                    yearmon,
+                    index,
+                    value)
     return(result)
   }
 
