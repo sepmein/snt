@@ -8,7 +8,7 @@ library(tidyverse)
 library(readxl)
 library(haven)
 library(tmap)
-
+tmap_options(check.and.fix = TRUE)
 
 # meta data ---------------------------------------------------------------
 
@@ -59,8 +59,8 @@ sle_pfpr_adm3_2019$plot_map(
   adm2_name_in_shp = "New_Dist",
   adm3_name_in_shp = "New_Chief",
   adm1_name_in_shp = "PROVINCE",
-  breaks = c(0,0.1, 0.2, 0.4, 1),
-  palette = "Red-Green",
+  breaks = c(0, 0.1, 0.2, 0.4, 1),
+  palette = c("#d5d5d5", "#8fbfe5", "#fbe484", "#782456"),
   adm2_border_thickness = 2.5
 )
 
@@ -85,8 +85,8 @@ sle_pfpr_adm2_2019$plot_map(
   adm2_name_in_shp = "New_Dist",
   adm3_name_in_shp = "New_Chief",
   adm1_name_in_shp = "PROVINCE",
-  breaks = c(0,0.1, 0.2, 0.4, 1),
-  palette = "Red-Green",
+  breaks = c(0, 0.1, 0.2, 0.4, 1),
+  palette = c("#d5d5d5", "#8fbfe5", "#fbe484", "#782456"),
   adm2_border_thickness = 2.5
 )
 
@@ -112,9 +112,8 @@ ihme_all_mortality_u5_sle_adm2$plot_map(
   adm2_name_in_shp = "New_Dist",
   adm3_name_in_shp = "New_Chief",
   adm1_name_in_shp = "PROVINCE",
-  breaks = c(0,0.06, 0.075, 0.095, 1),
-  # breaks = c(0,0.1, 0.2, 0.4, 1),
-  palette = "Red-Green",
+  breaks = c(0.06, 0.075, 0.095, 1),
+  palette = c("#fbe484", "#ed9c4a", "#ea3423"),
   adm2_border_thickness = 2.5
 )
 
@@ -138,11 +137,9 @@ ihme_all_mortality_u5_sle_adm3$plot_map(
   adm2_name_in_shp = "New_Dist",
   adm3_name_in_shp = "New_Chief",
   adm1_name_in_shp = "PROVINCE",
-  breaks = c(0,0.06, 0.075, 0.095, 1),
-  # breaks = c(0,0.1, 0.2, 0.4, 1),
-  palette = "Red-Green",
-  adm2_border_thickness = 2.5,
-  title  = FALSE
+  breaks = c(0.06, 0.075, 0.095, 1),
+  palette = c("#fbe484", "#ed9c4a", "#ea3423"),
+  adm2_border_thickness = 2.5
 )
 
 # monthly data ------------------------------------------------------------
@@ -198,7 +195,7 @@ sle_monthly <- sle_monthly |>
     test_mic = test_mic_u5 + test_mic_ov5,
     test_rdt_u5 = rowSums(across(starts_with("test_rdt_u5")), na.rm = TRUE),
     test_rdt_ov5 = rowSums(across(starts_with("test_rdt_ov5")), na.rm = TRUE),
-    test_rdt =   test_rdt_u5 + test_rdt_ov5,
+    test_rdt = test_rdt_u5 + test_rdt_ov5,
     test_u5 = test_mic_u5 + test_rdt_u5,
     test_ov5 = test_mic_ov5 + test_rdt_ov5,
     test = test_u5 + test_ov5,
@@ -223,7 +220,7 @@ sle_monthly <- sle_monthly |>
 
 ## Adm1 info ----
 sle_monthly <-
-  sle_monthly |> left_join(sle_adm |> select(adm1, adm2))
+  sle_monthly |> left_join(sle_adm |> select(adm1, adm2) |> distinct(adm1, adm2))
 ## Treatment seeking ----
 sle_monthly <- sle_monthly |> left_join(treatment_seeking_adm)
 
@@ -304,6 +301,161 @@ routine_data <- routine_data |> mutate(
 
 write.csv(routine_data, "SLE_routinedata_hf_month.csv")
 
+### 2.3 Outliers ------------------------------------------------------------
+
+#### 2.3.1 Plot --------------------------------------------------------------------
+routine_data |>
+  select(year,
+         allout_ov5,
+         allout_u5,
+         allout) |>
+  pivot_longer(cols = 2:4,
+               names_to = "index",
+               values_to = "value") |>
+  mutate(year = factor(year)) |>
+  ggplot(aes(x = value, y = index)) +
+  # geom_boxplot() +
+  geom_point(aes(color = year), alpha = 0.5)
+#
+# routine_data |>
+#   select(year,
+#          allout_ov5,
+#          allout_u5,
+#          allout) |>
+#   pivot_longer(cols = 2:4,
+#                names_to = "index",
+#                values_to = "value") |>
+#   mutate(year= factor(year)) |>
+#   ggstatsplot::ggbetweenstats(x = index,
+#                               y = value,
+#                               pairwise.comparisons = FALSE)
+ggsave(
+  "SLE_outliers_1.png",
+  width = 5,
+  height = 4,
+  dpi = 300
+)
+
+routine_data |>
+  select(year,
+         maldth_ov5,
+         maldth_u5,
+         maldth,
+         maltreat_ov5,
+         maltreat_u5,
+         maltreat,
+         conf,
+         test) |>
+  pivot_longer(cols = 2:9,
+               names_to = "index",
+               values_to = "value") |>
+  mutate(year = factor(year)) |>
+  ggplot(aes(x = value, y = index)) +
+  # geom_boxplot() +
+  geom_point(aes(color = year), alpha = 0.5)
+# mutate(year= factor(year)) |>
+# ggplot(aes(x = value, y = index)) +
+# geom_boxplot() +
+# # geom_point(aes(shape = year),alpha = 0.01)
+# ggstatsplot::ggbetweenstats(x = index,
+#                             y = value,
+#                             pairwise.comparisons = FALSE)
+ggsave(
+  "SLE_outliers_2.png",
+  width = 5,
+  height = 4,
+  dpi = 300
+)
+
+routine_data |>
+  select(year,
+         maladm,
+         maladm_ov5,
+         maladm_u5,
+         alladm,
+         alladm_ov5,
+         alladm_u5,
+  ) |>
+  pivot_longer(cols = 2:7,
+               names_to = "index",
+               values_to = "value") |>
+  # mutate(year= factor(year)) |>
+  # ggplot(aes(x = value, y = index)) +
+  # geom_boxplot() +
+  # geom_point(aes(shape = year),alpha = 0.01)
+  mutate(year = factor(year)) |>
+  ggplot(aes(x = value, y = index)) +
+  # geom_boxplot() +
+  geom_point(aes(color = year), alpha = 0.5)
+# ggstatsplot::ggbetweenstats(x = index,
+#                             y = value,
+#                             pairwise.comparisons = FALSE)
+ggsave(
+  "SLE_outliers_3.png",
+  width = 5,
+  height = 4,
+  dpi = 300
+)
+
+#### 2.3.2 List --------------------------------------------------------------------
+outliers <- find_outlier(routine_data)
+outliers_by_hf <- outliers_find_hf(outliers)
+# per health facilties
+# outlier_test <- EnvStats::rosnerTest(routine_monthly$maldth, 10000)
+# outlier_test$all.stats
+### 2.4 Consistency test --------------------------------------------------------
+
+consistency_color <- c("Blue", "Red")
+
+routine_data |>
+  mutate(error = if_else(test > allout, TRUE, FALSE)) |>
+  ggplot() +
+  geom_point(aes(y = allout, x = test, color = error)) +
+  scale_color_manual("test > allout", values = consistency_color) +
+  geom_abline(slope = 1)
+ggsave("SLE_consistency_1.png")
+
+routine_data |>
+  mutate(error = if_else(conf > test, TRUE, FALSE)) |>
+  ggplot() +
+  geom_point(aes(y = test, x = conf, color = error)) +
+  scale_color_manual("conf > test", values = consistency_color) +
+  geom_abline(slope = 1)
+ggsave("SLE_consistency_2.png")
+
+routine_data |>
+  mutate(error = if_else(maltreat > conf, TRUE, FALSE)) |>
+  ggplot() +
+  geom_point(aes(y = conf, x = maltreat, color = error)) +
+  scale_color_manual("maltreat > conf", values = consistency_color) +
+  geom_abline(slope = 1)
+ggsave("SLE_consistency_3.png")
+
+routine_data |>
+  mutate(error = if_else(maldth > maladm, TRUE, FALSE)) |>
+  routine_data |>
+  ggplot() +
+  geom_point(aes(y = maladm, x = maldth, color = error)) +
+  scale_color_manual("maldth > maladm", values = consistency_color) +
+  geom_abline(slope = 1)
+ggsave("SLE_consistency_4.png")
+
+routine_data |>
+  mutate(error = if_else(maldth > alldth, TRUE, FALSE)) |>
+  ggplot() +
+  geom_point(aes(y = alldth, x = maldth, color = error)) +
+  scale_color_manual("maldth > alldth", values = consistency_color) +
+  geom_abline(slope = 1)
+ggsave("SLE_consistency_5.png")
+
+routine_data |>
+  mutate(error = if_else(maladm > alladm, TRUE, FALSE)) |>
+  ggplot() +
+  geom_point(aes(y = alladm, x = maladm, color = error)) +
+  scale_color_manual("maladm > alladm", values = consistency_color) +
+  geom_abline(slope = 1)
+ggsave("SLE_consistency_6.png")
+
 # Incidence -----------------------------------------------------------
 ## By Adm2 -----
 ### By Month -----
@@ -313,7 +465,8 @@ adm2_reprat_month <- routine_data |>
   mutate(reported = if_else(conf > 0, 1, 0)) |>
   group_by(adm2, hf, year, month) |>
   summarise(reported = sum(reported, na.rm = TRUE),
-            n_hf = n(),) |>
+            n_hf = n(),
+  ) |>
   group_by(adm2, year, month) |>
   summarise(reprat = sum(reported) / sum(n_hf))
 
@@ -464,11 +617,7 @@ n2_adm3_year <-
 #### N3 -----
 n3_adm3_year <- n2_adm3_year |>
   mutate(n3 = n2 + n2 * priv_treat / pub_treat + n2 * no_treat / pub_treat)
-
-
 write_csv(n3_adm3_year, "SLE_incidence_adm3.csv")
-
-
 
 # Plot Incidence ----------------------------------------------------------
 
@@ -485,22 +634,124 @@ tmap_options(check.and.fix = TRUE)
 incidence_crude_map_adm2 <-
   tm_shape(sle_adm2_incidence_map_and_data) +
   tm_polygons(
-    "incidence_crude",
-    ,
-    # breaks = c(0, 250, 350, 450, 20000),
-    palette = rev(grDevices::hcl.colors(4,
-                                        "viridis"))
+    col = "incidence_crude",
+    breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(4,
+                                    "Blue-Red")
   ) +
   tmap::tm_facets(by = "year")
 print(incidence_crude_map_adm2)
+tmap_save(incidence_crude_map_adm2, "sle_incidence_crude_adm2.png")
+
+incidence_n1_map_adm2 <-
+  tm_shape(sle_adm2_incidence_map_and_data) +
+  tm_polygons(
+    col = "incidence_n1",
+    breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(4,
+                                    "Blue-Red")
+  ) +
+  tmap::tm_facets(by = "year")
+print(incidence_n1_map_adm2)
+tmap_save(incidence_n1_map_adm2, "sle_incidence_n1_adm2.png")
+
+
+incidence_n2_map_adm2 <-
+  tm_shape(sle_adm2_incidence_map_and_data) +
+  tm_polygons(
+    col = "incidence_n2",
+    breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(4,
+                                    "Blue-Red")
+  ) +
+  tmap::tm_facets(by = "year")
+print(incidence_n2_map_adm2)
+tmap_save(incidence_n2_map_adm2, "sle_incidence_n2_adm2.png")
+
+
+incidence_n3_map_adm2 <-
+  tm_shape(sle_adm2_incidence_map_and_data) +
+  tm_polygons(
+    col = "incidence_n3",
+    breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(4,
+                                    "Blue-Red")
+  ) +
+  tmap::tm_facets(by = "year")
+print(incidence_n3_map_adm2)
+tmap_save(incidence_n3_map_adm2, "sle_incidence_n3_adm2.png")
+
+## By adm3 year ------------------------------------------------------------
+sle_adm3_map <- sf::st_read(sle_chiefdom_shapefile)
+
+sle_adm3_incidence_map_and_data <-
+  sle_adm3_map |> left_join(incidence_adm3_year,
+                            by = c("ChiefDom" = "adm3"))
+
+tmap_mode("plot")
+tmap_options(check.and.fix = TRUE)
+incidence_crude_map_adm3 <-
+  tm_shape(sle_adm3_incidence_map_and_data) +
+  tm_polygons(
+    col = "incidence_crude",
+    breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(4,
+                                    "Blue-Red")
+  ) +
+  tmap::tm_facets(by = "year")
+print(incidence_crude_map_adm3)
+tmap_save(incidence_crude_map_adm3, "sle_incidence_crude_adm3.png")
+
+incidence_n1_map_adm3 <-
+  tm_shape(sle_adm3_incidence_map_and_data) +
+  tm_polygons(
+    col = "incidence_n1",
+    breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(4,
+                                    "Blue-Red")
+  ) +
+  tmap::tm_facets(by = "year")
+print(incidence_n1_map_adm3)
+tmap_save(incidence_n1_map_adm3, "sle_incidence_n1_adm3.png")
+
+
+incidence_n2_map_adm3 <-
+  tm_shape(sle_adm3_incidence_map_and_data) +
+  tm_polygons(
+    col = "incidence_n2",
+    breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(4,
+                                    "Blue-Red")
+  ) +
+  tmap::tm_facets(by = "year")
+print(incidence_n2_map_adm3)
+tmap_save(incidence_n2_map_adm3, "sle_incidence_n2_adm3.png")
+
+
+incidence_n3_map_adm3 <-
+  tm_shape(sle_adm3_incidence_map_and_data) +
+  tm_polygons(
+    col = "incidence_n3",
+    breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(4,
+                                    "Blue-Red")
+  ) +
+  tmap::tm_facets(by = "year")
+print(incidence_n3_map_adm3)
+tmap_save(incidence_n3_map_adm3, "sle_incidence_n3_adm3.png")
+
 
 # Missing check -----
 ## 2.4.1 Plot by HF & Date -------------------------------------------------------
 report_status_by_hf_and_date <- routine_data |>
-  group_by(hf, year, month) |>
+  group_by(adm1, adm2, adm3, hf, year, month) |>
   summarise(sum = sum(c_across(allout_u5:maldth), na.rm = TRUE)) |>
   mutate(reported = if_else(sum > 0, "Y", "N"),
-         yearmon = str_c(year, str_pad(month, 2, pad = "0")))
+         yearmon = str_c(year, str_pad(month, 2, pad = "0"))) |>
+  select(adm1, adm2, adm3, hf, yearmon, reported)
+
+write_csv(report_status_by_hf_and_date, "SLE_hfmont_activity.csv")
+
 report_status_by_hf_and_date |>
   ggplot(aes(x = yearmon, y = hf, fill = reported)) +
   geom_tile() +
@@ -510,7 +761,11 @@ report_status_by_hf_and_date |>
        x = "Date") +
   theme(axis.text.y = element_blank()) +
   scale_fill_manual(values = c("N" = "white", "Y" = "red3"))
-
+ggsave(
+  filename = "report_status_by_hf_and_date.png",
+  width = 7,
+  height = 5,
+)
 ## 2.4.4 Plot Indicators & Date --------------------------------------------------
 report_status_by_indicators_and_date <- routine_data |>
   pivot_longer(
@@ -535,13 +790,16 @@ ggplot(report_status_by_indicators_and_date) +
   geom_tile(aes(x = year, y = index, fill = report_rate)) +
   scale_fill_viridis_c()
 
+ggsave(filename = "report_status_by_indicators_and_date.png",
+       width = 7,
+       height = 6)
 
 ## 2.4.5 Plot By ADM2 and Date ---------------------------------------------------
 report_status_by_adm2_and_date <- routine_data |>
   pivot_longer(cols = susp:maldth,
                names_to = "index",
                values_to = "value") |>
-  mutate(reported = if_else(value > 0, 1, 0) ,
+  mutate(reported = if_else(value > 0, 1, 0),
          yearmon = str_c(year, str_pad(month, 2, pad = "0"))) |>
   group_by(adm2, yearmon) |>
   summarise(reports = sum(reported, na.rm = TRUE), n = n()) |>
@@ -554,3 +812,92 @@ ggplot(report_status_by_adm2_and_date) +
   labs(title = "Report Status By Adm2 and Date",
        y = "Districts",
        x = "Date")
+
+# Categorization -----
+
+categorization <- function(PfPR, au5mr_cat) {
+  if ((PfPR >= 0.2 & PfPR <= 0.4) & (au5mr_cat >= 0.095)) {
+    cat <- 1
+  } else if ((PfPR >= 0.4) & (au5mr_cat >= 0.095)) {
+    cat <- 1
+  } else if (PfPR >= 0.4 &
+             (au5mr_cat >= 0.075 & au5mr_cat < 0.095)) {
+    cat <- 1
+  } else if ((PfPR >= 0.1 & PfPR <= 0.2) & au5mr_cat >= 0.095) {
+    cat <- 2
+  } else if ((PfPR >= 0.2 & PfPR <= 0.4) &
+             (au5mr_cat >= 0.075 & au5mr_cat < 0.095)) {
+    cat <- 2
+  } else if (PfPR >= 0.4 &
+             (au5mr_cat >= 0.06 & au5mr_cat < 0.075)) {
+    cat <- 2
+  } else if ((PfPR >= 0.1 &
+              PfPR <= 0.2) &
+             (au5mr_cat >= 0.075 & au5mr_cat < 0.095)) {
+    cat <- 3
+  } else if ((PfPR >= 0.2 &
+              PfPR <= 0.4) &
+             (au5mr_cat >= 0.06 & au5mr_cat < 0.075)) {
+    cat <- 3
+  } else if ((PfPR >= 0.4) & (au5mr_cat < 0.06)) {
+    cat <- 3
+  } else if ((PfPR >= 0.1 &
+              PfPR <= 0.2) &
+             (au5mr_cat >= 0.06 & au5mr_cat < 0.075)) {
+    cat <- 4
+  } else if ((PfPR >= 0.2 & PfPR <= 0.4) & (au5mr_cat < 0.06)) {
+    cat <- 4
+  } else if ((PfPR >= 0.1 & PfPR <= 0.2) & (au5mr_cat < 0.06)) {
+    cat <- 5
+  }
+  return(as.character(cat))
+}
+### adm2 -----
+sle_malvec_cat_adm2 <-
+  sle_pfpr_adm2_2019$data |>
+  left_join(ihme_all_mortality_u5_sle_adm2$data, by = c('adm2')) |>
+  select(adm2, PfPR, au5mr_cat) |>
+  rowwise() |>
+  mutate(category = as.factor(categorization(PfPR, au5mr_cat)))
+
+write_csv(sle_malvec_cat_adm2, "sle_malvec_cat_adm2.csv")
+
+sle_malvec_cat_adm2_map_data <-
+  sle_adm2_map |> left_join(sle_malvec_cat_adm2, by = c("New_Dist" = "adm2"))
+sle_malvec_cat_adm2_map <- tm_shape(sle_malvec_cat_adm2_map_data) +
+  tm_polygons("category",
+              palette = c("#761a7b", "#ee3d8d", "#ef87be", "#4eac32", "#95d689"))
+print(sle_malvec_cat_adm2_map)
+tmap_save(sle_malvec_cat_adm2_map, "sle_malvec_cat_adm2.png")
+
+
+### adm3 -----
+sle_malvec_cat_adm3 <-
+  sle_pfpr_adm3_2019$data |>
+  left_join(ihme_all_mortality_u5_sle_adm3$data, by = c('adm2', 'adm3')) |>
+  select(adm2, adm3, PfPR, au5mr_cat) |>
+  rowwise() |>
+  mutate(category = categorization(PfPR, au5mr_cat))
+write_csv(sle_malvec_cat_adm3, "sle_malvec_cat_adm3.csv")
+
+sle_malvec_cat_adm3_map_data <-
+  sle_adm3_map |> left_join(sle_malvec_cat_adm3, by = c("New_Chief" = "adm3"))
+sle_malvec_cat_adm3_map <- tm_shape(sle_malvec_cat_adm3_map_data) +
+  tm_polygons("category",
+              palette = c("#761a7b", "#ee3d8d", "#ef87be", "#4eac32", "#95d689"))
+print(sle_malvec_cat_adm3_map)
+tmap_save(sle_malvec_cat_adm3_map, "sle_malvec_cat_adm3.png")
+
+## Population map
+pop_data_adm2  <-
+  routine_data |> filter(year == 2021) |> select(adm2, pop2022) |> distinct()
+
+pop_map <-
+  sle_adm2_map |> left_join(pop_data_adm2, by = c("New_Dist" = "adm2"))
+pop_map <-
+  tm_shape(pop_map) +
+  tm_polygons("pop2022") +
+  tm_shape(sle_adm3_map) +
+  tm_borders(col = "grey")
+
+tmap_save(pop_map, filename = "SLE_pop_map.png")
