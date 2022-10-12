@@ -3,5 +3,10 @@
         "dataframe",
         "shapefiles",
         "tibble"
-    ]
+    ],
+    "r.bracketedPaste": true,
+    "r.lsp.debug": true,
+    "r.lsp.use_stdio": true,
+    "r.plot.useHttpgd": true,
+    "r.rterm.mac": "/usr/local/bin/radian"
 }
