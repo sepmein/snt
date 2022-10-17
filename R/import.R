@@ -1,9 +1,9 @@
 #' @export
-routine_rename <- function(df, country = snt_country) {
+routine_rename <- function(df, cty) {
   # filter tibble by country name
   filtered_routine_rename_database <-
     snt::import_routine_rename %>%
-    dplyr::filter(country == country)
+    dplyr::filter(country == cty)
   find_and_rename <- function(names) {
     from <- filtered_routine_rename_database$from
     to <- filtered_routine_rename_database$to
@@ -26,11 +26,11 @@ routine_rename <- function(df, country = snt_country) {
 }
 
 #' @export
-routine_replace <- function(df, country = snt_country) {
+routine_replace <- function(df, cty) {
   # filter tibble by country name
   filtered_routine_rename_database <-
     snt::import_routine_replace %>%
-    dplyr::filter(country == country)
+    dplyr::filter(country == cty)
   find_and_rename <- function(names) {
     from <- filtered_routine_rename_database$from
     to <- filtered_routine_rename_database$to

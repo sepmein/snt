@@ -1,34 +1,131 @@
-﻿country,from,to
-BDI,Karusi,Karuzi
-BDI,Bugarama,Bugarama
-BDI,DS Bugarama,DS Bugarama
-BDI,Bujumbura centre,Zone Centre
-BDI,Bujumbura nord,Zone Nord
-BDI,Bujumbura sud,Zone Sud
-BDI,Bukinanyana,Mabayi
-BDI,DS Bukinanyana,DS Mabayi
-BDI,DS Bujumbura centre,DS Zone Centre
-BDI,DS Bujumbura nord,DS Zone Nord
-BDI,DS Bujumbura sud,DS Zone Sud
-BDI,DS Bukinanyana,DS Mabayi
-BDI,DS Bujumbura centre,DS Zone Centre
-BDI,DS Buja Centre,DS Zone Centre
-BDI,Ds Buja Centre,DS Zone Centre
-BDI,DS  Centre,DS Zone Centre
-BDI,DS Centre,DS Zone Centre
-BDI,DS Bujumbura nord,DS Zone Nord
-BDI,DS Buja Nord,DS Zone Nord
-BDI,DS  Buja Nord,DS Zone Nord
-BDI,DS Nord,DS Zone Nord
-BDI,DS Bujumbura sud,DS Zone Sud
-BDI,DS Sud,DS Zone Sud
-BDI,DS Bukinanyana,DS Mabayi
-BDI,DS  Centre,DS Zone Centre
-BDI,DS Nyanza lac,DS Nyanza-Lac
-BDI,DS Nyanza Lac,DS Nyanza-Lac
-BDI,DS Bujumbura centre,DS Zone Centre
-BDI,DS Bujumbura nord,DS Zone Nord
-BDI,DS Bujumbura sud,DS Zone Sud
-BDI,DS Bukinanyana,DS Mabayi
-BDI,Bujumbura Rural,Bujumbura
-BDI,DS Bukinanyana,DS Mabayi
+﻿country ,from                ,to
+BDI     ,Karusi              ,Karuzi
+BDI     ,Bugarama            ,Bugarama
+BDI     ,DS Bugarama         ,DS Bugarama
+BDI     ,Bujumbura centre    ,Zone Centre
+BDI     ,Bujumbura nord      ,Zone Nord
+BDI     ,Bujumbura sud       ,Zone Sud
+BDI     ,Bukinanyana         ,Mabayi
+BDI     ,DS Bukinanyana      ,DS Mabayi
+BDI     ,DS Bujumbura centre ,DS Zone Centre
+BDI     ,DS Bujumbura nord   ,DS Zone Nord
+BDI     ,DS Bujumbura sud    ,DS Zone Sud
+BDI     ,DS Bukinanyana      ,DS Mabayi
+BDI     ,DS Bujumbura centre ,DS Zone Centre
+BDI     ,DS Buja Centre      ,DS Zone Centre
+BDI     ,Ds Buja Centre      ,DS Zone Centre
+BDI     ,DS  Centre          ,DS Zone Centre
+BDI     ,DS Centre           ,DS Zone Centre
+BDI     ,DS Bujumbura nord   ,DS Zone Nord
+BDI     ,DS Buja Nord        ,DS Zone Nord
+BDI     ,DS  Buja Nord       ,DS Zone Nord
+BDI     ,DS Nord             ,DS Zone Nord
+BDI     ,DS Bujumbura sud    ,DS Zone Sud
+BDI     ,DS Sud              ,DS Zone Sud
+BDI     ,DS Bukinanyana      ,DS Mabayi
+BDI     ,DS  Centre          ,DS Zone Centre
+BDI     ,DS Nyanza lac       ,DS Nyanza-Lac
+BDI     ,DS Nyanza Lac       ,DS Nyanza-Lac
+BDI     ,DS Bujumbura centre ,DS Zone Centre
+BDI     ,DS Bujumbura nord   ,DS Zone Nord
+BDI     ,DS Bujumbura sud    ,DS Zone Sud
+BDI     ,DS Bukinanyana      ,DS Mabayi
+BDI     ,Bujumbura Rural     ,Bujumbura
+BDI     ,DS Bukinanyana      ,DS Mabayi
+SLE     ,January             ,1
+SLE     ,February            ,2
+SLE     ,March               ,3
+SLE     ,April               ,4
+SLE     ,May                 ,5
+SLE     ,June                ,6
+SLE     ,July                ,7
+SLE     ,August              ,8
+SLE     ,September           ,9
+SLE     ,October             ,10
+SLE     ,November            ,11
+SLE     ,December            ,12
+SLE,BO,Bo
+SLE,kaialhun,Kailahun
+SLE,kailahun,Kailahun
+SLE,moyamba,Moyamba
+SLE,Port loko,Port Loko
+SLE,Bargbo,Bagbo
+SLE,Bagbwe,Bagbwe(Bagbe)
+SLE,Bo city,Bo Town
+SLE,Baoma,Boama
+SLE,Bombali Serry,Bombali Siari
+SLE,Magbaimba Ndowahun,Magbaimba Ndorwahun
+SLE,Makarie,Makari
+SLE,Makarie,Makeni City
+SLE,Ngowahun,N'gowahun
+SLE,Benducha,Bendu-Cha
+SLE,Bonthe Municipal Council,Bonthe Urban
+SLE,Imperi,Imperri
+SLE,Kpanda Kemoh,Kpanda Kemo
+SLE,Sogbini,Sogbeni
+SLE,Delmandugu,Delemandugu
+SLE,Folosaba Dembelia,Dembelia
+SLE,Dembelia Sinkunia,Dembelia-Sinkunia
+SLE,Folosaba Kamba,Folosaba
+SLE,Kamadugu Yiraia,Kamadu Yiraia
+SLE,Kabelia,Kebelia
+SLE,Morifindu,Morifindugu
+SLE,Barawa,Wollay Barawa
+SLE,Jawei,Jawie
+SLE,kissi Teng,Kissi Teng
+SLE,Peje Bonge,Kpeje Bongre
+SLE,Peje West,Kpeje West
+SLE,Mambdu,Mandu
+SLE,Gbinleh,Gbinle
+SLE,Konimaka,Khonimaka
+SLE,Masumgbala,Masungbala
+SLE,Munu Thalla,Muna Thalla
+SLE,Gormbahun,Libeisaygahun/Gbombahun
+SLE,Sanda Magbolonthor,Sanda Magbolontor
+SLE,Sanda Tendaren,Sanda Tendaran
+SLE,Tambaka Simibuge,Tambakha Simibungie
+SLE,TAMBAKA YOBANGE,Tambakha Yobangie
+SLE,Gbonkorbor Kayaka,Gbonkobon Kayaka
+SLE,Kallian,Kalian
+SLE,Kasunko,Kasunko KaKellian
+SLE,Neini,Nieni
+SLE,Sengbeh,Sengbe
+SLE,Thamiso,Tamiso
+SLE,Gbane kandor,Gbane Kandor
+SLE,Banguawa,Bagruwa
+SLE,Kamjei,Kamajei
+SLE,Komgbora,Kongbora
+SLE,Bakeloko,Bakeh Loko
+SLE,Kafu bullum,Kaffu Bullom
+SLE,Koya (Port Loko),Koya
+SLE,Macimera,Masimera
+SLE,Tambaka,Thainkatopa
+SLE,Mano Sakrim,Mono Sakrim
+SLE,Kpanga,Panga
+SLE,Kpanga Krim,Panga krim
+SLE,Peje,Pejeh (Futa peje)
+SLE,Soro Gbeima,Soro Gbema
+SLE,Yakemoh Kpukumu Krim,Yakemu Kpukumu
+SLE,Dansigoia,Dansogoia
+SLE,Gbonkolenken Masankong,Gbonkolenkeni/Masankong
+SLE,Kalantuba,Kalanthuba
+SLE,Kholifa Mamuntha,Kholifa Mamuntha/Mayosso
+SLE,Kholifa Rowalla,Kholifa Rowala
+SLE,Kunike Fulawusu,Kunike Folawusu
+SLE,Gbokolenken,Mayeppoh
+SLE,Gbokolenken Polie,Poli
+SLE,Sambaya Bendugu,Sambaya
+SLE,Gbokolenken 5eppoh,Yele
+SLE,Tane,Tane
+SLE,Yoni Mabata,Yoni Mabanta
+SLE,Yoni Mamala,Yoni Mamaila
+SLE,Koya,Koya Rural
+SLE,York,York Rural
+SLE,Central 1,Central I
+SLE,Central 2,Central II
+SLE,East 1,East I
+SLE,East 2,East II
+SLE,East 3,East III
+SLE,West 1,West I
+SLE,West 2,West II
+SLE,West 3,West III
