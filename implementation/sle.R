@@ -1,7 +1,7 @@
 # reload package ----------------------------------------------------------
 
 
-setwd("/Users/sepmein/dev/working/snt")
+setwd("../snt")
 devtools::load_all()
 library(snt)
 library(tidyverse)
@@ -12,7 +12,7 @@ tmap_options(check.and.fix = TRUE)
 
 # meta data ---------------------------------------------------------------
 
-set_country(root_folder = "/Users/sepmein/dev/working/snt-data",
+set_country(root_folder = "../snt-data",
             country = "SLE")
 sle_adm2_shapefile <-
   "Countries/SLE/2022_malvac/shapefiles/sle_admn_adm2_py_who_district.shp"
@@ -228,6 +228,23 @@ sle_monthly <- sle_monthly |> left_join(treatment_seeking_adm)
 pop <- readxl::read_xlsx(path = "SLE_pop.xlsx")
 sle_monthly <- sle_monthly |> left_join(pop)
 
+# immunization follow up rates
+
+immunization_follow_up <- sle_monthly |>
+  select(
+    adm1,
+    adm2,
+    adm3,
+    penta3_tot,
+    mr1_tot
+  ) |>
+  group_by(
+    adm2
+  ) |>
+  summarise(penta3_tot = sum(penta3_tot, na.rm = TRUE), mr1_tot = sum(mr1_tot, na.rm = TRUE))
+
+write_csv(immunization_follow_up, "SLE_adm2_immunization_follow_up.csv")
+  
 ## Sle monthly
 # sle_adm_monthly <-
 # sle_monthly |> group_by(adm2, adm3) |> summarise(n = n())
@@ -400,7 +417,7 @@ ggsave(
 #### 2.3.2 List --------------------------------------------------------------------
 outliers <- find_outlier(routine_data)
 outliers_by_hf <- outliers_find_hf(outliers)
-# per health facilties
+# per health facilities
 # outlier_test <- EnvStats::rosnerTest(routine_monthly$maldth, 10000)
 # outlier_test$all.stats
 ### 2.4 Consistency test --------------------------------------------------------
@@ -750,13 +767,13 @@ report_status_by_hf_and_date <- routine_data |>
          yearmon = str_c(year, str_pad(month, 2, pad = "0"))) |>
   select(adm1, adm2, adm3, hf, yearmon, reported)
 
-write_csv(report_status_by_hf_and_date, "SLE_hfmont_activity.csv")
+write_csv(report_status_by_hf_and_date, "SLE_hfmonth_activity.csv")
 
 report_status_by_hf_and_date |>
   ggplot(aes(x = yearmon, y = hf, fill = reported)) +
   geom_tile() +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
-  labs(title = "Report Status By Health Facilitis and Date",
+  labs(title = "Report Status By Health Facilities and Date",
        y = "Health Facilities",
        x = "Date") +
   theme(axis.text.y = element_blank()) +
