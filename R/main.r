@@ -1560,6 +1560,42 @@ smart_get_file_list_by_year <- function(smart_path) {
 }
 
 #' @export
+smart_get_file_list_by_year_and_month <- function(smart_path) {
+  # detect country code
+  # find special character in special path parameter
+  # loop through file path in the path.list
+  # return valid file
+  pattern <- "\\*yyyy\\* | \\*mm\\*"
+  year_pattern <- "\\*yyyy\\*"
+  month_pattern <- "\\*mm\\*"
+  detected_pattern <- stringr::str_detect(smart_path, pattern)
+  if (!(detected_pattern)) {
+    stop("path do not contain pattern, please modify the year into *yyyy*")
+  }
+  target_years <- 1980:2030
+  target_months <- 1:12
+  result_file_list <- c()
+  for (i in seq_along(target_years)) {
+    for (j in seq_along(target_months)) {
+      replacement_year <- as.character(target_years[i])
+      replacement_month <- as.character(target_months[j])
+      target_file_path <- file.path(stringr::str_replace(
+        smart_path,
+        year_pattern, replacement_year
+      ))
+      target_file_path <- file.path(stringr::str_replace(
+        smart_path,
+        month_pattern, replacement_month
+      ))
+    }
+    if (file.exists(target_file_path)) {
+      result_file_list <- append(result_file_list, target_file_path)
+    }
+  }
+  return(result_file_list)
+}
+
+#' @export
 smart_read_excel_by_year <-
   function(reader,
            smart_path,
