@@ -2,7 +2,6 @@
 
 #' @export
 set_country <- function(root_folder, country) {
-  #  folder <- normalizePath(file.path(root_folder, country), mustWork = FALSE)
   setwd(root_folder)
   snt_country <<- country # nolint
 }
@@ -24,9 +23,9 @@ Resource <- R6::R6Class(
     #' is_online do have some problems, as all resources do come from
     #'  somewhere online,
     #' but in most cases this process only needed to be done once while,
-    #' means the file in not online anymore if this file has already 
+    #' means the file in not online anymore if this file has already
     #' been downloaded
-    #' TODO: should I provide a single download function for all the files 
+    #' TODO: should I provide a single download function for all the files
     #' needed
     #' e.g. download_resource(
     #'  resourceA, resourceB
@@ -294,14 +293,14 @@ Resource <- R6::R6Class(
 
 # Rainfall ----------------------------------------------------------------
 #' @export
+rainfall_api_base <- "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/"
 Rainfall <- R6::R6Class(
   # nolint
   classname = "Rainfall",
   inherit = Resource,
   public = list(
-    africa_api = 
-    "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/africa_monthly/tifs/",
-    global_api = "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/global_monthly/tifs/",
+    africa_api = paste0(rainfall_api_base, "africa_monthly/tifs/"),
+    global_api = paste0(rainfall_api_base, "global_monthly/tifs/"),
     initialize = function(is_online = TRUE,
                           is_batch = TRUE,
                           api_url = NULL,
@@ -547,12 +546,6 @@ RasterResource <- R6::R6Class(
         stop("Local destination should either be a list of folder, a folder or a file name") # nolint
       }
       self$clean()
-      # if (self$with_95CI) {
-      # merge three dataframes into one
-      # self$data[[1]]$MEAN <- self$data[[2]]$MEAN
-      # self$data[[1]]$UCI <- self$data[[3]]$UCI
-      # self$data <- self$data[[1]]
-      # }
       invisible(self)
     },
     clean = function() {
@@ -786,19 +779,28 @@ RasterResource <- R6::R6Class(
           if (!is.null(self$adm1_shapefile)) {
             map <- map +
               tmap::tm_shape(adm1_shapefile) +
-              tmap::tm_borders(lwd = adm1_border_thickness, col = adm1_border_color)
+              tmap::tm_borders(
+                lwd = adm1_border_thickness,
+                col = adm1_border_color
+              )
           }
         }
         if (self$target_adm_level == 3) {
           if (!is.null(self$adm1_shapefile)) {
             map <- map +
               tmap::tm_shape(adm1_shapefile) +
-              tmap::tm_borders(lwd = adm1_border_thickness, col = adm1_border_color)
+              tmap::tm_borders(
+                lwd = adm1_border_thickness,
+                col = adm1_border_color
+              )
           }
           if (!is.null(self$adm2_shapefile)) {
             map <- map +
               tmap::tm_shape(adm2_shapefile) +
-              tmap::tm_borders(lwd = adm2_border_thickness, col = adm2_border_color)
+              tmap::tm_borders(
+                lwd = adm2_border_thickness,
+                col = adm2_border_color
+              )
           }
         }
         print(map)
@@ -962,7 +964,13 @@ MAPPlasmodiumIndex <- R6::R6Class(
         self$data <- dplyr::rename(self$data, !!index := value)
       }
       self$data <-
-        self$data |> dplyr::mutate(year = stringr::str_extract(file, "\\d+(?=\\.\\w+$)"))
+        self$data |>
+        dplyr::mutate(
+          year = stringr::str_extract(
+            file,
+            "\\d+(?=\\.\\w+$)"
+          )
+        )
     },
     export = function(to = NULL, filename = NULL) {
       if (is.null(to)) {
@@ -1064,7 +1072,6 @@ MAPPlasmodiumIndex <- R6::R6Class(
           "2" = dplyr::inner_join(adm2_shapefile, my_data),
           "3" = dplyr::inner_join(adm3_shapefile, my_data)
         )
-        # dplyr::inner_join(palette.colors(), my_data)
         map <- tmap::tm_shape(map_and_data) +
           tmap::tm_borders() +
           tmap::tm_fill(
@@ -1115,7 +1122,7 @@ MAPPlasmodiumIndex <- R6::R6Class(
 
         # if title is false, display no title
         # if title is true, display default title
-        # if title is string, display the setted title
+        # if title is string, display the settled title
         if (is.logical(title)) {
           if (title == TRUE) {
             map <- map + tmap::tm_layout(title = paste(snt_country, year,
@@ -1503,7 +1510,12 @@ IHME_mortality <- R6::R6Class(
       }
       self$data <-
         self$data |>
-        dplyr::mutate(year = stringr::str_extract(file, "(\\d{4})(?=_Y2017M09D25)"))
+        dplyr::mutate(
+          year = stringr::str_extract(
+            file,
+            "(\\d{4})(?=_Y2017M09D25)"
+          )
+        )
     },
     export = function(to = NULL, filename = NULL) {
       if (is.null(to)) {
@@ -1567,7 +1579,10 @@ smart_read_excel_by_year <-
            clean = TRUE,
            country = snt_country) {
     if (is.null(snt_country)) { # nolint
-      warning("snt::set_country method has not runned yet, this will cause problem.")
+      warning(paste0(
+        "snt::set_country method has not run yet,",
+        " this will cause problem."
+      ))
     }
     file_list <-
       reader(smart_path)
@@ -1584,9 +1599,19 @@ smart_read_excel_by_year <-
     if (clean) {
       result <- result |>
         # rename using internal rename database
-        dplyr::mutate(data = purrr::map(data, ~ routine_rename(.x, country = country))) |>
+        dplyr::mutate(
+          data = purrr::map(
+            data,
+            ~ routine_rename(.x, country = country)
+          )
+        ) |>
         # replace using internal replace database
-        dplyr::mutate(data = purrr::map(data, ~ routine_replace(.x, country = country)))
+        dplyr::mutate(
+          data = purrr::map(
+            data,
+            ~ routine_replace(.x, country = country)
+          )
+        )
     }
     return(result)
   }
@@ -1619,11 +1644,21 @@ smart_get_all_files_in_dir <-
       data = data_tables
     )
     if (clean) {
-      result <- result %>%
+      result <- result |>
         # rename using internal rename database
-        dplyr::mutate(data = purrr::map(data, ~ routine_rename(.x, cty = country))) %>%
+        dplyr::mutate(
+          data = purrr::map(
+            data,
+            ~ routine_rename(.x, cty = country)
+          )
+        ) |>
         # replace using internal replace database
-        dplyr::mutate(data = purrr::map(data, ~ routine_replace(.x, cty = country)))
+        dplyr::mutate(
+          data = purrr::map(
+            data,
+            ~ routine_replace(.x, cty = country)
+          )
+        )
     }
     return(result)
   }
@@ -1704,7 +1739,7 @@ find_outlier <-
 
 #' @export
 outliers_find_hf <- function(outliers,
-group_by_column = "hf") {
+                             group_by_column = "hf") {
   result <-
     outliers |>
     dplyr::group_by(!!group_by_column) |>
