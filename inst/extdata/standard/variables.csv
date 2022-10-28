@@ -1,0 +1,21 @@
+code	definition	source	interval	from	to
+pfpr_map_m	mean value of PfPR estimation from MAP	MAP	yearly	2000	2022
+pfpr_map_u	upper value of PfPR estimation from MAP	MAP	yearly	2000	2022
+pfpr_map_l	low value of PfPR estimation from MAP	MAP	yearly	2000	2022
+pfic_map_m	mean value of Pf incidence estimation from MAP	MAP	yearly	2000	2022
+pfic_map_u	upper value of Pf incidence estimation from MAP	MAP	yearly	2000	2022
+pfic_map_l	low value of Pf incidence estimation from MAP	MAP	yearly	2000	2022
+pfmt_map_m	mean value of Pf mortality estimation from MAP	MAP	yearly	2000	2022
+pfmt_map_u	upper value of Pf mortality estimation from MAP	MAP	yearly	2000	2022
+pfmt_map_l	low value of Pf mortality  estimation from MAP	MAP	yearly	2000	2022
+pvpr_map_m	mean value of PvPR estimation from MAP	MAP	yearly	2000	2022
+pvpr_map_u	upper value of PvPR estimation from MAP	MAP	yearly	2000	2022
+pvpr_map_l	low value of PvPR estimation from MAP	MAP	yearly	2000	2022
+pvic_map_m	mean value of Pv Incidence estimation from MAP	MAP	yearly	2000	2022
+pvic_map_u	upper value of Pv Incidence estimation from MAP	MAP	yearly	2000	2022
+pvic_map_l	low value of Pv Incidence estimation from MAP	MAP	yearly	2000	2022
+rainfall	rainfall	CHIRPS	montly	2000	2020
+pop	All age population	country			
+pop_u5		country			
+pop_ov5		country			
+conf	confirmed malaria cases	country			

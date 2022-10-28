@@ -51,7 +51,25 @@ routine_replace <- function(df, cty) {
     return(formatted)
   }
   df <- df %>%
-    dplyr::mutate_if(is.character,
-                     find_and_rename)
+    dplyr::mutate_if(
+      is.character,
+      find_and_rename
+    )
   return(df)
+}
+
+dhs_api_endpoint <- "https://api.dhsprogram.com/rest/dhs/data/"
+#' @export
+import_dhs_data <- function(year = 2021) {
+  json_file <- RJSONIO::fromJSON(
+    paste0(dhs_api_endpoint, year, ",subnational")
+  )
+  json_data <- lapply(json_file$Data, function(x) {
+    unlist(x)
+  })
+  APIdata <- as.data.frame(
+    do.call("rbind", json_data),
+    stringsAsFactors = FALSE
+  )
+  return(tibble::as_tibble(APIdata))
 }

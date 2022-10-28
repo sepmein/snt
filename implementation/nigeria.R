@@ -29,14 +29,14 @@ nga_adm1_map <- st_read(nga_adm1_shapefile)
 
 ## Matching Adm1 name with Shapefiles -----
 ### Step1: export names in Shape file into a csv file -----
-nga_adm1 <- nga_adm1_map |> select(State)
+# nga_adm1 <- nga_adm1_map |> select(State)
 # write_csv(nga_adm1, "nga_adm1.csv")
 
 ### Step2: manually compare the adm1 with the one in the country data ------
 
-# Import data -----
+# 1. Import data -----
 
-## Bea incid-----
+## 1.1 Bea incid-----
 
 ### The data was stored in two dta file for Nigeria
 ### The data structure is different from each other
@@ -49,7 +49,8 @@ incid_2014_2020 <- read_dta(incid_2014_2020_path)
 incid_2021 <- read_dta(incid_2021_path) |>
   rename(adm1 = state) |>
   rename(pop = allagespop) |>
-  rename(pop_u5 = u5pop)
+  rename(pop_u5 = u5pop) |>
+  rename(adm2 = LGAName)
 
 ### Merge -----
 nga_adm1 <- bind_rows(incid_2014_2020, incid_2021)
@@ -80,7 +81,7 @@ nga_adm1 <- nga_adm1 |>
     c("adm1"),
     ~ str_remove(., "^\\w{2} ")
   ) |>
-  mutate(year = as.factor(year)) |>
+  # mutate(year = as.factor(year)) |>
   filter(!(is.na(adm1)))
 
 ## DHS -------
@@ -132,7 +133,6 @@ nga_dhs <- nga_dhs |>
   mutate(Year = as.factor(Year)) |>
   write_csv("nigeria_dhs-1.csv")
 
-nga_dhs <- read_csv("Data/Clean/nigeria_dhs.csv")
 ## MIS --------
 ### Read files ------
 household_possession_nets <- read_excel(
@@ -178,14 +178,20 @@ mis <- household_possession_nets |>
   full_join(use_of_itn_children) |>
   full_join(treatment_seeking) |>
   full_join(prevalence_in_children)
-mis <- mis
+mis <- mis |>
 rename(adm1 = State) |>
   mutate_at(c("adm1"), ~ str_replace(., "Akwa-Ibom", "Akwa lbom")) |>
   mutate_at(c("adm1"), ~ str_replace(., "Cross-River", "Cross River")) |>
   mutate_at(c("adm1"), ~ str_replace(., "FCT-Abuja", "Federal Capital Territory")) |>
   mutate(year = 2021)
 
-## Combine DHS and MIS data
+## Combine DHS and MIS data -----
+
+# Combine survey data and routine data ------
+
+# export ------
+
+nga_dhs <- read_csv("Data/Clean/nigeria_dhs.csv")
 
 ## Map and data -----
 nga_dhs_adm1 <-
@@ -582,6 +588,14 @@ wmr_one_page <- function(nga_adm1, district) {
 
       fct_survey <- nga_dhs_adm1 |>
         filter(State == district)
+    wmr_filtered <- wmr |>
+      select(Name, Year, incidence, Pop) |>
+      rename(adm1 = Name, year = Year, WMR = incidence) |>
+      filter(
+        adm1 == district,
+        year > 2013
+      ) |>
+      group_by(year)
   }
 
   # plot pop
@@ -614,7 +628,8 @@ wmr_one_page <- function(nga_adm1, district) {
     theme(text = element_text(size = 5))
   ggsave(paste0(district, " - 2. conf.png"), height = 1.2, width = 3)
 
-  fct |>
+  #incidence
+  incid <- fct |>
     select(year, adjinc3, pop) |>
     mutate(adjinc3_pop = adjinc3 * pop) |>
     summarise(
@@ -622,18 +637,50 @@ wmr_one_page <- function(nga_adm1, district) {
       pop = sum(pop, na.rm = TRUE)
     ) |>
     mutate(inci = adjinc3_pop / pop) |>
+      rename(`Routine Data(Adjusted)` = inci)
+
+  incid |> left_join(wmr_filtered) |> select(year, `Routine Data(Adjusted)`, WMR) |> pivot_longer(c(2:3)) |>
     ggplot(aes(
       x = year,
-      y = inci
-    ),
-    color = "blue"
+      y = value,
+      color = name,
+      group = name
+    )
     ) +
     geom_line() +
     geom_point() +
     labs(y = "Malaria Incidence / 1000") +
     theme(text = element_text(size = 5))
-  ggsave(paste0(district, " - 3. incidence.png"), height = 1.2, width = 3)
+  ggsave(paste0(district, " - 3. incidence.png"), height = 1.2, width = 5)
 
+  # WMR only incidence
+  wmr_filtered |>
+    select(year, WMR) |>
+    ggplot(aes(
+      x = year,
+      y = WMR
+    )) +
+    geom_line() +
+    geom_point() +
+    labs(y = "Estimated Incidence / 1000") +
+    ylim(50, NA) +
+    theme(text = element_text(size = 5))
+  ggsave(paste0(district, " - 3. WMR incidence.png"), height = 1.2, width = 3)
+
+  # WMR only cases
+  wmr_filtered |>
+    select(year, WMR, Pop) |>
+    mutate(cases = WMR * Pop) |>
+    ggplot(aes(
+      x = year,
+      y = cases
+    )) +
+    geom_line() +
+    geom_point() +
+    labs(y = "Estimated Cases") +
+    ylim(1000000000, NA) +
+    theme(text = element_text(size = 5))
+  ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
 
   fct_survey |>
     filter(Year != 2013) |>
@@ -749,6 +796,31 @@ for (district in adm1) {
 }
 
 wmr_one_page(nga_adm1, NA)
+
+### WMR 2021 -----
+wmr_2021 <- read_csv("Data/00_incidence_rate_all_age_table_Nigeria_admin1_2000-2023.csv") |>
+  filter(Year %in% c(2014, 2018, 2021)) |>
+  mutate(incidence_rate_all_age_rmean = incidence_rate_all_age_rmean * 1000) |>
+  mutate_at(c("Name"), ~ str_replace(., "Akwa Ibom", "Akwa lbom")) |>
+  mutate_at(c("Name"), ~ str_replace(., "Nassarawa", "Nasarawa")) |>
+  mutate_at(c("Name"), ~ str_replace(., "Abuja", "Federal Capital Territory"))
+
+wmr_2021_map_and_data <- nga_adm1_map |>
+  left_join(wmr_2021, by = c("State" = "Name"))
+
+wmr_2021_map <-
+  tm_shape(wmr_2021_map_and_data) +
+  tm_polygons("incidence_rate_all_age_rmean") +
+  tm_facets(by = "Year")
+print(wmr_2021_map)
+tmap_save(wmr_2021_map, "Nigeria - country - Incidence_wmr - map.png")
+
+wmr <- read_csv("Data/00_incidence_rate_all_age_table_Nigeria_admin1_2000-2023.csv") |>
+  mutate(incidence_rate_all_age_rmean = incidence_rate_all_age_rmean * 1000) |>
+  mutate_at(c("Name"), ~ str_replace(., "Akwa Ibom", "Akwa lbom")) |>
+  mutate_at(c("Name"), ~ str_replace(., "Nassarawa", "Nasarawa")) |>
+  mutate_at(c("Name"), ~ str_replace(., "Abuja", "Federal Capital Territory")) |>
+  rename(incidence = incidence_rate_all_age_rmean)
 
 ## Rainfall -------
 ### Extract rainfall data -----
@@ -1089,3 +1161,173 @@ nga_adm1 |>
   mutate(adjinc3_pop = adjinc3 * pop) |>
   summarise(adjinc3_pop = sum(adjinc3_pop, na.rm = TRUE), pop = sum(pop)) |>
   mutate(adjinc3 = adjinc3_pop / pop)
+
+
+
+
+
+
+
+district <- "Federal Capital Territory"
+wmr_filtered <- wmr |>
+  select(Name, Year, incidence, Pop) |>
+  rename(adm1 = Name, year = Year, WMR = incidence) |>
+  filter(
+    adm1 == district,
+    year > 2013
+  ) |>
+  group_by(year)
+
+# WMR only incidence
+wmr_filtered |>
+  select(year, WMR) |>
+  ggplot(aes(
+    x = year,
+    y = WMR
+  )) +
+  geom_line() +
+  geom_point() +
+  labs(y = "Estimated Incidence / 1000") +
+  ylim(50, NA) +
+  theme(text = element_text(size = 5))
+ggsave(paste0(district, " - 3. WMR incidence.png"), height = 1.2, width = 3)
+
+# WMR only cases
+wmr_filtered |>
+  select(year, WMR, Pop) |>
+  mutate(cases = WMR * Pop / 1000) |>
+  ggplot(aes(
+    x = year,
+    y = cases
+  )) +
+  geom_line() +
+  geom_point() +
+  labs(y = "Estimated Cases") +
+  ylim(50000, NA) +
+  theme(text = element_text(size = 5))
+ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
+
+
+district <- "Kwara"
+wmr_filtered <- wmr |>
+  select(Name, Year, incidence, Pop) |>
+  rename(adm1 = Name, year = Year, WMR = incidence) |>
+  filter(
+    adm1 == district,
+    year > 2013
+  ) |>
+  group_by(year)
+
+# WMR only incidence
+wmr_filtered |>
+  select(year, WMR) |>
+  ggplot(aes(
+    x = year,
+    y = WMR
+  )) +
+  geom_line() +
+  geom_point() +
+  labs(y = "Estimated Incidence / 1000") +
+  ylim(50, NA) +
+  theme(text = element_text(size = 5))
+ggsave(paste0(district, " - 3. WMR incidence.png"), height = 1.2, width = 3)
+
+# WMR only cases
+wmr_filtered |>
+  select(year, WMR, Pop) |>
+  mutate(cases = WMR * Pop / 1000) |>
+  ggplot(aes(
+    x = year,
+    y = cases
+  )) +
+  geom_line() +
+  geom_point() +
+  labs(y = "Estimated Cases") +
+  ylim(10000, NA) +
+  theme(text = element_text(size = 5))
+ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
+
+
+district <- "Katsina"
+wmr_filtered <- wmr |>
+  select(Name, Year, incidence, Pop) |>
+  rename(adm1 = Name, year = Year, WMR = incidence) |>
+  filter(
+    adm1 == district,
+    year > 2013
+  ) |>
+  group_by(year)
+
+# WMR only incidence
+wmr_filtered |>
+  select(year, WMR) |>
+  ggplot(aes(
+    x = year,
+    y = WMR
+  )) +
+  geom_line() +
+  geom_point() +
+  labs(y = "Estimated Incidence / 1000") +
+  ylim(50, NA) +
+  theme(text = element_text(size = 5))
+ggsave(paste0(district, " - 3. WMR incidence.png"), height = 1.2, width = 3)
+
+# WMR only cases
+wmr_filtered |>
+  select(year, WMR, Pop) |>
+  mutate(cases = WMR * Pop / 1000) |>
+  ggplot(aes(
+    x = year,
+    y = cases
+  )) +
+  geom_line() +
+  geom_point() +
+  labs(y = "Estimated Cases") +
+  ylim(1000000, NA) +
+  theme(text = element_text(size = 5))
+ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
+
+district <- "nga"
+wmr_filtered <- wmr |>
+  select(Name, Year, incidence, Pop) |>
+  rename(adm1 = Name, year = Year, WMR = incidence) |>
+  filter(
+    year > 2013
+  ) |>
+  group_by(year)
+
+# WMR only incidence
+wmr_filtered |>
+  select(year, WMR, Pop) |>
+  mutate(cases = WMR * Pop) |>
+  summarise(
+    cases = sum(cases, na.rm = TRUE),
+    Pop = sum(Pop, na.rm = TRUE)
+  ) |>
+  mutate(incid = cases / Pop) |>
+  ggplot(aes(
+    x = year,
+    y = incid
+  )) +
+  geom_line() +
+  geom_point() +
+  labs(y = "Estimated Incidence / 1000") +
+  ylim(50, NA) +
+  theme(text = element_text(size = 5))
+ggsave(paste0(district, " - 3. WMR incidence.png"), height = 1.2, width = 3)
+
+# WMR only cases
+wmr_filtered |>
+  select(year, WMR, Pop) |>
+  mutate(cases = WMR * Pop) |>
+  summarise(cases = sum(cases, na.rm = TRUE) / 1000) |>
+  ggplot(aes(
+    x = year,
+    y = cases
+  )) +
+  geom_line() +
+  geom_point() +
+  labs(y = "Estimated Cases") +
+  ylim(1000000, NA) +
+  theme(text = element_text(size = 5))
+ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)

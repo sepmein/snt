@@ -7,7 +7,7 @@ set_country <- function(root_folder, country) {
   snt_country <<- country # nolint
 }
 
-# Resource ----------------------------------------------------------------
+# Resource --------------------------------------------
 #' @export
 Resource <- R6::R6Class(
   classname = "resource",
@@ -24,9 +24,9 @@ Resource <- R6::R6Class(
     #' is_online do have some problems, as all resources do come from
     #'  somewhere online,
     #' but in most cases this process only needed to be done once while,
-    #' means the file in not online anymore if this file has already 
+    #' means the file in not online anymore if this file has already
     #' been downloaded
-    #' TODO: should I provide a single download function for all the files 
+    #' TODO: should I provide a single download function for all the files
     #' needed
     #' e.g. download_resource(
     #'  resourceA, resourceB
@@ -292,157 +292,19 @@ Resource <- R6::R6Class(
   )
 )
 
-# Rainfall ----------------------------------------------------------------
-#' @export
-Rainfall <- R6::R6Class(
-  # nolint
-  classname = "Rainfall",
-  inherit = Resource,
-  public = list(
-    africa_api = 
-    "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/africa_monthly/tifs/",
-    global_api = "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/global_monthly/tifs/",
-    initialize = function(is_online = TRUE,
-                          is_batch = TRUE,
-                          api_url = NULL,
-                          local_destination,
-                          local_file_type = "raster",
-                          output_destination) {
-      super$initialize(
-        is_online,
-        is_batch,
-        api_url,
-        local_destination,
-        local_file_type,
-        output_destination
-      )
-      invisible(self)
-    },
-    download = function(target,
-                        path_to_save,
-                        start_date,
-                        end_date) {
-      setwd(path_to_save)
-      if (target == "africa") {
-        super$download_batch(
-          api_url = self$africa_api,
-          select_files <-
-            self$select_files(
-              start_date,
-              end_date
-            )
-        )
-      } else if (target == "global") {
-        super$download_batch(
-          api_url = self$africa_api,
-          select_files = self.select_files(
-            start_date,
-            end_date
-          )
-        )
-      } else {
-        stop(paste0(
-          "Rainfall Resource Download, ",
-          "target should be africa or global"
-        ))
-      }
-      invisible(self)
-    },
-    load = function(country_shapefile_resource,
-                    country_adm2_code_resource) {
-      super$stack(country_shapefile_resource)
-      self$get_adm1_from_country(country_adm2_code_resource)
-      invisible(self)
-    },
-    clean = function() {
-
-    },
-    export = function(type, filename) {
-      setwd(self$output_destination)
-      if (type == "stacked") {
-        write.csv(self$data, file = filename)
-      }
-    },
-    plot = function() {
-      ggplot2::ggplot(self$data) +
-        ggplot2::geom_line(ggplot2::aes(
-          x = date,
-          y = rain
-        )) +
-        ggplot2::facet_wrap(~adm1)
-      invisible(self)
-    }
-  ),
-  private = list(
-    is_online = TRUE,
-    is_batch = TRUE,
-    local_file_type = "raster",
-    stacked_data = NULL,
-    select_files = function(start_date, end_date) {
-      return(function(filenames) {
-        start_id <- grep(start_date, filenames)
-        end_id <- grep(end_date, filenames)
-        filenames <- filenames[start_id:end_id]
-      })
-    },
-    get_adm1_from_country = function(path_to_country_adm2) {
-      self$data <- rename(self$data, amd2 = district)
-      self$data <- rename(self$data, rain = unlistrmeans)
-      self$data$date <- str_c(self$data$year,
-        str_pad(self$data$month, 2, pad = 0),
-        sep = "-"
-      )
-      self$data$date <- as.Date(sef.data$date)
-      country_adm2 <- read_dta(path_to_country_adm2)
-      rainfall_data_with_adm1 <- merge(self$data,
-        country_adm2,
-        by = "adm2"
-      )
-    }
-  )
-)
-
 
 # Shapefiles --------------------------------------------------------------
-#' @export
-CountryShapeFile <- R6::R6Class(
-  # nolint
-  "Country_Shapefile",
-  inherit = Resource,
-  public = list(
-    is_online = NULL,
-    is_batch = NULL,
-    api_url = NULL,
-    local_destination = NULL,
-    local_file_type = NULL,
-    output_destination = NULL,
-    initialize = function(is_online = FALSE,
-                          is_batch = FALSE,
-                          api_url = NULL,
-                          local_destination = paste(
-                            "Countries",
-                            snt_country,
-                            "2020_SNT",
-                            "Analysis",
-                            "orig",
-                            "data",
-                            "shapefiles",
-                            "District_sante_EPSG4326.shp",
-                            sep = "/"
-                          ),
-                          local_file_type = "shapefile",
-                          output_destination = ".") {
-      super$initialize(
-        is_online,
-        is_batch,
-        api_url,
-        local_destination,
-        local_file_type,
-        output_destination
-      )
-    }
-  )
-)
+
+# #' @export
+# Shapefile <- R6::R6Class(
+#   # nolint
+#   "Shapefile",
+#   inherit = Resource,
+#   public = list(
+#     local_destination = NULL,
+#     local_file_type <- NULL
+#   )
+# )
 
 # Raster Resource----------------------------------------------------------
 #' @export
@@ -456,12 +318,20 @@ RasterResource <- R6::R6Class(
     local_file_type = NULL,
     with_95CI = NULL,
     download_to = NULL,
+    adm0_shapefile = NULL,
     adm1_shapefile = NULL,
     adm2_shapefile = NULL,
     adm3_shapefile = NULL,
     target_adm_level = NULL,
     index_name = NULL,
-    initialize = function(adm1_shapefile = NULL,
+    cores = NULL,
+    # TODO add document
+    #' Init function for Raster Resource
+    #'
+    #' @param adm0_shapefile String
+    #' @param adm1_shapefile
+    initialize = function(adm0_shapefile = NULL,
+                          adm1_shapefile = NULL,
                           adm2_shapefile = NULL,
                           adm3_shapefile = NULL,
                           with_95CI = FALSE,
@@ -486,18 +356,23 @@ RasterResource <- R6::R6Class(
       )
       self$with_95CI <- with_95CI
       self$index_name <- index_name
+      self$adm0_shapefile <- adm0_shapefile
       self$adm1_shapefile <- adm1_shapefile
       self$adm2_shapefile <- adm2_shapefile
       self$adm3_shapefile <- adm3_shapefile
+      self$cores <- parallel::detectCores()
     },
     load = function(target_adm_level = 2,
+                    adm0_name_in_shp = NULL,
                     adm1_name_in_shp = NULL,
                     adm2_name_in_shp = NULL,
                     adm3_name_in_shp = NULL,
                     method = "mean") {
       self$target_adm_level <- target_adm_level
       # set target shapefile based on target level
-      if (target_adm_level == 1) {
+      if (target_adm_level == 0) {
+        target_shapefile <- self$adm0_shapefile
+      } else if (target_adm_level == 1) {
         target_shapefile <- self$adm1_shapefile
       } else if (target_adm_level == 2) {
         target_shapefile <- self$adm2_shapefile
@@ -515,10 +390,14 @@ RasterResource <- R6::R6Class(
       }
 
       # read shapefile
-      loaded_shp <- rgdal::readOGR(target_shapefile)
+      loaded_shp <- sf::st_read(target_shapefile)
+
+
       if (typeof(self$local_destination) == "list") {
+        # if local_destination is a list of folder
         self$data <- self$load_multiple_folder(
           target_adm_level,
+          adm0_name_in_shp,
           adm1_name_in_shp,
           adm2_name_in_shp,
           adm3_name_in_shp,
@@ -526,8 +405,10 @@ RasterResource <- R6::R6Class(
           loaded_shp
         )
       } else if (dir.exists(self$local_destination)) {
+        # if is a single folder
         self$data <- self$load_single_folder(
           target_adm_level,
+          adm0_name_in_shp,
           adm1_name_in_shp,
           adm2_name_in_shp,
           adm3_name_in_shp,
@@ -535,8 +416,10 @@ RasterResource <- R6::R6Class(
           loaded_shp
         )
       } else if (file_test("-f", self$local_destination)) {
+        # if is a single file
         self$data <- self$load_single_file(
           target_adm_level,
+          adm0_name_in_shp,
           adm1_name_in_shp,
           adm2_name_in_shp,
           adm3_name_in_shp,
@@ -559,6 +442,7 @@ RasterResource <- R6::R6Class(
 
     },
     load_single_file = function(target_adm_level,
+                                adm0_name_in_shp,
                                 adm1_name_in_shp,
                                 adm2_name_in_shp,
                                 adm3_name_in_shp,
@@ -588,41 +472,63 @@ RasterResource <- R6::R6Class(
       result <- tibble::as_tibble(unlist(by_district))
       # set file for tibble
       result$file <- current_file
+      result$GUID <- loaded_shp$GUID
+
+      result <- dplyr::left_join(loaded_shp, result, by = c("GUID"))
 
       # set adm1, adm2, adm3 from shp
-      if (target_adm_level == 1) {
-        result$adm1 <- loaded_shp[[adm1_name_in_shp]]
-      } else if (target_adm_level == 2) {
-        if (!is.null(adm1_name_in_shp)) {
-          result$adm1 <-
-            loaded_shp[[adm1_name_in_shp]]
-        }
-        result$adm2 <- loaded_shp[[adm2_name_in_shp]]
-      } else if (target_adm_level == 3) {
-        if (!is.null(adm1_name_in_shp)) {
-          result$adm1 <-
-            loaded_shp[[adm1_name_in_shp]]
-        }
-        if (!is.null(adm2_name_in_shp)) {
-          result$adm2 <-
-            loaded_shp[[adm2_name_in_shp]]
-        }
-        result$adm3 <- loaded_shp[[adm3_name_in_shp]]
-      }
+      # if (target_adm_level == 0) {
+      #   result$adm0 <- loaded_shp[[adm0_name_in_shp]]
+      # } else if (target_adm_level == 1) {
+      #   if (!is.null(adm0_name_in_shp)) {
+      #     result$adm0 <-
+      #       loaded_shp[[adm0_name_in_shp]]
+      #   }
+      #   result$adm1 <- loaded_shp[[adm1_name_in_shp]]
+      # } else if (target_adm_level == 2) {
+      #   if (!is.null(adm0_name_in_shp)) {
+      #     result$adm0 <-
+      #       loaded_shp[[adm0_name_in_shp]]
+      #   }
+      #   if (!is.null(adm1_name_in_shp)) {
+      #     result$adm1 <-
+      #       loaded_shp[[adm1_name_in_shp]]
+      #   }
+      #   result$adm2 <- loaded_shp[[adm2_name_in_shp]]
+      # } else if (target_adm_level == 3) {
+      #   if (!is.null(adm0_name_in_shp)) {
+      #     result$adm0 <-
+      #       loaded_shp[[adm0_name_in_shp]]
+      #   }
+      #   if (!is.null(adm1_name_in_shp)) {
+      #     result$adm1 <-
+      #       loaded_shp[[adm1_name_in_shp]]
+      #   }
+      #   if (!is.null(adm2_name_in_shp)) {
+      #     result$adm2 <-
+      #       loaded_shp[[adm2_name_in_shp]]
+      #   }
+      #   result$adm3 <- loaded_shp[[adm3_name_in_shp]]
+      # }
 
       # return result
       return(result)
     },
     get_district_raster_data = function(method,
                                         extracted_raster_data) {
+      # mean method in R is slow
+      # changed to this method based on
+      # https://stackoverflow.com/a/18604487/886198
       if (method == "mean") {
-        result <- lapply(extracted_raster_data,
-          FUN = mean, na.rm = TRUE
+        result <- parallel::mclapply(extracted_raster_data,
+          FUN = snt::faster_mean,
+          mc.cores = self$cores
         )
       }
       return(result)
     },
     load_single_folder = function(target_adm_level,
+                                  adm0_name_in_shp,
                                   adm1_name_in_shp,
                                   adm2_name_in_shp,
                                   adm3_name_in_shp,
@@ -648,6 +554,7 @@ RasterResource <- R6::R6Class(
         )
         loaded <- self$load_single_file(
           target_adm_level,
+          adm0_name_in_shp,
           adm1_name_in_shp,
           adm2_name_in_shp,
           adm3_name_in_shp,
@@ -660,6 +567,7 @@ RasterResource <- R6::R6Class(
       return(result)
     },
     load_multiple_folder = function(target_adm_level,
+                                    adm0_name_in_shp,
                                     adm1_name_in_shp,
                                     adm2_name_in_shp,
                                     adm3_name_in_shp,
@@ -669,6 +577,7 @@ RasterResource <- R6::R6Class(
       for (i in seq_along(self$local_destination)) {
         loaded <- self$load_single_folder(
           target_adm_level,
+          adm0_name_in_shp,
           adm1_name_in_shp,
           adm2_name_in_shp,
           adm3_name_in_shp,
@@ -807,6 +716,137 @@ RasterResource <- R6::R6Class(
   )
 )
 
+# Rainfall ----------------------------------------------------------------
+#' @export
+Rainfall <- R6::R6Class(
+  # nolint
+  classname = "Rainfall",
+  inherit = RasterResource,
+  public = list(
+    africa_api = NULL,
+    global_api = NULL,
+    api_url = NULL,
+    is_online = NULL,
+    is_batch = NULL,
+    local_file_type = NULL,
+    with_95CI = NULL,
+    download_to = NULL,
+    adm0_shapefile = NULL,
+    adm1_shapefile = NULL,
+    adm2_shapefile = NULL,
+    adm3_shapefile = NULL,
+    target_adm_level = NULL,
+    index_name = NULL,
+    initialize = function(adm0_shapefile = NULL,
+                          adm1_shapefile = NULL,
+                          adm2_shapefile = NULL,
+                          adm3_shapefile = NULL,
+                          with_95CI = FALSE,
+                          is_online = FALSE,
+                          is_batch = FALSE,
+                          api_url = NULL,
+                          local_destination = NULL,
+                          output_destination = NULL,
+                          download_to = NULL,
+                          ...) {
+      super$initialize(
+        adm0_shapefile = adm0_shapefile,
+        adm1_shapefile = adm1_shapefile,
+        adm2_shapefile = adm2_shapefile,
+        adm3_shapefile = adm3_shapefile,
+        with_95CI = with_95CI,
+        is_online = is_online,
+        is_batch = is_batch,
+        api_url = api_url,
+        local_destination = local_destination,
+        output_destination = output_destination,
+        local_file_type = "raster",
+        download_to = download_to,
+        index_name = "rainfall",
+        ...
+      )
+      self$africa_api <- "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/africa_monthly/tifs/"
+      self$global_api <- "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/global_monthly/tifs/"
+      invisible(self)
+    },
+    download = function(target,
+                        start_date,
+                        end_date) {
+      if (target == "africa") {
+        super$download_batch(
+          api_url = self$africa_api,
+          select_files <-
+            self$select_files(
+              start_date,
+              end_date
+            )
+        )
+      } else if (target == "global") {
+        super$download_batch(
+          api_url = self$africa_api,
+          select_files = self.select_files(
+            start_date,
+            end_date
+          )
+        )
+      } else {
+        stop(paste0(
+          "Rainfall Resource Download, ",
+          "target should be africa or global"
+        ))
+      }
+      invisible(self)
+    },
+    clean = function() {
+      # Filename: chirps-v2.0.2019.01.tif
+      self$data <- self$data |>
+        dplyr::mutate(
+          year = stringi::str_extract(filename, "\\d{4}"),
+          month = stringi::str_extract(filename, "\\d{2}(?=.tif)")
+        ) |>
+        rename(value == !!self$index_name)
+    },
+    export = function(type, filename) {
+      setwd(self$output_destination)
+      if (type == "stacked") {
+        write_csv(self$data, file = filename)
+      }
+    },
+    plot = function() {
+      ggplot2::ggplot(self$data) +
+        ggplot2::geom_line(ggplot2::aes(
+          x = date,
+          y = rain
+        )) +
+        ggplot2::facet_wrap(~adm1)
+      invisible(self)
+    }
+  ),
+  private = list(
+    select_files = function(start_date, end_date) {
+      return(function(filenames) {
+        start_id <- grep(start_date, filenames)
+        end_id <- grep(end_date, filenames)
+        filenames <- filenames[start_id:end_id]
+      })
+    },
+    get_adm1_from_country = function(path_to_country_adm2) {
+      self$data <- rename(self$data, amd2 = district)
+      self$data <- rename(self$data, rain = unlistrmeans)
+      self$data$date <- str_c(self$data$year,
+        str_pad(self$data$month, 2, pad = 0),
+        sep = "-"
+      )
+      self$data$date <- as.Date(sef.data$date)
+      country_adm2 <- read_dta(path_to_country_adm2)
+      rainfall_data_with_adm1 <- merge(self$data,
+        country_adm2,
+        by = "adm2"
+      )
+    }
+  )
+)
+
 # Plasmodium Index --------------------------------------------------------
 
 MAPPlasmodiumIndex <- R6::R6Class(
@@ -820,7 +860,8 @@ MAPPlasmodiumIndex <- R6::R6Class(
     with_95CI = NULL,
     download_to = NULL,
     plasmodium_index = NULL,
-    initialize = function(adm1_shapefile = NULL,
+    initialize = function(adm0_shapefile = NULL,
+                          adm1_shapefile = NULL,
                           adm2_shapefile = NULL,
                           adm3_shapefile = NULL,
                           with_95CI = TRUE,
@@ -916,6 +957,7 @@ MAPPlasmodiumIndex <- R6::R6Class(
       }
 
       super$initialize(
+        adm0_shapefile = adm0_shapefile,
         adm1_shapefile = adm1_shapefile,
         adm2_shapefile = adm2_shapefile,
         adm3_shapefile = adm3_shapefile,
@@ -927,6 +969,7 @@ MAPPlasmodiumIndex <- R6::R6Class(
         output_destination = output_destination,
         local_destination = local_destination,
         download_to = download_to,
+        index_name = self$plasmodium_index,
         ...
       )
 
@@ -940,7 +983,7 @@ MAPPlasmodiumIndex <- R6::R6Class(
       invisible(self)
     },
     read_csv = function(from = NULL, filename) {
-      self$data <- read.csv(file = file.path(
+      self$data <- readr::read_csv(file = file.path(
         self$output_destination,
         paste(self$plasmodium_index,
           snt_country,
@@ -962,7 +1005,11 @@ MAPPlasmodiumIndex <- R6::R6Class(
         self$data <- dplyr::rename(self$data, !!index := value)
       }
       self$data <-
-        self$data |> dplyr::mutate(year = stringr::str_extract(file, "\\d+(?=\\.\\w+$)"))
+        self$data |> dplyr::mutate(
+          year = stringr::str_extract(
+            file, "\\d+(?=\\.\\w+$)"
+          )
+        )
     },
     export = function(to = NULL, filename = NULL) {
       if (is.null(to)) {
@@ -1213,7 +1260,7 @@ PfPrevalence <- R6::R6Class(
 #' @export
 PfIncidence <- R6::R6Class(
   "PfIncidence",
-  inherit = PlasmodiumIndex,
+  inherit = MAPPlasmodiumIndex,
   public = list(
     api_url = NULL,
     is_online = NULL,
@@ -1269,7 +1316,7 @@ PfIncidence <- R6::R6Class(
 #' @export
 PfMortality <- R6::R6Class(
   "PfMortality",
-  inherit = PlasmodiumIndex,
+  inherit = MAPPlasmodiumIndex,
   public = list(
     api_url = NULL,
     is_online = NULL,
@@ -1324,7 +1371,7 @@ PfMortality <- R6::R6Class(
 #' @export
 PvPrevalence <- R6::R6Class(
   "PVPrevalence",
-  inherit = PlasmodiumIndex,
+  inherit = MAPPlasmodiumIndex,
   public = list(
     api_url = NULL,
     is_online = NULL,
@@ -1379,7 +1426,7 @@ PvPrevalence <- R6::R6Class(
 #' @export
 PvIncidence <- R6::R6Class(
   "PVIncidence",
-  inherit = PlasmodiumIndex,
+  inherit = MAPPlasmodiumIndex,
   public = list(
     api_url = NULL,
     is_online = NULL,
@@ -1740,11 +1787,17 @@ find_outlier <-
 
 #' @export
 outliers_find_hf <- function(outliers,
-group_by_column = "hf") {
+                             group_by_column = "hf") {
   result <-
     outliers |>
     dplyr::group_by(!!group_by_column) |>
     dplyr::summarise(count = dplyr::n()) |>
     dplyr::arrange(dplyr::desc(dplyr::count))
   return(result)
+}
+
+#' @export
+faster_mean <- function(data) {
+  # https://stackoverflow.com/a/18604487/886198
+  return(sum(data, na.rm = TRUE) / length(data))
 }
