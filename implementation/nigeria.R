@@ -21,7 +21,7 @@ smc_before_2020 <- "Data/NGA_Intervention_data_29-01-2020_CORRECTED_bg.xlsx"
 smc_after_2020 <- "Data/Clean/nigeria_smc_2021.xlsx"
 llins_before_2020 <- smc_before_2020
 llins_after_2020 <- "Data/Clean/nga_adm1_llins_2020_2021.xlsx"
-
+ento_file <- "Data/"
 ## Shapefiles -----
 nga_adm1_shapefile <-
   "NGA_clean_Shp/NGA_States_clean.shp"
@@ -1331,3 +1331,4 @@ wmr_filtered |>
   ylim(1000000, NA) +
   theme(text = element_text(size = 5))
 ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
+
