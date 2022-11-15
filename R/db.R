@@ -10,6 +10,8 @@ sql_select_adm0_year <- "select * from adm0_year"
 sql_select_adm0_month <- "select * from adm0_month"
 sql_select_adm1_year <- "select * from adm1_year"
 sql_select_adm1_month <- "select * from adm1_month"
+sql_select_adm2_year <- "select * from adm2_year"
+sql_select_adm2_month <- "select * from adm2_month"
 
 ## sql constrain -----------
 constrain_adm0 <- function(positional_index) {
@@ -75,8 +77,8 @@ add_where <- function(sql) {
     sql <- paste(sql, "WHERE", sep = " ")
     return(sql)
 }
-add_constrain <- function(sql, constain_fn, index, ...) {
-    constrain <- constain_fn(index, ...)
+add_constrain <- function(sql, constrain_fn, index, ...) {
+    constrain <- constrain_fn(index, ...)
     sql <- paste(
         sql, constrain,
         sep = " "
@@ -87,12 +89,35 @@ add_constrain <- function(sql, constain_fn, index, ...) {
 # query --------
 ## adm0_year by adm0, year, year_from, year_to, indicators
 #' @export
-dbq_select_adm0 <- function(adm0 = NULL,
-                            year = NULL,
-                            year_from = NULL,
-                            year_to = NULL,
-                            indicators = NULL,
-                            aggregation = "yearly") {
+dbq_select <- function(adm0 = NULL,
+                       year = NULL,
+                       year_from = NULL,
+                       year_to = NULL,
+                       indicators = NULL,
+                       aggregation = "yearly",
+                       level = NULL) {
+    # Decide on the db query
+    if (level == "adm0") {
+        if (aggregation == "yearly") {
+            sql <- sql_select_adm0_year
+        } else if (aggregation == "monthly") {
+            sql <- sql_select_adm0_month
+        }
+    } else if (level == "adm1") {
+        if (aggregation == "yearly") {
+            sql <- sql_select_adm1_year
+        } else if (aggregation == "monthly") {
+            sql <- sql_select_adm1_month
+        }
+    } else if (level == "adm2") {
+        if (aggregation == "yearly") {
+            sql <- sql_select_adm2_year
+        } else if (aggregation == "monthly") {
+            sql <- sql_select_adm2_month
+        }
+    } else {
+        stop("dbq_select, level should be either adm0, adm1 or adm2")
+    }
 
     # Build connection
     con <- DBI::dbConnect(
@@ -101,11 +126,7 @@ dbq_select_adm0 <- function(adm0 = NULL,
         user = db_user,
         password = db_pass
     )
-    if (aggregation == "yearly") {
-        sql <- sql_select_adm0_year
-    } else if (aggregation == "monthly") {
-        sql <- sql_select_adm0_month
-    }
+
     query_list <- c()
     index <- 1
     first <- TRUE
@@ -198,16 +219,92 @@ dbq_select_adm0 <- function(adm0 = NULL,
     # close connection
     DBI::dbDisconnect(con)
     # return result
-     return(tibble::as.tibble(result) |>
+    return(tibble::as_tibble(result) |>
         tidyr::pivot_wider(
             names_from = index,
             values_from = value
         ))
 }
 
-cases_and_deaths_averted <- dbq_select_adm0(
+cases_and_deaths_averted <- dbq_select(
+    level = "adm0",
     adm0 = "NIGERIA",
     year_from = 2010,
     year_to = 2022,
     indicators = c("cases_averted", "deaths_averted")
 )
+
+format_level <- function(level) {
+    levels <- c("adm0", "adm1", "adm2")
+    formatted <- stringr::str_to_lower(level)
+    if (!(formatted %in% levels)) {
+        stop(
+            paste(
+                "level should be either",
+                "adm0, adm1 or adm2"
+            )
+        )
+    }
+    return(formatted)
+}
+
+format_adm0 <- function(adm0) {
+    return(stringr::str_to_upper(adm0))
+}
+
+#' @export
+#' @param adm0 country name
+#' @param level district aggregation level, default at country level
+cases_averted <- function(adm0 = NULL,
+                          level = "adm0",
+                          year = NULL,
+                          year_from = 
+                          ) {
+    level <- format_level(level)
+    adm0 <- format_adm0(adm0)
+    
+    return(result)
+}
+cases_averted <- dbq_select(
+    level = "adm1",
+    adm0 = "NIGERIA",
+    year_from = 2000,
+    year_to = 2022,
+    indicators = "cases_wmr"
+)
+
+cases_averted <- cases_averted |>
+    dplyr::arrange(year) |>
+    select(adm1, year, cases_wmr) |>
+    pivot_wider(names_from = year, values_from = cases_wmr) |>
+    mutate(base_case = `2000`) |>
+    select(adm1, base_case, c(`2000`:`2022`)) |>
+    pivot_longer(cols = c(3:25)) |>
+    mutate(cases_averted = base_case - value) |>
+    group_by(adm1) |>
+    mutate(cases_averted_accumulated = cumsum(cases_averted)) |>
+    rename(year = name)
+
+adm1 <- cases_averted |> distinct(adm1)
+adm1_list <- adm1$adm1
+
+for (x in adm1_list) {
+    cases_averted |>
+        filter(adm1 == x) |>
+        ggplot(aes(
+            x = year,
+            y = cases_averted_accumulated,
+            group = adm1
+        )) +
+        geom_line() +
+        geom_point() +
+        ylab("Accumulated Estimated Cases Averted") +
+        hrbrthemes::theme_ipsum() +
+        theme(
+            legend.title = element_blank()
+        ) +
+        scale_x_discrete(guide = guide_axis(check.overlap = TRUE))
+    ggsave(
+        paste0(x, " - 11. cases_averted.png")
+    )
+}
