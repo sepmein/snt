@@ -2,7 +2,9 @@
 #' @export
 #' @param adm0 country name
 #' @param level district aggregation level, default at country level
-cases_averted <- snt::dbq_select(
+
+# get data from database
+cases_wmr <- snt::dbq_select(
     level = "adm1",
     adm0 = "NIGERIA",
     year_from = 2000,
@@ -10,7 +12,8 @@ cases_averted <- snt::dbq_select(
     indicators = "cases_wmr"
 )
 
-cases_averted <- cases_averted |>
+# calculate cased averted
+cases_averted <- cases_wmr |>
     dplyr::arrange(year) |>
     dplyr::select(adm1, year, cases_wmr) |>
     tidyr::pivot_wider(names_from = year, values_from = cases_wmr) |>
@@ -22,13 +25,14 @@ cases_averted <- cases_averted |>
     dplyr::mutate(cases_averted_accumulated = cumsum(cases_averted)) |>
     dplyr::rename(year = name)
 
+# plot
 adm1 <- cases_averted |> dplyr::distinct(adm1)
 adm1_list <- adm1$adm1
 
 for (x in adm1_list) {
     cases_averted |>
-        filter(adm1 == x) |>
-        ggplot2::ggplot(aes(
+        dplyr::filter(adm1 == x) |>
+        ggplot2::ggplot(ggplot2::aes(
             x = year,
             y = cases_averted_accumulated,
             group = adm1
@@ -38,10 +42,21 @@ for (x in adm1_list) {
         ggplot2::ylab("Accumulated Estimated Cases Averted") +
         hrbrthemes::theme_ipsum() +
         ggplot2::theme(
-            legend.title = element_blank()
+            legend.title <- ggplot2::element_blank()
         ) +
-        ggplot2::scale_x_discrete(guide = guide_axis(check.overlap = TRUE))
+        ggplot2::scale_x_discrete(
+            guide = ggplot2::guide_axis(check.overlap = TRUE)
+        )
     ggplot2::ggsave(
         paste0(x, " - 11. cases_averted.png")
     )
 }
+
+# plot the cases for nassawara
+cases_averted |>
+    filter(adm1 == "NASARAWA") |>
+    rename(cases_2000 = base_case, cases = value) |>
+    pivot_longer(cols = c("cases_2000", "cases")) |>
+    ggplot(aes(x = year)) +
+    geom_line(aes(y = value, group = name, color = name)) +
+    ylab("cases")

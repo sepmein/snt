@@ -87,11 +87,12 @@ tmap_save(
 nga_dhs_adm1 |>
   filter(Year != 2013) |>
   ggplot() +
-  geom_bar(aes(
-    x = Year,
-    y = `Malaria prevalence according to RDT`
-  ),
-  stat = "identity"
+  geom_bar(
+    aes(
+      x = Year,
+      y = `Malaria prevalence according to RDT`
+    ),
+    stat = "identity"
   ) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(y = "Malaria prevalence according to RDT", x = "Year") +
@@ -116,11 +117,12 @@ tmap_save(
 nga_dhs_adm1 |>
   filter(Year != 2013) |>
   ggplot() +
-  geom_bar(aes(
-    x = Year,
-    y = `Malaria prevalence according to microscopy`
-  ),
-  stat = "identity"
+  geom_bar(
+    aes(
+      x = Year,
+      y = `Malaria prevalence according to microscopy`
+    ),
+    stat = "identity"
   ) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(y = "Malaria prevalence according to microscopy", x = "Year") +
@@ -156,11 +158,12 @@ nga_adm1 |>
   group_by(adm1, year) |>
   summarise(conf = sum(conf, na.rm = TRUE)) |>
   ggplot() +
-  geom_bar(aes(
-    x = year,
-    y = conf
-  ),
-  stat = "identity"
+  geom_bar(
+    aes(
+      x = year,
+      y = conf
+    ),
+    stat = "identity"
   ) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(y = "Confirmed Malaria Cases", x = "year") +
@@ -208,11 +211,12 @@ nga_adm1_inci <- nga_adm1 |>
     incidence = conf / pop * 1000
   ) |>
   ggplot() +
-  geom_bar(aes(
-    x = year,
-    y = incidence
-  ),
-  stat = "identity"
+  geom_bar(
+    aes(
+      x = year,
+      y = incidence
+    ),
+    stat = "identity"
   ) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(y = "Malaria Incidence(per thousand)", x = "year") +
@@ -227,11 +231,12 @@ ggsave("Nigeria - States - Malaria Incidence(per thousand - Barplot.png")
 
 nga_dhs_adm1 |>
   ggplot() +
-  geom_bar(aes(
-    x = Year,
-    y = `Population who slept under an insecticide-treated mosquito net (ITN) last night`
-  ),
-  stat = "identity"
+  geom_bar(
+    aes(
+      x = Year,
+      y = `Population who slept under an insecticide-treated mosquito net (ITN) last night`
+    ),
+    stat = "identity"
   ) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(y = "Population who slept under an insecticide-treated mosquito net (ITN) last night", x = "Year") +
@@ -282,11 +287,12 @@ tmap_save(
 # per state plot
 nga_dhs_adm1 |>
   ggplot() +
-  geom_bar(aes(
-    x = Year,
-    y = `Population who slept under an insecticide-treated mosquito net (ITN) last night`
-  ),
-  stat = "identity"
+  geom_bar(
+    aes(
+      x = Year,
+      y = `Population who slept under an insecticide-treated mosquito net (ITN) last night`
+    ),
+    stat = "identity"
   ) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(y = "Population who slept under an insecticide-treated mosquito net (ITN) last night", x = "Year") +
@@ -296,11 +302,12 @@ ggsave("Nigeria - States - Population who slept under an insecticide-treated mos
 
 nga_dhs_adm1 |>
   ggplot() +
-  geom_bar(aes(
-    x = Year,
-    y = `Children under 5 who slept under an insecticide-treated net (ITN)`
-  ),
-  stat = "identity"
+  geom_bar(
+    aes(
+      x = Year,
+      y = `Children under 5 who slept under an insecticide-treated net (ITN)`
+    ),
+    stat = "identity"
   ) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(y = "Children under 5 who slept under an insecticide-treated net (ITN)", x = "Year") +
@@ -319,11 +326,12 @@ nga_dhs_adm1_map_and_data |>
   ) |>
   filter(Year != 2013) |>
   ggplot() +
-  geom_bar(aes(
-    x = Year,
-    y = `itn_ov5`
-  ),
-  stat = "identity"
+  geom_bar(
+    aes(
+      x = Year,
+      y = `itn_ov5`
+    ),
+    stat = "identity"
   ) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(y = "itn_ov5", x = "Year") +
@@ -344,11 +352,12 @@ tmap_save(
 
 nga_dhs_adm1 |>
   ggplot() +
-  geom_bar(aes(
-    x = Year,
-    y = `Advice or treatment for fever sought from a health facility or provider`
-  ),
-  stat = "identity"
+  geom_bar(
+    aes(
+      x = Year,
+      y = `Advice or treatment for fever sought from a health facility or provider`
+    ),
+    stat = "identity"
   ) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(y = "Advice or treatment for fever sought from a health facility or provider", x = "Year") +
@@ -369,11 +378,12 @@ tmap_save(
 
 nga_dhs_adm1 |>
   ggplot() +
-  geom_bar(aes(
-    x = Year,
-    y = `Children with fever who had blood taken from a finger or heel for testing`
-  ),
-  stat = "identity"
+  geom_bar(
+    aes(
+      x = Year,
+      y = `Children with fever who had blood taken from a finger or heel for testing`
+    ),
+    stat = "identity"
   ) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(y = "Children with fever who had blood taken from a finger or heel for testing", x = "Year") +
@@ -397,7 +407,7 @@ wmr_one_page <- function(nga_adm1, district) {
     fct <- nga_adm1 |>
       group_by(year)
 
-  fct_survey <- nga_dhs_adm1
+    fct_survey <- nga_dhs_adm1
     district <- "nga"
   } else {
     fct <- nga_adm1 |>
@@ -406,8 +416,8 @@ wmr_one_page <- function(nga_adm1, district) {
       ) |>
       group_by(year)
 
-      fct_survey <- nga_dhs_adm1 |>
-        filter(State == district)
+    fct_survey <- nga_dhs_adm1 |>
+      filter(State == district)
 
     wmr_filtered <- wmr |>
       select(Name, Year, incidence, Pop) |>
@@ -429,7 +439,7 @@ wmr_one_page <- function(nga_adm1, district) {
     labs(y = "Population") +
     theme(text = element_text(size = 5))
   ggsave(paste0(district, " - 1. pop.png"), height = 1.8, width = 3)
-  
+
   # plot confirmed cases
   fct |>
     select(year, conf, pop) |>
@@ -437,11 +447,12 @@ wmr_one_page <- function(nga_adm1, district) {
       conf = sum(conf, na.rm = TRUE),
       pop = sum(pop, na.rm = TRUE)
     ) |>
-    ggplot(aes(
-      x = year,
-      y = conf
-    ),
-    color = "red"
+    ggplot(
+      aes(
+        x = year,
+        y = conf
+      ),
+      color = "red"
     ) +
     geom_line() +
     geom_point() +
@@ -449,7 +460,7 @@ wmr_one_page <- function(nga_adm1, district) {
     theme(text = element_text(size = 5))
   ggsave(paste0(district, " - 2. conf.png"), height = 1.2, width = 3)
 
-  #incidence
+  # incidence
   incid <- fct |>
     select(year, adjinc3, pop) |>
     mutate(adjinc3_pop = adjinc3 * pop) |>
@@ -458,16 +469,18 @@ wmr_one_page <- function(nga_adm1, district) {
       pop = sum(pop, na.rm = TRUE)
     ) |>
     mutate(inci = adjinc3_pop / pop) |>
-      rename(`Routine Data(Adjusted)` = inci)
+    rename(`Routine Data(Adjusted)` = inci)
 
-  incid |> left_join(wmr_filtered) |> select(year, `Routine Data(Adjusted)`, WMR) |> pivot_longer(c(2:3)) |>
+  incid |>
+    left_join(wmr_filtered) |>
+    select(year, `Routine Data(Adjusted)`, WMR) |>
+    pivot_longer(c(2:3)) |>
     ggplot(aes(
       x = year,
       y = value,
       color = name,
       group = name
-    )
-    ) +
+    )) +
     geom_line() +
     geom_point() +
     labs(y = "Malaria Incidence / 1000") +
@@ -883,7 +896,7 @@ ggsave(
 ## calculate nation indicator -------
 nga_dhs_2021 <- nga_dhs |>
   filter(Year == 2021) |>
-  mutate_at(c("State"), ~str_replace(., "Akwa Ibom", "Akwa lbom")) |>
+  mutate_at(c("State"), ~ str_replace(., "Akwa Ibom", "Akwa lbom")) |>
   left_join(pop, by = c("State" = "adm1"))
 
 #  [6] "Malaria prevalence according to RDT"
@@ -892,36 +905,38 @@ nga_dhs_2021 |>
   summarise(prev_mic_pop = sum(prev_mic_pop), pop = sum(pop)) |>
   mutate(prev_rdt = prev_mic_pop / pop)
 
-#  [7] "Malaria prevalence according to microscopy"                                     
+#  [7] "Malaria prevalence according to microscopy"
 nga_dhs_2021 |>
   mutate(prev_mic_pop = `Malaria prevalence according to microscopy` * pop) |>
   summarise(prev_mic_pop = sum(prev_mic_pop), pop = sum(pop)) |>
   mutate(prev_rdt = prev_mic_pop / pop)
 
-#  [8] "Persons with access to an insecticide-treated mosquito net (ITN)"               
+#  [8] "Persons with access to an insecticide-treated mosquito net (ITN)"
 nga_dhs_2021 |>
   mutate(prev_mic_pop = `Persons with access to an insecticide-treated mosquito net (ITN)` * pop) |>
-  summarise(prev_mic_pop = sum(prev_mic_pop, na.rm = TRUE), 
-  pop = sum(pop)) |>
+  summarise(
+    prev_mic_pop = sum(prev_mic_pop, na.rm = TRUE),
+    pop = sum(pop)
+  ) |>
   mutate(prev_rdt = prev_mic_pop / pop)
 
 #  [9] "Children who took any ACT"
 nga_dhs_2021 |>
-mutate(prev_mic_pop = `Children who took any ACT` * pop_u5) |>
+  mutate(prev_mic_pop = `Children who took any ACT` * pop_u5) |>
   summarise(prev_mic_pop = sum(prev_mic_pop), pop_u5 = sum(pop_u5)) |>
   mutate(prev_rdt = prev_mic_pop / pop_u5)
-  
-# [10] "Children tested for malaria with RDT"                                           
+
+# [10] "Children tested for malaria with RDT"
 nga_dhs_2021 |>
   mutate(prev_mic_pop = `Children tested for malaria with RDT` * pop_u5) |>
   summarise(prev_mic_pop = sum(prev_mic_pop), pop_u5 = sum(pop_u5)) |>
   mutate(prev_rdt = prev_mic_pop / pop_u5)
-# [11] "Children with fever who had blood taken from a finger or heel for testing"      
+# [11] "Children with fever who had blood taken from a finger or heel for testing"
 nga_dhs_2021 |>
   mutate(prev_mic_pop = `Children with fever who had blood taken from a finger or heel for testing` * pop_u5) |>
   summarise(prev_mic_pop = sum(prev_mic_pop), pop_u5 = sum(pop_u5)) |>
   mutate(prev_rdt = prev_mic_pop / pop_u5)
-# [12] "Existing insecticide-treated mosquito nets (ITNs) used last night"              
+# [12] "Existing insecticide-treated mosquito nets (ITNs) used last night"
 nga_dhs_2021 |>
   mutate(prev_mic_pop = `Existing insecticide-treated mosquito nets (ITNs) used last night` * pop) |>
   summarise(
@@ -933,7 +948,7 @@ nga_dhs_2021 |>
 # [13] "Children under 5 who slept under any net"
 nga_dhs_2021 |>
   mutate(prev_mic_pop = `Children under 5 who slept under any net` * pop_u5) |>
-  filter(!is.na(`Children under 5 who slept under any net`))|>
+  filter(!is.na(`Children under 5 who slept under any net`)) |>
   summarise(prev_mic_pop = sum(prev_mic_pop, na.rm = TRUE), pop_u5 = sum(pop_u5)) |>
   mutate(prev_rdt = prev_mic_pop / pop_u5)
 # [14] "Population who slept under an insecticide-treated mosquito net (ITN) last night"
@@ -946,7 +961,7 @@ nga_dhs_2021 |>
   ) |>
   mutate(prev_rdt = prev_mic_pop / pop)
 
-# [15] "Advice or treatment for fever sought from a health facility or provider"        
+# [15] "Advice or treatment for fever sought from a health facility or provider"
 nga_dhs_2021 |>
   mutate(prev_mic_pop = `Advice or treatment for fever sought from a health facility or provider` * pop) |>
   filter(!is.na(`Advice or treatment for fever sought from a health facility or provider`)) |>
@@ -955,7 +970,7 @@ nga_dhs_2021 |>
     pop = sum(pop)
   ) |>
   mutate(prev_rdt = prev_mic_pop / pop)
-# [16] "Children under 5 who slept under an insecticide-treated net (ITN)"   
+# [16] "Children under 5 who slept under an insecticide-treated net (ITN)"
 nga_dhs_2021 |>
   mutate(prev_mic_pop = `Children under 5 who slept under an insecticide-treated net (ITN)` * pop_u5) |>
   filter(!is.na(`Children under 5 who slept under an insecticide-treated net (ITN)`)) |>
@@ -971,176 +986,63 @@ nga_adm1 |>
   summarise(adjinc3_pop = sum(adjinc3_pop, na.rm = TRUE), pop = sum(pop)) |>
   mutate(adjinc3 = adjinc3_pop / pop)
 
+# Indicators -------
 
-
-
-
-
-
-district <- "Federal Capital Territory"
-wmr_filtered <- wmr |>
-  select(Name, Year, incidence, Pop) |>
-  rename(adm1 = Name, year = Year, WMR = incidence) |>
+wmr_2021 <- wmr_2021 |>
+  mutate_at(c("Name"), ~ str_replace(., "Akwa lbom", "Akwa Ibom"))
+## population ------
+pop <- wmr_2021 |>
   filter(
-    adm1 == district,
-    year > 2013
+    Year == 2021
   ) |>
-  group_by(year)
-
-# WMR only incidence
-wmr_filtered |>
-  select(year, WMR) |>
-  ggplot(aes(
-    x = year,
-    y = WMR
-  )) +
-  geom_line() +
-  geom_point() +
-  labs(y = "Estimated Incidence / 1000") +
-  ylim(50, NA) +
-  theme(text = element_text(size = 5))
-ggsave(paste0(district, " - 3. WMR incidence.png"), height = 1.2, width = 3)
-
-# WMR only cases
-wmr_filtered |>
-  select(year, WMR, Pop) |>
-  mutate(cases = WMR * Pop / 1000) |>
-  ggplot(aes(
-    x = year,
-    y = cases
-  )) +
-  geom_line() +
-  geom_point() +
-  labs(y = "Estimated Cases") +
-  ylim(50000, NA) +
-  theme(text = element_text(size = 5))
-ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
-
-
-district <- "Kwara"
-wmr_filtered <- wmr |>
-  select(Name, Year, incidence, Pop) |>
-  rename(adm1 = Name, year = Year, WMR = incidence) |>
-  filter(
-    adm1 == district,
-    year > 2013
+  select(
+    Name, Pop
   ) |>
-  group_by(year)
+  rename(
+    State = Name
+  )
 
-# WMR only incidence
-wmr_filtered |>
-  select(year, WMR) |>
-  ggplot(aes(
-    x = year,
-    y = WMR
-  )) +
-  geom_line() +
-  geom_point() +
-  labs(y = "Estimated Incidence / 1000") +
-  ylim(50, NA) +
-  theme(text = element_text(size = 5))
-ggsave(paste0(district, " - 3. WMR incidence.png"), height = 1.2, width = 3)
+## malaria rdt & microscopy density -------
+dhs_2021 <- nga_dhs |>
+  filter(Year == 2021, Level == "L2") |>
+  select(-Country, -Survey, -Year)
 
-# WMR only cases
-wmr_filtered |>
-  select(year, WMR, Pop) |>
-  mutate(cases = WMR * Pop / 1000) |>
-  ggplot(aes(
-    x = year,
-    y = cases
-  )) +
-  geom_line() +
-  geom_point() +
-  labs(y = "Estimated Cases") +
-  ylim(10000, NA) +
-  theme(text = element_text(size = 5))
-ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
+indicator <- dhs_2021 |>
+  left_join(pop) |>
+  select(-Level)
 
-
-district <- "Katsina"
-wmr_filtered <- wmr |>
-  select(Name, Year, incidence, Pop) |>
-  rename(adm1 = Name, year = Year, WMR = incidence) |>
-  filter(
-    adm1 == district,
-    year > 2013
+## cases -------
+wmr_cases <- wmr_2021 |>
+  filter(Year == 2021) |>
+  mutate(
+    cases_mean = PAR * incidence_rate_all_age_rmean / 1000,
+    cases_lci = PAR * incidence_rate_all_age_LCI / 1000,
+    cases_uci = PAR * incidence_rate_all_age_LCI / 1000
   ) |>
-  group_by(year)
+  rename(State = Name) |>
+  select(State, cases_mean, incidence_rate_all_age_rmean)
 
-# WMR only incidence
-minimum_incidences <- min(wmr_filtered$WMR)
-min_incidences_y_lab <- minimum_incidences / 4
-wmr_filtered |>
-  select(year, WMR) |>
-  ggplot(aes(
-    x = year,
-    y = WMR
-  )) +
-  geom_line() +
-  geom_point() +
-  labs(y = "Estimated Incidence / 1000") +
-  ylim(min_incidences_y_lab, NA) +
-  theme(text = element_text(size = 5))
-ggsave(paste0(district, " - 3. WMR incidence.png"), height = 1.2, width = 3)
-
-# WMR only cases
-
-wmr_filtered |>
-  select(year, WMR, Pop) |>
-  mutate(cases = WMR * Pop / 1000) |>
-  ggplot(aes(
-    x = year,
-    y = cases
-  )) +
-  geom_line() +
-  geom_point() +
-  labs(y = "Estimated Cases") +
-  ylim(min_cases_y_lab, NA) +
-  theme(text = element_text(size = 5))
-ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
-
-district <- "nga"
-wmr_filtered <- wmr |>
-  select(Name, Year, incidence, Pop) |>
-  rename(adm1 = Name, year = Year, WMR = incidence) |>
-  filter(
-    year > 2013
+indicator <- indicator |>
+  left_join(
+    wmr_cases
   ) |>
-  group_by(year)
+  select(
+    State,
+    Pop,
+    "Malaria prevalence according to RDT", "Malaria prevalence according to microscopy",
+    cases_mean, incidence_rate_all_age_rmean,
+    "Persons with access to an insecticide-treated mosquito net (ITN)",
+    "Existing insecticide-treated mosquito nets (ITNs) used last night",
+    "Population who slept under an insecticide-treated mosquito net (ITN) last night",
+    "Children under 5 who slept under any net",
+    "Children under 5 who slept under an insecticide-treated net (ITN)",
+    "Advice or treatment for fever sought from a health facility or provider",
+    "Children with fever who had blood taken from a finger or heel for testing"
+  )
 
-# WMR only incidence
-wmr_filtered |>
-  select(year, WMR, Pop) |>
-  mutate(cases = WMR * Pop) |>
-  summarise(
-    cases = sum(cases, na.rm = TRUE),
-    Pop = sum(Pop, na.rm = TRUE)
-  ) |>
-  mutate(incid = cases / Pop) |>
-  ggplot(aes(
-    x = year,
-    y = incid
-  )) +
-  geom_line() +
-  geom_point() +
-  labs(y = "Estimated Incidence / 1000") +
-  ylim(50, NA) +
-  theme(text = element_text(size = 5))
-ggsave(paste0(district, " - 3. WMR incidence.png"), height = 1.2, width = 3)
-
-# WMR only cases
-wmr_filtered |>
-  select(year, WMR, Pop) |>
-  mutate(cases = WMR * Pop) |>
-  summarise(cases = sum(cases, na.rm = TRUE) / 1000) |>
-  ggplot(aes(
-    x = year,
-    y = cases
-  )) +
-  geom_line() +
-  geom_point() +
-  labs(y = "Estimated Cases") +
-  ylim(1000000, NA) +
-  theme(text = element_text(size = 5))
-ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
-
+View(indicator)
+indicator |>
+mutate_if(is.numeric, ~round(.,digits=1)) |>
+  write_csv(
+    "nga_indicators.csv"
+  )
