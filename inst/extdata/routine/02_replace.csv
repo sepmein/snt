@@ -1,49 +1,49 @@
-﻿country ,from                ,to
-BDI     ,Karusi              ,Karuzi
-BDI     ,Bugarama            ,Bugarama
-BDI     ,DS Bugarama         ,DS Bugarama
-BDI     ,Bujumbura centre    ,Zone Centre
-BDI     ,Bujumbura nord      ,Zone Nord
-BDI     ,Bujumbura sud       ,Zone Sud
-BDI     ,Bukinanyana         ,Mabayi
-BDI     ,DS Bukinanyana      ,DS Mabayi
-BDI     ,DS Bujumbura centre ,DS Zone Centre
-BDI     ,DS Bujumbura nord   ,DS Zone Nord
-BDI     ,DS Bujumbura sud    ,DS Zone Sud
-BDI     ,DS Bukinanyana      ,DS Mabayi
-BDI     ,DS Bujumbura centre ,DS Zone Centre
-BDI     ,DS Buja Centre      ,DS Zone Centre
-BDI     ,Ds Buja Centre      ,DS Zone Centre
-BDI     ,DS  Centre          ,DS Zone Centre
-BDI     ,DS Centre           ,DS Zone Centre
-BDI     ,DS Bujumbura nord   ,DS Zone Nord
-BDI     ,DS Buja Nord        ,DS Zone Nord
-BDI     ,DS  Buja Nord       ,DS Zone Nord
-BDI     ,DS Nord             ,DS Zone Nord
-BDI     ,DS Bujumbura sud    ,DS Zone Sud
-BDI     ,DS Sud              ,DS Zone Sud
-BDI     ,DS Bukinanyana      ,DS Mabayi
-BDI     ,DS  Centre          ,DS Zone Centre
-BDI     ,DS Nyanza lac       ,DS Nyanza-Lac
-BDI     ,DS Nyanza Lac       ,DS Nyanza-Lac
-BDI     ,DS Bujumbura centre ,DS Zone Centre
-BDI     ,DS Bujumbura nord   ,DS Zone Nord
-BDI     ,DS Bujumbura sud    ,DS Zone Sud
-BDI     ,DS Bukinanyana      ,DS Mabayi
-BDI     ,Bujumbura Rural     ,Bujumbura
-BDI     ,DS Bukinanyana      ,DS Mabayi
-SLE     ,January             ,1
-SLE     ,February            ,2
-SLE     ,March               ,3
-SLE     ,April               ,4
-SLE     ,May                 ,5
-SLE     ,June                ,6
-SLE     ,July                ,7
-SLE     ,August              ,8
-SLE     ,September           ,9
-SLE     ,October             ,10
-SLE     ,November            ,11
-SLE     ,December            ,12
+﻿country,from,to
+BDI,Karusi,Karuzi
+BDI,Bugarama,Bugarama
+BDI,DS Bugarama,DS Bugarama
+BDI,Bujumbura centre,Zone Centre
+BDI,Bujumbura nord,Zone Nord
+BDI,Bujumbura sud,Zone Sud
+BDI,Bukinanyana,Mabayi
+BDI,DS Bukinanyana,DS Mabayi
+BDI,DS Bujumbura centre,DS Zone Centre
+BDI,DS Bujumbura nord,DS Zone Nord
+BDI,DS Bujumbura sud,DS Zone Sud
+BDI,DS Bukinanyana,DS Mabayi
+BDI,DS Bujumbura centre,DS Zone Centre
+BDI,DS Buja Centre,DS Zone Centre
+BDI,Ds Buja Centre,DS Zone Centre
+BDI,DS  Centre,DS Zone Centre
+BDI,DS Centre,DS Zone Centre
+BDI,DS Bujumbura nord,DS Zone Nord
+BDI,DS Buja Nord,DS Zone Nord
+BDI,DS  Buja Nord,DS Zone Nord
+BDI,DS Nord,DS Zone Nord
+BDI,DS Bujumbura sud,DS Zone Sud
+BDI,DS Sud,DS Zone Sud
+BDI,DS Bukinanyana,DS Mabayi
+BDI,DS  Centre,DS Zone Centre
+BDI,DS Nyanza lac,DS Nyanza-Lac
+BDI,DS Nyanza Lac,DS Nyanza-Lac
+BDI,DS Bujumbura centre,DS Zone Centre
+BDI,DS Bujumbura nord,DS Zone Nord
+BDI,DS Bujumbura sud,DS Zone Sud
+BDI,DS Bukinanyana,DS Mabayi
+BDI,Bujumbura Rural,Bujumbura
+BDI,DS Bukinanyana,DS Mabayi
+SLE,January,1
+SLE,February,2
+SLE,March,3
+SLE,April,4
+SLE,May,5
+SLE,June,6
+SLE,July,7
+SLE,August,8
+SLE,September,9
+SLE,October,10
+SLE,November,11
+SLE,December,12
 SLE,BO,Bo
 SLE,kaialhun,Kailahun
 SLE,kailahun,Kailahun
@@ -129,3 +129,43 @@ SLE,East 3,East III
 SLE,West 1,West I
 SLE,West 2,West II
 SLE,West 3,West III
+NGA,ab Abia State,Abia
+NGA,ad Adamawa State,Adamawa
+NGA,ak Akwa-Ibom State,Akwa-Ibom
+NGA,an Anambra state,Anambra
+NGA,ba Bauchi State,Bauchi
+NGA,be Benue State,Benue
+NGA,bo Borno State,Borno
+NGA,by Bayelsa State,Bayelsa
+NGA,cr Cross River State,Cross-River
+NGA,Cross River,Cross-River
+NGA,de Delta State,Delta
+NGA,eb Ebonyi State,Ebonyi
+NGA,ed Edo State,Edo
+NGA,ek Ekiti State,Ekiti
+NGA,en Enugu State,Enugu
+NGA,fc Federal Capital Territory,FCT-Abuja
+NGA,FCT,FCT-Abuja
+NGA,go Gombe State,Gombe
+NGA,im Imo State,Imo
+NGA,jg Jigawa State,Jigawa
+NGA,jiJigawaState,Jigawa
+NGA,kd Kaduna State,Kaduna
+NGA,ke Kebbi State,Kebbi
+NGA,kn Kano State,Kano
+NGA,ko Kogi State,Kogi
+NGA,kt Katsina State,Katsina
+NGA,kw Kwara State,Kwara
+NGA,la Lagos State,Lagos
+NGA,na Nasarawa State,Nasarawa
+NGA,ni Niger State,Niger
+NGA,og Ogun State,Ogun
+NGA,on Ondo State,Ondo
+NGA,os Osun State,Osun
+NGA,oy Oyo State,Oyo
+NGA,pl Plateau State,Plateau
+NGA,ri Rivers State,Rivers
+NGA,so Sokoto State,Sokoto
+NGA,ta Taraba State,Taraba
+NGA,yo Yobe State,Yobe
+NGA,za Zamfara State,Zamfara

@@ -1,0 +1,328 @@
+---
+title: "Nigeria 2022 SNT"
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  comment = '', fig.width = 6, fig.height = 6,
+  tidy = 'formatR',
+  cache = TRUE
+)
+```
+
+```{r include=FALSE}
+devtools::load_all()
+library(snt)
+library(tidyverse)
+library(haven)
+library(readxl)
+library(skimr)
+```
+
+# 1. cleaning
+
+## 1.0 meta
+
+### 1.0.1 input
+
+```{r}
+path_data <- "/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR\ -\ Country_Analytical_Support/Countries/NGA/WHO_NGA/NGA_2022_SNT/_Submitted_data/"
+```
+
+#### 1.0.1.1 Routine
+
+```{r}
+path_data_routine <- file.path(path_data, "Routine\ data")
+path_data_routine_hf_1420 <- file.path(
+    path_data_routine,
+    "NGA_hflevel_2014-2020_raw.dta"
+)
+path_data_routine_hf_21 <- file.path(
+    path_data_routine,
+    "monthly_hf_2021.xlsx"
+)
+```
+
+### 1.0.2 output
+
+```{r}
+path_output_data <- ""
+```
+
+## 1.1 merging before 2021 and the 2021 data
+
+### 1.1.1 read health facility monthly data from 2014 - 2021
+
+```{r}
+d_hf_14_20 <- read_dta(path_data_routine_hf_1420)
+```
+
+#### Get colnames and skim the data
+
+```{r}
+colnames(d_hf_14_20)
+skimr::skim(d_hf_14_20)
+```
+
+#### Show first rows
+
+```{r}
+head(d_hf_14_20)
+```
+
+### 1.1.2 read health facility monthly data of the year 2021
+
+```{r echo = FALSE}
+d_hf_21 <- read_xlsx(path_data_routine_hf_21)
+```
+
+#### Get colnames and skim the data
+
+```{r}
+colnames(d_hf_21)
+skimr::skim(d_hf_21)
+```
+
+#### Show first N rows
+
+```{r}
+head(d_hf_21)
+```
+
+### 1.1.3 Reconstruct hf 2021
+
+#### Rename the columns
+
+```{r}
+d_hf_21 <- d_hf_21 |>
+  select(
+    -fever_u5,
+    -fever_a5,
+    -tested_rdt_u5,
+    -tested_rdt_a5,
+    -rdtpos_u5,
+    -rdtpos_a5,
+    -conf_a5,
+    -clinical_u5,
+    -clinical_a5,
+    -severe_u5,
+    -severe_a5,
+    
+  ) |>
+  rename(
+    opd = allout,
+    fever_u5  = susp_u5,
+    fever_a5  = susp_ov5,
+    tested_rdt_u5  = test_rdt_u5,
+    tested_rdt_a5  = test_rdt_ov5,
+    rdtpos_u5  = conf_rdt_u5,
+    rdtpos_a5  = conf_rdt_ov5,
+    tested_micro_a5  = test_mic_ov5,
+    tested_micro_u5  = test_mic_u5,
+    micropos_u5  = conf_mic_u5,
+    micropos_a5  = conf_mic_ov5,
+  #  clinical_preg  = pres_preg,
+    clinical_u5  = pres_u5,
+    clinical_a5  = pres_ov5,
+    conf_a5  = conf_ov5,
+    severe_a5  = maladm_ov5,
+    severe_u5  = maladm_u5,
+    ipd  = alladm,
+    mal_death_u5  = maldth_u5
+  )
+```
+
+#### Reorder the columns
+
+```{r}
+d_hf_21 <- d_hf_21 |>
+  select(
+    "facilityuid",
+    "periodid",
+    "periodcode",
+    "perioddesc",
+    "attendance",
+    "opd",
+    "fever_u5",
+    "fever_a5",
+    "tested_rdt_u5",
+    "tested_rdt_a5",
+    "rdtpos_u5",
+    "rdtpos_a5",
+    "tested_micro_u5",
+    "tested_micro_a5",
+    "micropos_u5",
+    "micropos_a5",
+    #"clinical_preg", # wait for Ibrahim to share data
+    #"conf_preg", # wait for Ibrahim to share data
+    "clinical_u5",
+    "clinical_a5",
+    #"conf_u5", # check in 21 database
+    "conf_a5",
+    "severe_u5",
+    "severe_a5",
+    "conf_act_u5",
+    "conf_act_a5",
+    "clinical_act_u5",
+    "clinical_act_a5",
+    "conf_othantimal_u5",
+    "conf_othantimal_a5",
+    "ipd",
+    "mal_death_u5",
+    #"stockout_act", # no need
+    #"stockout_rdt", # no need
+    #"stockout_sp", # no need
+    #"stockout_llin", # no need
+    "anc_total",
+    "anc_b20wks",
+    "anc_a20wks",
+    #"ipt1", # in malvac but not so good
+    #"ipt2", # in malvac but not so good
+    #"preg_llin", # wait for Ibrahim to share data
+    "fi_1yr_fixed",
+    "fi_1yr_outreach",
+    #"u5llin", 
+    #"mal_ro", 
+    #"mal_adr", 
+    #"stateuid", 
+    #"lgauid", 
+    #"facility_name", 
+    "ownership",
+    #"facilityname", 
+    #"longid", 
+    "year",
+    "month",
+    "state",
+    "lga",
+    "ward",
+    "periodname"
+  )
+```
+
+#### Fix the *periodname* column problem
+When combining rows of two database:
+Error in `bind_rows()`:
+! Can't combine `..1$periodname` <date> and `..2$periodname` <character>.
+fix that firstly
+
+I found that the date information was already well stored in the `periodcode` 
+column, so what I am going to do is to **drop** `periodname` colomn for both
+database.
+
+```{r}
+d_hf_14_20 <- d_hf_14_20 |> select( -periodname)
+d_hf_21 <- d_hf_21 |> select(-periodname)
+```
+
+### 1.1.3 Combine Rows for the two dbs
+bind rows between the old and new data
+```{r}
+d_hf_14_21 <- bind_rows(d_hf_14_20, d_hf_21)
+```
+
+## 1.2 Cleaning
+
+### 1.2.1 state and stateuid
+As we can see from the merged data
+```{r}
+state_db <- d_hf_14_21 |>
+  distinct(
+    state,
+    stateuid
+  ) |>
+  arrange(state)
+state_db
+```
+We need to clean it a little bit.
+1. Get a standard state name and uid
+2. replace it with the incorrect names
+3. assign correct stateuid to the according column
+
+```{r}
+# get a standard state name and uid
+
+# remove unneccesary lines
+state_db |> filter(!is.na(stateuid)) |> filter(!nchar(stateuid) == 0)
+# create a standard replace table for NGA
+std_replace_table_state <-  
+
+
+d_hf_14_21 |>
+  mutate_at(c('state'),
+            
+            )
+```
+Check if it's better now:
+```{r}
+
+```
+
+
+### 1.2.2 HF names
+
+### 1.2.3 Periods
+
+
+Correct LGA names to align with shapefile
+use `unique` to generate a database
+
+
+
+```{r}
+lga_db <-  d_hf_14_20 |>
+  distinct(
+    facilityuid,
+    facility_name,
+#    facilityname,
+    state,
+    stateuid,
+#    lgauid,
+#    lga,
+#    ward,
+#    periodname
+  )
+lga_db
+```
+
+```{r}
+d_hf_21 <- d_hf_21 |>
+  select(-state,
+         -lga,
+         -ward,
+         -periodname) |>
+  left_join(lga_db)
+```
+
+if there is some facility in 21 but not in 1420?
+How did we do?
+
+So the algorithm should be: if there is a facility from 1420,
+then keep all the **Meta** collumns from 1420
+Else, keep all the **Meta** collumns from 20
+
+For those existed **Meta** collumn in 20
+should perform again the subsititute procedures,
+which seams to be not funny
+
+
+check whether some column in d_hf_21 are missing
+```{r}
+d_hf_21 |>
+  select(
+    facilityuid,
+    facility_name,
+    facilityname,
+    state,
+    stateuid,
+    lgauid,
+    lga,
+    ward,
+    periodname
+  ) |>
+  skimr::skim()
+```
+
+
+Use fuzzy matching in R methodology to calculate two columns
+detailed check this post
+https://www.statology.org/fuzzy-matching-in-r/#:~:text=Often%20you%20may%20want%20to,function%20from%20the%20fuzzyjoin%20package.
