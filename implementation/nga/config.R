@@ -7,10 +7,14 @@ library(snt)
 # remote this line in production
 devtools::load_all(path = "/Users/sepmein/x/snt")
 
-snt::config()
+config <- snt::config(
+    country = "NGA",
+    raster_root = "/Users/sepmein/x/snt-data/Global/Data/",
+    rainfall_folder = "CHIRPS_Global_raster_files"
+)
 
 # Change configuration for your own settings
 
 # Rasters ---
 ## rainfall file path ---
-path_rainfall_rasters <- "/Users/sepmein/x/snt-data/Global/Data/CHIRPS_Global_raster_files"
+rainfall_folder <- config$raster$rainfall$folder
