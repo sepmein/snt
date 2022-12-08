@@ -8,5 +8,5 @@
     "r.lsp.debug": true,
     "r.lsp.use_stdio": true,
     "r.plot.useHttpgd": true,
-    "r.rterm.mac": "/usr/local/bin/radian"
+    "r.rterm.mac": "/opt/homebrew/Caskroom/miniconda/base/bin/radian"
 }
