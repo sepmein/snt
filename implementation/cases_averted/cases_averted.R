@@ -1,9 +1,4 @@
 
-#' @export
-#' @param adm0 country name
-#' @param level district aggregation level, default at country level
-
-# get data from database
 cases_wmr <- snt::dbq_select(
     level = "adm1",
     adm0 = "NIGERIA",

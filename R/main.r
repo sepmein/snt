@@ -8,6 +8,7 @@ set_country <- function(root_folder, country) {
 }
 
 # Resource --------------------------------------------
+
 #' @export
 Resource <- R6::R6Class(
   classname = "resource",
@@ -17,35 +18,6 @@ Resource <- R6::R6Class(
     output_destination = NULL,
     data = NULL,
     download_to = NULL,
-    #' Resource class
-    #' Base class for the sub-national analysis package
-    #' @param is_online, Bool, is online resource or not, consider to remote?
-    #' if api_url has been set, then is should be an online resource
-    #' is_online do have some problems, as all resources do come from
-    #'  somewhere online,
-    #' but in most cases this process only needed to be done once while,
-    #' means the file in not online anymore if this file has already
-    #' been downloaded
-    #' TODO: should I provide a single download function for all the files
-    #' needed
-    #' e.g. download_resource(
-    #'  resourceA, resourceB
-    #' )
-    #' Then that's it.?
-    #' @param is_batch, Bool, the definition of is_batch is somewhat unclear.
-    #' TODO need to be clearer defined. Batch included a few level of batch.
-    #' When downloading files, download a single file or a few files
-    #' When read from local file
-    #' @param api_url
-    #' @param local_destination
-    #' @param local_file_type
-    #' @param output_destination
-    #' @param download_to
-    #'
-    #' @return
-    #' @export
-    #'
-    #' @examples
     initialize = function(is_online,
                           is_batch,
                           api_url,
@@ -295,17 +267,6 @@ Resource <- R6::R6Class(
 
 # Shapefiles --------------------------------------------------------------
 
-# #' @export
-# Shapefile <- R6::R6Class(
-#   # nolint
-#   "Shapefile",
-#   inherit = Resource,
-#   public = list(
-#     local_destination = NULL,
-#     local_file_type <- NULL
-#   )
-# )
-
 # Raster Resource----------------------------------------------------------
 #' @export
 RasterResource <- R6::R6Class(
@@ -325,11 +286,6 @@ RasterResource <- R6::R6Class(
     target_adm_level = NULL,
     index_name = NULL,
     cores = NULL,
-    # TODO add document
-    #' Init function for Raster Resource
-    #'
-    #' @param adm0_shapefile String
-    #' @param adm1_shapefile
     initialize = function(adm0_shapefile = NULL,
                           adm1_shapefile = NULL,
                           adm2_shapefile = NULL,
@@ -1717,15 +1673,31 @@ update_database <- function() {
   import_routine_rename <-
     readr::read_csv("inst//extdata//routine//01_rename.csv")
   usethis::use_data(import_routine_rename, overwrite = TRUE)
+
+import_routine_adm1_replace <-
+  readr::read_csv("inst//extdata//routine//01_adm1_replace.csv")
+usethis::use_data(import_routine_adm1_replace, overwrite = TRUE)
+
+import_routine_adm2_replace <-
+  readr::read_csv("inst//extdata//routine//01_adm2_replace.csv")
+usethis::use_data(import_routine_adm2_replace, overwrite = TRUE)
+
+import_routine_adm2_replace_by_adm1 <-
+  readr::read_csv("inst//extdata//routine//01_adm2_replace_by_adm1.csv")
+usethis::use_data(import_routine_adm2_replace_by_adm1, overwrite = TRUE)
+
   import_routine_replace <-
     readr::read_csv("inst//extdata//routine//02_replace.csv")
   usethis::use_data(import_routine_replace, overwrite = TRUE)
+
   import_routine_replace_hfname <-
     readr::read_csv("inst//extdata//routine//03_replace_hfname.csv")
   usethis::use_data(import_routine_replace_hfname, overwrite = TRUE)
+
   import_routine_set_cluster <-
     readr::read_csv("inst//extdata//routine//04_cluster.csv")
   usethis::use_data(import_routine_set_cluster, overwrite = TRUE)
+
   devtools::load_all()
 }
 

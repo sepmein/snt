@@ -58,7 +58,52 @@ routine_replace <- function(df, cty) {
   return(df)
 }
 
+#' A helper function to import routine database
+#'
+#' @param df Target dataframe to be replaced
+#' @param replace_database Db which stored the corrected information, usually
+#' snt internal database could be used.
+#' @param snt_country Target snt country, as there is multiple country replacement
+#' store inside the replace db. So designate a database is necessary
+#' @param column Target column in the target dataframe to be replaced
+#' @author Chunzhe ZHANG
+#' @export
+import_replace <- function(df,
+                           replace_database,
+                           snt_country,
+                           column,
+                           by = FALSE) {
+  temp_column <- paste0(column, "_")
+  filtered_replace_database <- replace_database |>
+    filter(country == snt_country) |>
+    dplyr::select(-country) |>
+    dplyr::rename(
+      !!column := from,
+      !!temp_column := to
+    )
+  if (isFALSE(by)) {
+    df <- df |>
+      dplyr::left_join(filtered_replace_database)
+  } else if (is.vector(by)){
+    by[column] = column
+    df <- df |>
+      dplyr::left_join(filtered_replace_database,
+                       by = by
+      )
+  }
+  df <- df |>
+    dplyr::mutate_at(
+      c(temp_column),
+      ~ if_else(is.na(.x), !!sym(column), .x)
+    ) |>
+    dplyr::select(-!!column) |>
+    dplyr::rename(!!column := !!temp_column)
+
+  return(df)
+}
+
 dhs_api_endpoint <- "https://api.dhsprogram.com/rest/dhs/data/"
+
 #' @export
 import_dhs_data <- function(year = 2021) {
   json_file <- RJSONIO::fromJSON(
