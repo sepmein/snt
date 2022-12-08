@@ -24,12 +24,3 @@ shp_global_adm1 <- base::system.file(
     package = "snt"
 )
 
-# #' @export
-# shp_global_adm2 <- base::system.file(
-#     "extdata",
-#     "shapefiles",
-#     "global",
-#     "ADM0",
-#     "GLOBAL_ADM2.shp",
-#     package = "snt"
-# )

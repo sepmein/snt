@@ -1,0 +1,15 @@
+---
+title: "Nigeria 2022 SNT - 01 Rainfall"
+output: 
+  html_document:
+    code_folding: show
+    toc: true
+    theme:
+      primary: "#EA80FC"
+      secondary: "#00DAC6"
+      base_font:
+        google: Prompt
+      heading_font:
+        google: Proza Libre
+---
+

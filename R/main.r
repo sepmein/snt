@@ -7,7 +7,58 @@ set_country <- function(root_folder, country) {
   snt_country <<- country # nolint
 }
 
-# Resource --------------------------------------------
+#' @export
+config <- function(country,
+                   root = FALSE,
+                   input_root = FALSE,
+                   output_root = FALSE,
+                   raster_root = FALSE,
+                   map_folder = FALSE,
+                   ihme_folder = FALSE,
+                   rainfall_folder = FALSE,
+                   rainfall_output = FALSE) {
+  # todo add a formatter function to format country to ISO3 code
+  country <- country
+
+  if (!(isFALSE(root))) {
+    input_root <- file.path(root, input_root)
+    output_root <- file.path(root, output_root)
+    raster_root <- file.path(root, raster_root)
+  }
+
+  # output folder
+  if (!(isFALSE(output_root))) {
+    # set by relative path
+    rainfall_output <- file.path(raster_root, rainfall_output)
+    map_output <- file.path(raster_root, map_output)
+    ihme_output <- file.path(raster_root, ihme_output)
+  }
+
+  # raster root folder
+  if (!(isFALSE(raster_root))) {
+    # Set by relative path
+    rainfall_folder <- file.path(raster_root, rainfall_folder)
+    map_folder <- file.path(raster_root, map_folder)
+    ihme_folder <- file.path(raster_root, ihme_folder)
+  }
+  result <- list(
+    "country" = country,
+    "raster" = list(
+      "rainfall" = list(
+        "folder" = rainfall_folder
+      ),
+      "map" = list(
+        "folder" = map_folder
+      ),
+      "ihme" = list(
+        "folder" = ihme_folder
+      )
+    )
+  )
+  return(result)
+}
+
+# Resource ----------------------------------------------------------------
 #' @export
 Resource <- R6::R6Class(
   classname = "resource",
@@ -17,35 +68,6 @@ Resource <- R6::R6Class(
     output_destination = NULL,
     data = NULL,
     download_to = NULL,
-    #' Resource class
-    #' Base class for the sub-national analysis package
-    #' @param is_online, Bool, is online resource or not, consider to remote?
-    #' if api_url has been set, then is should be an online resource
-    #' is_online do have some problems, as all resources do come from
-    #'  somewhere online,
-    #' but in most cases this process only needed to be done once while,
-    #' means the file in not online anymore if this file has already
-    #' been downloaded
-    #' TODO: should I provide a single download function for all the files
-    #' needed
-    #' e.g. download_resource(
-    #'  resourceA, resourceB
-    #' )
-    #' Then that's it.?
-    #' @param is_batch, Bool, the definition of is_batch is somewhat unclear.
-    #' TODO need to be clearer defined. Batch included a few level of batch.
-    #' When downloading files, download a single file or a few files
-    #' When read from local file
-    #' @param api_url
-    #' @param local_destination
-    #' @param local_file_type
-    #' @param output_destination
-    #' @param download_to
-    #'
-    #' @return
-    #' @export
-    #'
-    #' @examples
     initialize = function(is_online,
                           is_batch,
                           api_url,
@@ -292,19 +314,7 @@ Resource <- R6::R6Class(
   )
 )
 
-
 # Shapefiles --------------------------------------------------------------
-
-# #' @export
-# Shapefile <- R6::R6Class(
-#   # nolint
-#   "Shapefile",
-#   inherit = Resource,
-#   public = list(
-#     local_destination = NULL,
-#     local_file_type <- NULL
-#   )
-# )
 
 # Raster Resource----------------------------------------------------------
 #' @export
@@ -325,11 +335,6 @@ RasterResource <- R6::R6Class(
     target_adm_level = NULL,
     index_name = NULL,
     cores = NULL,
-    # TODO add document
-    #' Init function for Raster Resource
-    #'
-    #' @param adm0_shapefile String
-    #' @param adm1_shapefile
     initialize = function(adm0_shapefile = NULL,
                           adm1_shapefile = NULL,
                           adm2_shapefile = NULL,
@@ -440,6 +445,14 @@ RasterResource <- R6::R6Class(
     },
     clean = function() {
 
+    },
+    get_district_raster_data = function(method,
+                                        extracted_raster_data) {
+      if (method == "mean") {
+        result <- lapply(extracted_raster_data,
+                         FUN = mean, na.rm = TRUE)
+      }
+      return(result)
     },
     load_single_file = function(target_adm_level,
                                 adm0_name_in_shp,
@@ -723,126 +736,19 @@ Rainfall <- R6::R6Class(
   classname = "Rainfall",
   inherit = RasterResource,
   public = list(
-    africa_api = NULL,
-    global_api = NULL,
-    api_url = NULL,
-    is_online = NULL,
-    is_batch = NULL,
-    local_file_type = NULL,
-    with_95CI = NULL,
-    download_to = NULL,
-    adm0_shapefile = NULL,
-    adm1_shapefile = NULL,
-    adm2_shapefile = NULL,
-    adm3_shapefile = NULL,
-    target_adm_level = NULL,
-    index_name = NULL,
-    initialize = function(adm0_shapefile = NULL,
-                          adm1_shapefile = NULL,
-                          adm2_shapefile = NULL,
-                          adm3_shapefile = NULL,
-                          with_95CI = FALSE,
-                          is_online = FALSE,
-                          is_batch = FALSE,
-                          api_url = NULL,
-                          local_destination = NULL,
-                          output_destination = NULL,
-                          download_to = NULL,
-                          ...) {
-      super$initialize(
-        adm0_shapefile = adm0_shapefile,
-        adm1_shapefile = adm1_shapefile,
-        adm2_shapefile = adm2_shapefile,
-        adm3_shapefile = adm3_shapefile,
-        with_95CI = with_95CI,
-        is_online = is_online,
-        is_batch = is_batch,
-        api_url = api_url,
-        local_destination = local_destination,
-        output_destination = output_destination,
-        local_file_type = "raster",
-        download_to = download_to,
-        index_name = "rainfall",
-        ...
-      )
-      self$africa_api <- "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/africa_monthly/tifs/"
-      self$global_api <- "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/global_monthly/tifs/"
-      invisible(self)
-    },
+    global_api = "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/tifs/",
     download = function(target,
+                        path_to_save,
                         start_date,
                         end_date) {
-      if (target == "africa") {
-        super$download_batch(
-          api_url = self$africa_api,
-          select_files <-
-            self$select_files(
-              start_date,
-              end_date
-            )
-        )
-      } else if (target == "global") {
-        super$download_batch(
-          api_url = self$africa_api,
-          select_files = self.select_files(
-            start_date,
-            end_date
-          )
-        )
-      } else {
-        stop(paste0(
-          "Rainfall Resource Download, ",
-          "target should be africa or global"
-        ))
-      }
-      invisible(self)
     },
     clean = function() {
-      # Filename: chirps-v2.0.2019.01.tif
-      self$data <- self$data |>
+      self$data <-
+        self$data |>
         dplyr::mutate(
-          year = stringi::str_extract(filename, "\\d{4}"),
-          month = stringi::str_extract(filename, "\\d{2}(?=.tif)")
-        ) |>
-        rename(value == !!self$index_name)
-    },
-    export = function(type, filename) {
-      setwd(self$output_destination)
-      if (type == "stacked") {
-        write_csv(self$data, file = filename)
-      }
-    },
-    plot = function() {
-      ggplot2::ggplot(self$data) +
-        ggplot2::geom_line(ggplot2::aes(
-          x = date,
-          y = rain
-        )) +
-        ggplot2::facet_wrap(~adm1)
-      invisible(self)
-    }
-  ),
-  private = list(
-    select_files = function(start_date, end_date) {
-      return(function(filenames) {
-        start_id <- grep(start_date, filenames)
-        end_id <- grep(end_date, filenames)
-        filenames <- filenames[start_id:end_id]
-      })
-    },
-    get_adm1_from_country = function(path_to_country_adm2) {
-      self$data <- rename(self$data, amd2 = district)
-      self$data <- rename(self$data, rain = unlistrmeans)
-      self$data$date <- str_c(self$data$year,
-        str_pad(self$data$month, 2, pad = 0),
-        sep = "-"
-      )
-      self$data$date <- as.Date(sef.data$date)
-      country_adm2 <- read_dta(path_to_country_adm2)
-      rainfall_data_with_adm1 <- merge(self$data,
-        country_adm2,
-        by = "adm2"
-      )
+          year = stringr::str_extract(file, "\\d{4}"),
+          month = stringr::str_extract(file, "\\d{2}(?=.tif)")
+        )
     }
   )
 )
@@ -1717,15 +1623,31 @@ update_database <- function() {
   import_routine_rename <-
     readr::read_csv("inst//extdata//routine//01_rename.csv")
   usethis::use_data(import_routine_rename, overwrite = TRUE)
+
+import_routine_adm1_replace <-
+  readr::read_csv("inst//extdata//routine//01_adm1_replace.csv")
+usethis::use_data(import_routine_adm1_replace, overwrite = TRUE)
+
+import_routine_adm2_replace <-
+  readr::read_csv("inst//extdata//routine//01_adm2_replace.csv")
+usethis::use_data(import_routine_adm2_replace, overwrite = TRUE)
+
+import_routine_adm2_replace_by_adm1 <-
+  readr::read_csv("inst//extdata//routine//01_adm2_replace_by_adm1.csv")
+usethis::use_data(import_routine_adm2_replace_by_adm1, overwrite = TRUE)
+
   import_routine_replace <-
     readr::read_csv("inst//extdata//routine//02_replace.csv")
   usethis::use_data(import_routine_replace, overwrite = TRUE)
+
   import_routine_replace_hfname <-
     readr::read_csv("inst//extdata//routine//03_replace_hfname.csv")
   usethis::use_data(import_routine_replace_hfname, overwrite = TRUE)
+
   import_routine_set_cluster <-
     readr::read_csv("inst//extdata//routine//04_cluster.csv")
   usethis::use_data(import_routine_set_cluster, overwrite = TRUE)
+
   devtools::load_all()
 }
 

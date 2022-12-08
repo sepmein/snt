@@ -7,33 +7,47 @@ db_pass <- "crimson"
 # sql -----------
 #' @export
 sql_select_adm0_year <- "select * from adm0_year"
+#' @export
 sql_select_adm0_month <- "select * from adm0_month"
+#' @export
 sql_select_adm1_year <- "select * from adm1_year"
+#' @export
 sql_select_adm1_month <- "select * from adm1_month"
+#' @export
 sql_select_adm2_year <- "select * from adm2_year"
+#' @export
 sql_select_adm2_month <- "select * from adm2_month"
 
 ## sql constrain -----------
+#' @export
 constrain_adm0 <- function(positional_index) {
     return(
         paste0("adm0 = $", positional_index)
     )
 }
+
+#' @export
 constrain_adm1 <- function(positional_index) {
     return(
         paste0("adm1 = $", positional_index)
     )
 }
+
+#' @export
 constrain_adm2 <- function(positional_index) {
     return(
         paste0("adm2 = $", positional_index)
     )
 }
+
+#' @export
 constrain_year <- function(positional_index) {
     return(
         paste0("year = $", positional_index)
     )
 }
+
+#' @export
 constrain_range_year_included <- function(positional_index) {
     first <- positional_index
     second <- positional_index + 1
@@ -46,11 +60,15 @@ constrain_range_year_included <- function(positional_index) {
         )
     )
 }
+
+#' @export
 constrain_indicator <- function(positional_index) {
     return(
         paste0("index = $", positional_index)
     )
 }
+
+#' @export
 constrain_indicators <- function(positional_index, ...) {
     # index IN ('foo', 'bar')
     # index IN ($n1, $n2, $n3)
@@ -69,14 +87,20 @@ constrain_indicators <- function(positional_index, ...) {
 }
 
 ## sql generator fns -------------
+
+#' @export
 add_and <- function(sql) {
     sql <- paste(sql, "AND", sep = " ")
     return(sql)
 }
+
+#' @export
 add_where <- function(sql) {
     sql <- paste(sql, "WHERE", sep = " ")
     return(sql)
 }
+
+#' @export
 add_constrain <- function(sql, constrain_fn, index, ...) {
     constrain <- constrain_fn(index, ...)
     sql <- paste(
@@ -226,14 +250,7 @@ dbq_select <- function(adm0 = NULL,
         ))
 }
 
-cases_and_deaths_averted <- dbq_select(
-    level = "adm0",
-    adm0 = "NIGERIA",
-    year_from = 2010,
-    year_to = 2022,
-    indicators = c("cases_averted", "deaths_averted")
-)
-
+#' @export
 format_level <- function(level) {
     levels <- c("adm0", "adm1", "adm2")
     formatted <- stringr::str_to_lower(level)
@@ -248,6 +265,7 @@ format_level <- function(level) {
     return(formatted)
 }
 
+#' @export
 format_adm0 <- function(adm0) {
     return(stringr::str_to_upper(adm0))
 }

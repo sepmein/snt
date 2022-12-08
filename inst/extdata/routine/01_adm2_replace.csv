@@ -1,0 +1,727 @@
+country ,from                                        ,to
+NGA     ,ab Aba North Local Government Area          ,Aba North
+NGA     ,Atakumosa East                              ,Atakunmosa East
+NGA     ,Atakumosa West                              ,Atakunmosa West
+NGA     ,ab Aba South Local Government Area          ,Aba South
+NGA     ,ab Ikwuano Local Government Area            ,Ikwuano
+NGA     ,ab Isiala-Ngwa South Local Government Area  ,Isiala-Ngwa South
+NGA     ,ab Ugwunagbo Local Government Area          ,Ugwunagbo
+NGA     ,ab Ukwa East Local Government Area          ,Ukwa East
+NGA     ,ab Umuahia South Local Government Area      ,Umuahia South
+NGA     ,ab Umunneochi Local Government Area         ,Umu-Nneochi
+NGA     ,ad Girei Local Government Area              ,Girei
+NGA     ,ad Lamurde Local Government Area            ,Lamurde
+NGA     ,ad Mubi North Local Government Area         ,Mubi North
+NGA     ,ad Shelleng Local Government Area           ,Shelleng
+NGA     ,Afikpo North                                ,Afikpo-North
+NGA     ,Afikpo South                                ,Afikpo-South
+NGA     ,ak Mbo Local Government Area                ,Mbo
+NGA     ,ak Nsit Ibom Local Government Area          ,Nsit Ibom
+NGA     ,ak Udung Uko Local Government Area          ,Udung Uko
+NGA     ,ak Ukanafun Local Government Area           ,Ukanafun
+NGA     ,an Ayamelum Local Government Area           ,Ayamelum
+NGA     ,an Ihiala Local Government Area             ,Ihiala
+NGA     ,an Onitsha South Local Government Area      ,Onitsha South
+NGA     ,an Oyi Local Government Area                ,Oyi
+NGA     ,ri Oyigbo Local Government Area             ,Oyigbo
+NGA     ,bo Abadam Local Government Area             ,Abadam
+NGA     ,bo Bama Local Government Area               ,Bama
+NGA     ,bo Bayo Local Government Area               ,Bayo
+NGA     ,bo Damboa Local Government Area             ,Damboa
+NGA     ,bo Dikwa Local Government Area              ,Dikwa
+NGA     ,Calabar Municipal                           ,Calabar-Municipal
+NGA     ,ak Urue-Offong/Oruko Local Government Area  ,Urue Offong/Oruko
+NGA     ,Urue-Offong/Oruko                           ,Urue Offong/Oruko
+NGA     ,fc Abaji Local Government Area              ,Abaji
+NGA     ,ak Abak Local Government Area               ,Abak
+NGA     ,eb Abakaliki Local Government Area          ,Abakaliki
+NGA     ,og Abeokuta North Local Government Area     ,Abeokuta North
+NGA     ,og Abeokuta South Local Government Area     ,Abeokuta South
+NGA     ,cr Abi Local Government Area                ,Abi
+NGA     ,im Aboh-Mbaise Local Government Area        ,Aboh-Mbaise
+NGA     ,ri Abua/Odual Local Government Area         ,Abua/Odual
+NGA     ,ko Adavi Local Government Area              ,Adavi
+NGA     ,be Ado Local Government Area                ,Ado
+NGA     ,ek Ado Ekiti Local Government Area          ,Ado Ekiti
+NGA     ,og Ado Odo/Ota Local Government Area        ,Ado Odo/Ota
+NGA     ,oy Afijio Local Government Area             ,Afijio
+NGA     ,eb Afikpo North Local Government Area       ,Afikpo-North
+NGA     ,eb Afikpo South Local Government Area       ,Afikpo-South
+NGA     ,ni Agaie Local Government Area              ,Agaie
+NGA     ,be Agatu Local Government Area              ,Agatu
+NGA     ,la Agege Local Government Area              ,Agege
+NGA     ,an Aguata Local Government Area             ,Aguata
+NGA     ,ri Ahoada East Local Government Area        ,Ahoada East
+NGA     ,ri Ahoada West Local Government Area        ,Ahoada West
+NGA     ,os Aiyedaade Local Government Area          ,Aiyedaade
+NGA     ,os Aiyedire Local Government Area           ,Aiyedire
+NGA     ,ek Aiyekire (Gbonyin) Local Government Area ,Aiyekire (Gbonyin)
+NGA     ,ko Ajaokuta Local Government Area           ,Ajaokuta
+NGA     ,la Ajeromi/Ifelodun Local Government Area   ,Ajeromi/Ifelodun
+NGA     ,cr Akamkpa Local Government Area            ,Akamkpa
+NGA     ,oy Akinyele Local Government Area           ,Akinyele
+NGA     ,go Akko Local Government Area               ,Akko
+NGA     ,on Akoko North East Local Government Area   ,Akoko North East
+NGA     ,on Akoko North West Local Government Area   ,Akoko North West
+NGA     ,on Akoko South East Local Government Area   ,Akoko South East
+NGA     ,on Akoko South West Local Government Area   ,Akoko South West
+NGA     ,ed Akoko-Edo Local Government Area          ,Akoko-Edo
+NGA     ,cr Akpabuyo Local Government Area           ,Akpabuyo
+NGA     ,ri Akuku Toru Local Government Area         ,Akuku Toru
+NGA     ,on Akure North Local Government Area        ,Akure North
+NGA     ,on Akure South Local Government Area        ,Akure South
+NGA     ,na Akwanga Local Government Area            ,Akwanga
+NGA     ,kn Albasu Local Government Area             ,Albasu
+NGA     ,ke Aleiro Local Government Area             ,Aleiro
+NGA     ,la Alimosho Local Government Area           ,Alimosho
+NGA     ,ba Alkaleri Local Government Area           ,Alkaleri
+NGA     ,fc AMAC Local Government Area               ,AMAC
+NGA     ,la Amuwo Odofin Local Government Area       ,Amuwo Odofin
+NGA     ,an Anambra East Local Government Area       ,Anambra East
+NGA     ,an Anambra West Local Government Area       ,Anambra West
+NGA     ,an Anaocha Local Government Area            ,Anaocha
+NGA     ,ri Andoni Local Government Area             ,Andoni
+NGA     ,en Aninri Local Government Area             ,Aninri
+NGA     ,de Aniocha North Local Government Area      ,Aniocha North
+NGA     ,de Aniocha South Local Government Area      ,Aniocha South
+NGA     ,za Anka Local Government Area               ,Anka
+NGA     ,ko Ankpa Local Government Area              ,Ankpa
+NGA     ,be Apa Local Government Area                ,Apa
+NGA     ,la Apapa Local Government Area              ,Apapa
+NGA     ,ta Ardo-Kola Local Government Area          ,Ardo-Kola
+NGA     ,ke Arewa Local Government Area              ,Arewa
+NGA     ,ke Argungu Local Government Area            ,Argungu
+NGA     ,ab Arochukwu Local Government Area          ,Arochukwu
+NGA     ,kw Asa Local Government Area                ,Asa
+NGA     ,ri Asari-Toru Local Government Area         ,Asari-Toru
+NGA     ,bo Askira/Uba Local Government Area         ,Askira/Uba
+NGA     ,os Atakunmosa East Local Government Area    ,Atakunmosa East
+NGA     ,os Atakunmosa West Local Government Area    ,Atakunmosa West
+NGA     ,oy Atisbo Local Government Area             ,Atisbo
+NGA     ,na Awe Local Government Area                ,Awe
+NGA     ,en Awgu Local Government Area               ,Awgu
+NGA     ,an Awka North Local Government Area         ,Awka North
+NGA     ,an Awka South Local Government Area         ,Awka South
+NGA     ,jg Babura Local Government Area             ,Babura
+NGA     ,la Badagry Local Government Area            ,Badagry
+NGA     ,yo Bade Local Government Area               ,Bade
+NGA     ,ke Bagudo Local Government Area             ,Bagudo
+NGA     ,za Bakura Local Government Area             ,Bakura
+NGA     ,go Balanga Local Government Area            ,Balanga
+NGA     ,ta Bali Local Government Area               ,Bali
+NGA     ,pl Barkin Ladi Local Government Area        ,Barkin Ladi
+NGA     ,kw Baruten Local Government Area            ,Baruten
+NGA     ,ko Bassa Local Government Area              ,Bassa
+NGA     ,kt Batsari Local Government Area            ,Batsari
+NGA     ,ba Bauchi Local Government Area             ,Bauchi
+NGA     ,kt Baure Local Government Area              ,Baure
+NGA     ,kn Bebeji Local Government Area             ,Bebeji
+NGA     ,ab Bende Local Government Area              ,Bende
+NGA     ,cr Biase Local Government Area              ,Biase
+NGA     ,kn Bichi Local Government Area              ,Bichi
+NGA     ,ni Bida Local Government Area               ,Bida
+NGA     ,go Billiri Local Government Area            ,Billiri
+NGA     ,so Binji Local Government Area              ,Binji
+NGA     ,ke Birnin Kebbi Local Government Area       ,Birnin Kebbi
+NGA     ,jg Birnin Kudu Local Government Area        ,Birnin Kudu
+NGA     ,za Birnin Magaji Local Government Area      ,Birnin Magaji
+NGA     ,jg Birniwa Local Government Area            ,Birniwa
+NGA     ,bo Biu Local Government Area                ,Biu
+NGA     ,so Bodinga Local Government Area            ,Bodinga
+NGA     ,ba Bogoro Local Government Area             ,Bogoro
+NGA     ,pl Bokkos Local Government Area             ,Bokkos
+NGA     ,os Boluwaduro Local Government Area         ,Boluwaduro
+NGA     ,de Bomadi Local Government Area             ,Bomadi
+NGA     ,ri Bonny Local Government Area              ,Bonny
+NGA     ,os Boripe Local Government Area             ,Boripe
+NGA     ,by Brass Local Government Area              ,Brass
+NGA     ,za Bukkuyum Local Government Area           ,Bukkuyum
+NGA     ,za Bungudu Local Government Area            ,Bungudu
+NGA     ,ke Bunza Local Government Area              ,Bunza
+NGA     ,yo Bursari Local Government Area            ,Bursari
+NGA     ,be Buruku Local Government Area             ,Buruku
+NGA     ,de Burutu Local Government Area             ,Burutu
+NGA     ,fc Bwari Local Government Area              ,Bwari
+NGA     ,cr Calabar Municipal Local Government Area  ,Calabar-Municipal
+NGA     ,ni Chanchaga Local Government Area          ,Chanchaga
+NGA     ,bo Chibok Local Government Area             ,Chibok
+NGA     ,kd Chikun Local Government Area             ,Chikun
+NGA     ,kn Dala Local Government Area               ,Dala
+NGA     ,yo Damaturu Local Government Area           ,Damaturu
+NGA     ,ba Dambam Local Government Area             ,Dambam
+NGA     ,kt Dan Musa Local Government Area           ,Dan Musa
+NGA     ,kn Danbatta Local Government Area           ,Danbatta
+NGA     ,so Dange-Shuni Local Government Area        ,Dange-Shuni
+NGA     ,ke Danko/Wasagu Local Government Area       ,Danko/Wasagu
+NGA     ,ba Darazo Local Government Area             ,Darazo
+NGA     ,ba Dass Local Government Area               ,Dass
+NGA     ,kt Daura Local Government Area              ,Daura
+NGA     ,kn Dawakin Kudu Local Government Area       ,Dawakin Kudu
+NGA     ,kn Dawakin Tofa Local Government Area       ,Dawakin Tofa
+NGA     ,ri Degema Local Government Area             ,Degema
+NGA     ,ko Dekina Local Government Area             ,Dekina
+NGA     ,ad Demsa Local Government Area              ,Demsa
+NGA     ,kn Doguwa Local Government Area             ,Doguwa
+NGA     ,na Doma Local Government Area               ,Doma
+NGA     ,go Dukku Local Government Area              ,Dukku
+NGA     ,an Dunukofia Local Government Area          ,Dunukofia
+NGA     ,jg Dutse Local Government Area              ,Dutse
+NGA     ,kt Dutsin-Ma Local Government Area          ,Dutsin-Ma
+NGA     ,ak Eastern Obolo Local Government Area      ,Eastern Obolo
+NGA     ,eb Ebonyi Local Government Area             ,Ebonyi
+NGA     ,os Ede South Local Government Area          ,Ede South
+NGA     ,kw Edu Local Government Area                ,Edu
+NGA     ,ek Efon Local Government Area               ,Efon
+NGA     ,oy Egbeda Local Government Area             ,Egbeda
+NGA     ,os Egbedore Local Government Area           ,Egbedore
+NGA     ,ed Egor Local Government Area               ,Egor
+NGA     ,os Ejigbo Local Government Area             ,Ejigbo
+NGA     ,by Ekeremor Local Government Area           ,Ekeremor
+NGA     ,ak Eket Local Government Area               ,Eket
+NGA     ,kw Ekiti Local Government Area              ,Ekiti
+NGA     ,ek Ekiti East Local Government Area         ,Ekiti East
+NGA     ,ek Ekiti South West Local Government Area   ,Ekiti South West
+NGA     ,ek Ekiti West Local Government Area         ,Ekiti West
+NGA     ,an Ekwusigo Local Government Area           ,Ekwusigo
+NGA     ,ri Eleme Local Government Area              ,Eleme
+NGA     ,ek Emure Local Government Area              ,Emure
+NGA     ,en Enugu East Local Government Area         ,Enugu East
+NGA     ,en Enugu North Local Government Area        ,Enugu North
+NGA     ,en Enugu South Local Government Area        ,Enugu South
+NGA     ,la Epe Local Government Area                ,Epe
+NGA     ,ed Esan Central Local Government Area       ,Esan Central
+NGA     ,ed Esan North-East Local Government Area    ,Esan North-East
+NGA     ,ed Esan South-East Local Government Area    ,Esan South-East
+NGA     ,ed Esan West Local Government Area          ,Esan West
+NGA     ,on Ese Odo Local Government Area            ,Ese Odo
+NGA     ,ak Esit Eket Local Government Area          ,Esit Eket
+NGA     ,ak Essien Udim Local Government Area        ,Essien Udim
+NGA     ,ri Etche Local Government Area              ,Etche
+NGA     ,de Ethiope East Local Government Area       ,Ethiope East
+NGA     ,de Ethiope West Local Government Area       ,Ethiope West
+NGA     ,ak Etim Ekpo Local Government Area          ,Etim Ekpo
+NGA     ,ak Etinan Local Government Area             ,Etinan
+NGA     ,ed Etsako Central Local Government Area     ,Etsako Central
+NGA     ,ed Etsako East Local Government Area        ,Etsako East
+NGA     ,ed Etsako West Local Government Area        ,Etsako West
+NGA     ,og Ewekoro Local Government Area            ,Ewekoro
+NGA     ,en Ezeagu Local Government Area             ,Ezeagu
+NGA     ,eb Ezza North Local Government Area         ,Ezza North
+NGA     ,eb Ezza South Local Government Area         ,Ezza South
+NGA     ,kn Fagge Local Government Area              ,Fagge
+NGA     ,ke Fakai Local Government Area              ,Fakai
+NGA     ,yo Fika Local Government Area               ,Fika
+NGA     ,ad Fufore Local Government Area             ,Fufore
+NGA     ,go Funakaye Local Government Area           ,Funakaye
+NGA     ,yo Fune Local Government Area               ,Fune
+NGA     ,kt Funtua Local Government Area             ,Funtua
+NGA     ,so Gada Local Government Area               ,Gada
+NGA     ,ba Gamawa Local Government Area             ,Gamawa
+NGA     ,ba Ganjuwa Local Government Area            ,Ganjuwa
+NGA     ,ad Ganye Local Government Area              ,Ganye
+NGA     ,ta Gashaka Local Government Area            ,Gashaka
+NGA     ,ta Gassol Local Government Area             ,Gassol
+NGA     ,kn Gaya Local Government Area               ,Gaya
+NGA     ,be Gboko Local Government Area              ,Gboko
+NGA     ,yo Geidam Local Government Area             ,Geidam
+NGA     ,kn Gezawa Local Government Area             ,Gezawa
+NGA     ,ba Giade Local Government Area              ,Giade
+NGA     ,kd Giwa Local Government Area               ,Giwa
+NGA     ,ri Gokana Local Government Area             ,Gokana
+NGA     ,go Gombe Local Government Area              ,Gombe
+NGA     ,ad Gombi Local Government Area              ,Gombi
+NGA     ,so Goronyo Local Government Area            ,Goronyo
+NGA     ,so Gudu Local Government Area               ,Gudu
+NGA     ,yo Gujba Local Government Area              ,Gujba
+NGA     ,be Guma Local Government Area               ,Guma
+NGA     ,jg Gumel Local Government Area              ,Gumel
+NGA     ,za Gummi Local Government Area              ,Gummi
+NGA     ,za Gusau Local Government Area              ,Gusau
+NGA     ,ad Guyuk Local Government Area              ,Guyuk
+NGA     ,so Gwadabawa Local Government Area          ,Gwadabawa
+NGA     ,fc Gwagwalada Local Government Area         ,Gwagwalada
+NGA     ,kn Gwale Local Government Area              ,Gwale
+NGA     ,ke Gwandu Local Government Area             ,Gwandu
+NGA     ,jg Gwaram Local Government Area             ,Gwaram
+NGA     ,kn Gwarzo Local Government Area             ,Gwarzo
+NGA     ,be Gwer East Local Government Area          ,Gwer East
+NGA     ,be Gwer West Local Government Area          ,Gwer West
+NGA     ,jg Hadejia Local Government Area            ,Hadejia
+NGA     ,bo Hawul Local Government Area              ,Hawul
+NGA     ,ad Hong Local Government Area               ,Hong
+NGA     ,oy Ibadan North Local Government Area       ,Ibadan North
+NGA     ,oy Ibadan North East Local Government Area  ,Ibadan North East
+NGA     ,oy Ibadan South West Local Government Area  ,Ibadan South West
+NGA     ,ko Ibaji Local Government Area              ,Ibaji
+NGA     ,oy Ibarapa Central Local Government Area    ,Ibarapa Central
+NGA     ,oy Ibarapa East Local Government Area       ,Ibarapa East
+NGA     ,oy Ibarapa North Local Government Area      ,Ibarapa North
+NGA     ,la Ibeju Lekki Local Government Area        ,Ibeju Lekki
+NGA     ,Ibeju/Lekki                                 ,Ibeju Lekki
+NGA     ,ak Ibeno Local Government Area              ,Ibeno
+NGA     ,ak Ibesikpo Asutan Local Government Area    ,Ibesikpo Asutan
+NGA     ,ta Ibi Local Government Area                ,Ibi
+NGA     ,ak Ibiono Ibom Local Government Area        ,Ibiono Ibom
+NGA     ,ko Idah Local Government Area               ,Idah
+NGA     ,on Idanre Local Government Area             ,Idanre
+NGA     ,im Ideato North Local Government Area       ,Ideato North
+NGA     ,an Idemili North Local Government Area      ,Idemili North
+NGA     ,an Idemili South Local Government Area      ,Idemili South
+NGA     ,ek Ido-Osi Local Government Area            ,Ido-Osi
+NGA     ,la Ifako/Ijaye Local Government Area        ,Ifako/Ijaye
+NGA     ,os Ife Central Local Government Area        ,Ife Central
+NGA     ,os Ife East Local Government Area           ,Ife East
+NGA     ,os Ife North Local Government Area          ,Ife North
+NGA     ,os Ife South Local Government Area          ,Ife South
+NGA     ,os Ifedayo Local Government Area            ,Ifedayo
+NGA     ,on Ifedore Local Government Area            ,Ifedore
+NGA     ,kw Ifelodun Local Government Area           ,Ifelodun
+NGA     ,os Ifelodun Local Government Area           ,Ifelodun
+NGA     ,og Ifo Local Government Area                ,Ifo
+NGA     ,kd Igabi Local Government Area              ,Igabi
+NGA     ,en Igbo-Etiti Local Government Area         ,Igbo-Etiti
+NGA     ,en Igbo-Eze North Local Government Area     ,Igbo-Eze North
+NGA     ,en Igbo-Eze South Local Government Area     ,Igbo-Eze South
+NGA     ,ed Igueben Local Government Area            ,Igueben
+NGA     ,im Ihitte/Uboma Local Government Area       ,Ihitte/Uboma
+NGA     ,og Ijebu East Local Government Area         ,Ijebu East
+NGA     ,og Ijebu North Local Government Area        ,Ijebu North
+NGA     ,og Ijebu North East Local Government Area   ,Ijebu North East
+NGA     ,og Ijebu Ode Local Government Area          ,Ijebu Ode
+NGA     ,ek Ijero Local Government Area              ,Ijero
+NGA     ,ko Ijumu Local Government Area              ,Ijumu
+NGA     ,ak Ika Local Government Area                ,Ika
+NGA     ,de Ika North East Local Government Area     ,Ika North East
+NGA     ,de Ika South Local Government Area          ,Ika South
+NGA     ,kd Ikara Local Government Area              ,Ikara
+NGA     ,la Ikeja Local Government Area              ,Ikeja
+NGA     ,og Ikenne Local Government Area             ,Ikenne
+NGA     ,ek Ikere Local Government Area              ,Ikere
+NGA     ,ek Ikole Local Government Area              ,Ikole
+NGA     ,ak Ikono Local Government Area              ,Ikono
+NGA     ,la Ikorodu Local Government Area            ,Ikorodu
+NGA     ,ak Ikot Abasi Local Government Area         ,Ikot Abasi
+NGA     ,ak Ikot Ekpene Local Government Area        ,Ikot Ekpene
+NGA     ,ri Ikwerre Local Government Area            ,Ikwerre
+NGA     ,eb Ikwo Local Government Area               ,Ikwo
+NGA     ,os Ila Local Government Area                ,Ila
+NGA     ,on Ilaje Local Government Area              ,Ilaje
+NGA     ,on Ile-Oluji-Okeigbo Local Government Area  ,Ile-Oluji-Okeigbo
+NGA     ,ek Ilejemeje Local Government Area          ,Ilejemeje
+NGA     ,os Ilesha East Local Government Area        ,Ilesha East
+NGA     ,os Ilesha West Local Government Area        ,Ilesha West
+NGA     ,so Illela Local Government Area             ,Illela
+NGA     ,kw Ilorin East Local Government Area        ,Ilorin East
+NGA     ,kw Ilorin South Local Government Area       ,Ilorin South
+NGA     ,kw Ilorin West Local Government Area        ,Ilorin West
+NGA     ,og Imeko Afon Local Government Area         ,Imeko Afon
+NGA     ,kt Ingawa Local Government Area             ,Ingawa
+NGA     ,ak Ini Local Government Area                ,Ini
+NGA     ,og Ipokia Local Government Area             ,Ipokia
+NGA     ,on Irele Local Government Area              ,Irele
+NGA     ,oy Irepo Local Government Area              ,Irepo
+NGA     ,kw Irepodun Local Government Area           ,Irepodun
+NGA     ,os Irepodun Local Government Area           ,Irepodun
+NGA     ,ek Irepodun/Ifelodun Local Government Area  ,Irepodun/Ifelodun
+NGA     ,os Irewole Local Government Area            ,Irewole
+NGA     ,so Isa Local Government Area                ,Isa
+NGA     ,ek Ise/Orun Local Government Area           ,Ise/Orun
+NGA     ,oy Iseyin Local Government Area             ,Iseyin
+NGA     ,eb Ishielu Local Government Area            ,Ishielu
+NGA     ,en Isi-Uzo Local Government Area            ,Isi-Uzo
+NGA     ,ab Isiala-Ngwa North Local Government Area  ,Isiala-Ngwa North
+NGA     ,kw Isin Local Government Area               ,Isin
+NGA     ,os Isokan Local Government Area             ,Isokan
+NGA     ,de Isoko North Local Government Area        ,Isoko North
+NGA     ,de Isoko South Local Government Area        ,Isoko South
+NGA     ,ab Isuikwuato Local Government Area         ,Isuikwuato
+NGA     ,ba Itas/Gadau Local Government Area         ,Itas/Gadau
+NGA     ,oy Itesiwaju Local Government Area          ,Itesiwaju
+NGA     ,ak Itu Local Government Area                ,Itu
+NGA     ,eb Ivo Local Government Area                ,Ivo
+NGA     ,oy Iwajowa Local Government Area            ,Iwajowa
+NGA     ,os Iwo Local Government Area                ,Iwo
+NGA     ,eb Izzi Local Government Area               ,Izzi
+NGA     ,kd Jaba Local Government Area               ,Jaba
+NGA     ,ad Jada Local Government Area               ,Jada
+NGA     ,jg Jahun Local Government Area              ,Jahun
+NGA     ,yo Jakusko Local Government Area            ,Jakusko
+NGA     ,ta Jalingo Local Government Area            ,Jalingo
+NGA     ,ba Jama'are Local Government Area           ,Jama'are
+NGA     ,ke Jega Local Government Area               ,Jega
+NGA     ,kd Jema'a Local Government Area             ,Jemaa
+NGA     ,bo Jere Local Government Area               ,Jere
+NGA     ,kt Jibia Local Government Area              ,Jibia
+NGA     ,pl Jos East Local Government Area           ,Jos East
+NGA     ,pl Jos North Local Government Area          ,Jos North
+NGA     ,pl Jos South Local Government Area          ,Jos South
+NGA     ,ko Kabba/Bunu Local Government Area         ,Kabba/Bunu
+NGA     ,kn Kabo Local Government Area               ,Kabo
+NGA     ,kd Kachia Local Government Area             ,Kachia
+NGA     ,kd Kaduna North Local Government Area       ,Kaduna North
+NGA     ,kd Kaduna South Local Government Area       ,Kaduna South
+NGA     ,jg Kafin Hausa Local Government Area        ,Kafin Hausa
+NGA     ,kd Kagarko Local Government Area            ,Kagarko
+NGA     ,kw Kaiama Local Government Area             ,Kaiama
+NGA     ,oy Kajola Local Government Area             ,Kajola
+NGA     ,kd Kajuru Local Government Area             ,Kajuru
+NGA     ,go Kaltungo Local Government Area           ,Kaltungo
+NGA     ,pl Kanam Local Government Area              ,Kanam
+NGA     ,kt Kankara Local Government Area            ,Kankara
+NGA     ,kt Kankia Local Government Area             ,Kankia
+NGA     ,kn Kano Municipal Local Government Area     ,Kano Municipal
+NGA     ,ta Karim-Lamido Local Government Area       ,Karim-Lamido
+NGA     ,na Karu Local Government Area               ,Karu
+NGA     ,ba Katagum Local Government Area            ,Katagum
+NGA     ,kt Katsina Local Government Area            ,Katsina
+NGA     ,be Katsina-Ala Local Government Area        ,Katsina-Ala
+NGA     ,kd Kaura Local Government Area              ,Kaura
+NGA     ,za Kaura Namoda Local Government Area       ,Kaura Namoda
+NGA     ,kd Kauru Local Government Area              ,Kauru
+NGA     ,jg Kazaure Local Government Area            ,Kazaure
+NGA     ,na Keana Local Government Area              ,Keana
+NGA     ,so Kebbe Local Government Area              ,Kebbe
+NGA     ,na Keffi Local Government Area              ,Keffi
+NGA     ,ri Khana Local Government Area              ,Khana
+NGA     ,ba Kirfi Local Government Area              ,Kirfi
+NGA     ,ko Kogi Local Government Area               ,Kogi
+NGA     ,by Kolokuma/Opokuma Local Government Area   ,Kolokuma-Opokuma
+NGA     ,Kolokuma/Opokuma                            ,Kolokuma-Opokuma
+NGA     ,ke Koko/Besse Local Government Area         ,Koko/Besse
+NGA     ,na Kokona Local Government Area             ,Kokona
+NGA     ,be Konshisha Local Government Area          ,Konshisha
+NGA     ,ni Kontagora Local Government Area          ,Kontagora
+NGA     ,la Kosofe Local Government Area             ,Kosofe
+NGA     ,kd Kubau Local Government Area              ,Kubau
+NGA     ,kd Kudan Local Government Area              ,Kudan
+NGA     ,fc Kuje Local Government Area               ,Kuje
+NGA     ,kn Kura Local Government Area               ,Kura
+NGA     ,kt Kurfi Local Government Area              ,Kurfi
+NGA     ,ta Kurmi Local Government Area              ,Kurmi
+NGA     ,fc Kwali Local Government Area              ,Kwali
+NGA     ,go Kwami Local Government Area              ,Kwami
+NGA     ,be Kwande Local Government Area             ,Kwande
+NGA     ,bo Kwaya Kusar Local Government Area        ,Kwaya Kusar
+NGA     ,na Lafia Local Government Area              ,Lafia
+NGA     ,oy Lagelu Local Government Area             ,Lagelu
+NGA     ,la Lagos Island Local Government Area       ,Lagos Island
+NGA     ,la Lagos Mainland Local Government Area     ,Lagos Mainland
+NGA     ,pl Langtang North Local Government Area     ,Langtang North
+NGA     ,ni Lapai Local Government Area              ,Lapai
+NGA     ,ta Lau Local Government Area                ,Lau
+NGA     ,ni Lavun Local Government Area              ,Lavun
+NGA     ,kd Lere Local Government Area               ,Lere
+NGA     ,be Logo Local Government Area               ,Logo
+NGA     ,ko Lokoja Local Government Area             ,Lokoja
+NGA     ,ad Madagali Local Government Area           ,Madagali
+NGA     ,kn Madobi Local Government Area             ,Madobi
+NGA     ,bo Magumeri Local Government Area           ,Magumeri
+NGA     ,bo Maiduguri Local Government Area          ,Maiduguri
+NGA     ,ad Maiha Local Government Area              ,Maiha
+NGA     ,ke Maiyama Local Government Area            ,Maiyama
+NGA     ,kd Makarfi Local Government Area            ,Makarfi
+NGA     ,be Makurdi Local Government Area            ,Makurdi
+NGA     ,kt Malumfashi Local Government Area         ,Malumfashi
+NGA     ,pl Mangu Local Government Area              ,Mangu
+NGA     ,kt Mani Local Government Area               ,Mani
+NGA     ,za Maradun Local Government Area            ,Maradun
+NGA     ,za Maru Local Government Area               ,Maru
+NGA     ,ad Mayo-Belwa Local Government Area         ,Mayo-Belwa
+NGA     ,im Mbatoli Local Government Area            ,Mbatoli
+NGA     ,ad Michika Local Government Area            ,Michika
+NGA     ,pl Mikang Local Government Area             ,Mikang
+NGA     ,kn Minjibir Local Government Area           ,Minjibir
+NGA     ,ba Misau Local Government Area              ,Misau
+NGA     ,ak Mkpat Enin Local Government Area         ,Mkpat Enin
+NGA     ,ek Moba Local Government Area               ,Moba
+NGA     ,ni Mokwa Local Government Area              ,Mokwa
+NGA     ,ko Mopa-Muro Local Government Area          ,Mopa-Muro
+NGA     ,kw Moro Local Government Area               ,Moro
+NGA     ,ad Mubi South Local Government Area         ,Mubi South
+NGA     ,kt Musawa Local Government Area             ,Musawa
+NGA     ,la Mushin Local Government Area             ,Mushin
+NGA     ,go Nafada Local Government Area             ,Nafada
+NGA     ,yo Nangere Local Government Area            ,Nangere
+NGA     ,na Nasarawa Local Government Area           ,Nasarawa
+NGA     ,na Nasarawa Eggon Local Government Area     ,Nasarawa Eggon
+NGA     ,kn Nassarawa Local Government Area          ,Nassarawa
+NGA     ,de Ndokwa East Local Government Area        ,Ndokwa East
+NGA     ,de Ndokwa West Local Government Area        ,Ndokwa West
+NGA     ,by Nembe Local Government Area              ,Nembe
+NGA     ,im Ngor-Okpala Local Government Area        ,Ngor-Okpala
+NGA     ,yo Nguru Local Government Area              ,Nguru
+NGA     ,ba Ningi Local Government Area              ,Ningi
+NGA     ,an Njikoka Local Government Area            ,Njikoka
+NGA     ,en Nkanu East Local Government Area         ,Nkanu East
+NGA     ,en Nkanu West Local Government Area         ,Nkanu West
+NGA     ,an Nnewi North Local Government Area        ,Nnewi North
+NGA     ,an Nnewi South Local Government Area        ,Nnewi South
+NGA     ,ak Nsit Atai Local Government Area          ,Nsit Atai
+NGA     ,ak Nsit Ubium Local Government Area         ,Nsit Ubium
+NGA     ,en Nsukka Local Government Area             ,Nsukka
+NGA     ,ad Numan Local Government Area              ,Numan
+NGA     ,og Obafemi-Owode Local Government Area      ,Obafemi-Owode
+NGA     ,cr Obanliku Local Government Area           ,Obanliku
+NGA     ,be Obi Local Government Area                ,Obi
+NGA     ,na Obi Local Government Area                ,Obi
+NGA     ,ab Obi Nwga Local Government Area           ,Obi Nwga
+NGA     ,ri Obio/Akpor Local Government Area         ,Obio/Akpor
+NGA     ,os Obokun Local Government Area             ,Obokun
+NGA     ,ak Obot Akara Local Government Area         ,Obot Akara
+NGA     ,cr Obubra Local Government Area             ,Obubra
+NGA     ,og Odeda Local Government Area              ,Odeda
+NGA     ,on Odigbo Local Government Area             ,Odigbo
+NGA     ,os Odo-Otin Local Government Area           ,Odo-Otin
+NGA     ,og Odogbolu Local Government Area           ,Odogbolu
+NGA     ,cr Odukpani Local Government Area           ,Odukpani
+NGA     ,kw Offa Local Government Area               ,Offa
+NGA     ,ko Ofu Local Government Area                ,Ofu
+NGA     ,ri Ogba/Egbema/Ndoni Local Government Area  ,Ogba/Egbema/Ndoni
+NGA     ,be Ogbadibo Local Government Area           ,Ogbadibo
+NGA     ,an Ogbaru Local Government Area             ,Ogbaru
+NGA     ,by Ogbia Local Government Area              ,Ogbia
+NGA     ,oy Ogbomosho South Local Government Area    ,Ogbomosho South
+NGA     ,cr Ogoja Local Government Area              ,Ogoja
+NGA     ,ko Ogori/Magongo Local Government Area      ,Ogori/Magongo
+NGA     ,ri Ogu/Bolo Local Government Area           ,Ogu/Bolo
+NGA     ,og Ogun Waterside Local Government Area     ,Ogun Waterside
+NGA     ,im Oguta Local Government Area              ,Oguta
+NGA     ,ab Ohafia Local Government Area             ,Ohafia
+NGA     ,im Ohaji/Egbema Local Government Area       ,Ohaji/Egbema
+NGA     ,eb Ohaozara Local Government Area           ,Ohaozara
+NGA     ,eb Ohaukwu Local Government Area            ,Ohaukwu
+NGA     ,be Ohimini Local Government Area            ,Ohimini
+NGA     ,en Oji River Local Government Area          ,Oji River
+NGA     ,be Oju Local Government Area                ,Oju
+NGA     ,kw Oke-Ero Local Government Area            ,Oke-Ero
+NGA     ,ko Okehi Local Government Area              ,Okehi
+NGA     ,ko Okene Local Government Area              ,Okene
+NGA     ,im Okigwe Local Government Area             ,Okigwe
+NGA     ,on Okitipupa Local Government Area          ,Okitipupa
+NGA     ,ak Okobo Local Government Area              ,Okobo
+NGA     ,de Okpe Local Government Area               ,Okpe
+NGA     ,be Okpokwu Local Government Area            ,Okpokwu
+NGA     ,ri Okrika Local Government Area             ,Okrika
+NGA     ,os Ola-Oluwa Local Government Area          ,Ola-Oluwa
+NGA     ,ko Olamaboro Local Government Area          ,Olamaboro
+NGA     ,os Olorunda Local Government Area           ,Olorunda
+NGA     ,oy Olorunsogo Local Government Area         ,Olorunsogo
+NGA     ,oy Oluyole Local Government Area            ,Oluyole
+NGA     ,ko Omala Local Government Area              ,Omala
+NGA     ,on Ondo East Local Government Area          ,Ondo East
+NGA     ,on Ondo West Local Government Area          ,Ondo West
+NGA     ,eb Onicha Local Government Area             ,Onicha
+NGA     ,an Onitsha North Local Government Area      ,Onitsha North
+NGA     ,ak Onna Local Government Area               ,Onna
+NGA     ,ed Oredo Local Government Area              ,Oredo
+NGA     ,oy Orelope Local Government Area            ,Orelope
+NGA     ,ed Orhionmwon Local Government Area         ,Orhionmwon
+NGA     ,oy Ori Ire Local Government Area            ,Ori Ire
+NGA     ,os Oriade Local Government Area             ,Oriade
+NGA     ,im Orlu Local Government Area               ,Orlu
+NGA     ,os Orolu Local Government Area              ,Orolu
+NGA     ,ak Oron Local Government Area               ,Oron
+NGA     ,im Oru East Local Government Area           ,Oru East
+NGA     ,ak Oruk Anam Local Government Area          ,Oruk Anam
+NGA     ,an Orumba North Local Government Area       ,Orumba North
+NGA     ,an Orumba South Local Government Area       ,Orumba South
+NGA     ,on Ose Local Government Area                ,Ose
+NGA     ,de Oshimili North Local Government Area     ,Oshimili-North
+NGA     ,de Oshimili South Local Government Area     ,Oshimili-South
+NGA     ,la Oshodi/Isolo Local Government Area       ,Oshodi/Isolo
+NGA     ,ab Osisioma Ngwa Local Government Area      ,Osisioma Ngwa
+NGA     ,os Osogbo Local Government Area             ,Osogbo
+NGA     ,be Otukpo Local Government Area             ,Otukpo
+NGA     ,ed Ovia North-East Local Government Area    ,Ovia North-East
+NGA     ,ed Ovia South-West Local Government Area    ,Ovia South-West
+NGA     ,ed Owan East Local Government Area          ,Owan East
+NGA     ,ed Owan West Local Government Area          ,Owan West
+NGA     ,im Owerri Municipal Local Government Area   ,Owerri Municipal
+NGA     ,im Owerri West Local Government Area        ,Owerri West
+NGA     ,on Owo Local Government Area                ,Owo
+NGA     ,ek Oye Local Government Area                ,Oye
+NGA     ,oy Oyo East Local Government Area           ,Oyo East
+NGA     ,kw Oyun Local Government Area               ,Oyun
+NGA     ,ni Paikoro Local Government Area            ,Paikoro
+NGA     ,pl Pankshin Local Government Area           ,Pankshin
+NGA     ,de Patani Local Government Area             ,Patani
+NGA     ,kw Pategi Local Government Area             ,Pategi
+NGA     ,yo Potiskum Local Government Area           ,Potiskum
+NGA     ,pl Qua'an Pan Local Government Area         ,Qua'an Pan
+NGA     ,so Rabah Local Government Area              ,Rabah
+NGA     ,ni Rafi Local Government Area               ,Rafi
+NGA     ,kn Rano Local Government Area               ,Rano
+NGA     ,og Remo North Local Government Area         ,Remo North
+NGA     ,kt Rimi Local Government Area               ,Rimi
+NGA     ,jg Ringim Local Government Area             ,Ringim
+NGA     ,kn Rogo Local Government Area               ,Rogo
+NGA     ,so Sabon Birni Local Government Area        ,Sabon Birni
+NGA     ,kd Sabon Gari Local Government Area         ,Sabon Gari
+NGA     ,by Sagbama Local Government Area            ,Sagbama
+NGA     ,ke Sakaba Local Government Area             ,Sakaba
+NGA     ,oy Saki East Local Government Area          ,Saki East
+NGA     ,kd Sanga Local Government Area              ,Sanga
+NGA     ,de Sapele Local Government Area             ,Sapele
+NGA     ,ta Sardauna Local Government Area           ,Sardauna
+NGA     ,og Shagamu Local Government Area            ,Shagamu
+NGA     ,so Shagari Local Government Area            ,Shagari
+NGA     ,pl Shendam Local Government Area            ,Shendam
+NGA     ,za Shinkafi Local Government Area           ,Shinkafi
+NGA     ,ba Shira Local Government Area              ,Shira
+NGA     ,ni Shiroro Local Government Area            ,Shiroro
+NGA     ,la Shomolu Local Government Area            ,Shomolu
+NGA     ,kd Soba Local Government Area               ,Soba
+NGA     ,so Sokoto South Local Government Area       ,Sokoto South
+NGA     ,ad Song Local Government Area               ,Song
+NGA     ,by Southern Ijaw Local Government Area      ,Southern-Ijaw
+NGA     ,Southern Ijaw                               ,Southern Ijaw
+NGA     ,ni Suleja Local Government Area             ,Suleja
+NGA     ,kn Sumaila Local Government Area            ,Sumaila
+NGA     ,ke Suru Local Government Area               ,Suru
+NGA     ,la Surulere Local Government Area           ,Surulere
+NGA     ,oy Surulere Local Government Area           ,Surulere
+NGA     ,ni Tafa Local Government Area               ,Tafa
+NGA     ,ba Tafawa-Balewa Local Government Area      ,Tafawa-Balewa
+NGA     ,ta Takum Local Government Area              ,Takum
+NGA     ,za Talata Mafara Local Government Area      ,Talata Mafara
+NGA     ,so Tambuwal Local Government Area           ,Tambuwal
+NGA     ,so Tangaza Local Government Area            ,Tangaza
+NGA     ,kn Tarauni Local Government Area            ,Tarauni
+NGA     ,be Tarka Local Government Area              ,Tarka
+NGA     ,kn Tofa Local Government Area               ,Tofa
+NGA     ,ba Toro Local Government Area               ,Toro
+NGA     ,na Toto Local Government Area               ,Toto
+NGA     ,ad Toungo Local Government Area             ,Toungo
+NGA     ,za Tsafe Local Government Area              ,Tsafe
+NGA     ,kn Tudun Wada Local Government Area         ,Tudun Wada
+NGA     ,en Udenu Local Government Area              ,Udenu
+NGA     ,en Udi Local Government Area                ,Udi
+NGA     ,de Udu Local Government Area                ,Udu
+NGA     ,de Ughelli North Local Government Area      ,Ughelli North
+NGA     ,de Ughelli South Local Government Area      ,Ughelli South
+NGA     ,ed Uhunmwonde Local Government Area         ,Uhunmwonde
+NGA     ,be Ukum Local Government Area               ,Ukum
+NGA     ,ab Ukwa West Local Government Area          ,Ukwa West
+NGA     ,de Ukwuani Local Government Area            ,Ukwuani
+NGA     ,ab Umu-Nneochi Local Government Area        ,Umu-Nneochi
+NGA     ,ab Umuahia North Local Government Area      ,Umuahia North
+NGA     ,kn Ungogo Local Government Area             ,Ungogo
+NGA     ,ak Uruan Local Government Area              ,Uruan
+NGA     ,ak Urue Offong/Oruko Local Government Area  ,Urue Offong/Oruko
+NGA     ,be Ushongo Local Government Area            ,Ushongo
+NGA     ,de Uvwie Local Government Area              ,Uvwie
+NGA     ,ak Uyo Local Government Area                ,Uyo
+NGA     ,be Vandeikya Local Government Area          ,Vandeikya
+NGA     ,so Wamako Local Government Area             ,Wamako
+NGA     ,na Wamba Local Government Area              ,Wamba
+NGA     ,ba Warji Local Government Area              ,Warji
+NGA     ,de Warri North Local Government Area        ,Warri North
+NGA     ,de Warri South Local Government Area        ,Warri South
+NGA     ,de Warri South West Local Government Area   ,Warri South West
+NGA     ,pl Wase Local Government Area               ,Wase
+NGA     ,kn Wudil Local Government Area              ,Wudil
+NGA     ,ta Wukari Local Government Area             ,Wukari
+NGA     ,so Wurno Local Government Area              ,Wurno
+NGA     ,ni Wushishi Local Government Area           ,Wushishi
+NGA     ,so Yabo Local Government Area               ,Yabo
+NGA     ,ko Yagba East Local Government Area         ,Yagba East
+NGA     ,ko Yagba West Local Government Area         ,Yagba West
+NGA     ,cr Yakurr Local Government Area             ,Yakurr
+NGA     ,cr Yala Local Government Area               ,Yala
+NGA     ,go Yamaltu/Deba Local Government Area       ,Yamaltu/Deba
+NGA     ,ke Yauri Local Government Area              ,Yauri
+NGA     ,by Yenagoa Local Government Area            ,Yenagoa
+NGA     ,og Yewa North Local Government Area         ,Yewa North
+NGA     ,og Yewa South Local Government Area         ,Yewa South
+NGA     ,ad Yola North Local Government Area         ,Yola North
+NGA     ,ad Yola South Local Government Area         ,Yola South
+NGA     ,ta Yorro Local Government Area              ,Yorro
+NGA     ,yo Yusufari Local Government Area           ,Yusufari
+NGA     ,ba Zaki Local Government Area               ,Zaki
+NGA     ,kd Zangon Kataf Local Government Area       ,Zangon Kataf
+NGA     ,kd Zaria Local Government Area              ,Zaria
+NGA     ,ta Zing Local Government Area               ,Zing
+NGA     ,za Zurmi Local Government Area              ,Zurmi
+NGA     ,ke Zuru Local Government Area               ,Zuru
+NGA     ,AMAC                                        ,Abuja Municipal
+NGA     ,Ado Odo/Ota                                 ,Ado-Odo/Ota
+NGA     ,Afikpo-North                                ,Afikpo North
+NGA     ,Afikpo-South                                ,Afikpo South
+NGA     ,Aiyedaade                                   ,Aiyedade
+NGA     ,Ajeromi/Ifelodun                            ,Ajeromi-Ifelodun
+NGA     ,Amuwo Odofin                                ,Amuwo-Odofin
+NGA     ,Arewa                                       ,Arewa-Dandi
+NGA     ,Atisbo                                      ,Atigbo
+NGA     ,Barkin Ladi                                 ,Barikin Ladi
+NGA     ,Bekwarra                                    ,Bekwara
+NGA     ,Birniwa                                     ,Biriniwa
+NGA     ,Birnin Kudu                                 ,Birni Kudu
+NGA     ,Birnin Gwari                                ,Birnin-Gwari
+NGA     ,Dambam                                      ,Damban
+NGA     ,Danbatta                                    ,Dambatta
+NGA     ,Dange-Shuni                                 ,Dange-Shnsi
+NGA     ,Efon                                        ,Efon-Alayee
+NGA     ,Yewa North                                  ,Egbado North
+NGA     ,Yewa South                                  ,Egbado South
+NGA     ,Emuoha                                      ,Emohua
+NGA     ,Esan North-East                             ,Esan North East
+NGA     ,Esan South-East                             ,Esan South East
+NGA     ,Ese Odo                                     ,Ese-Odo
+NGA     ,Ezinihitte-Mbaise                           ,Ezinihitte
+NGA     ,Ganye                                       ,Ganaye
+NGA     ,Gwadabawa                                   ,Gawabawa
+NGA     ,Aiyekire (Gbonyin)                          ,Gboyin
+NGA     ,Girei                                       ,Gireri
+NGA     ,Ido-Osi                                     ,Idosi-Osi
+NGA     ,Ifako/Ijaye                                 ,Ifako-Ijaye
+NGA     ,Ijebu Ode                                   ,Ijebu ode
+NGA     ,Ilejemeje                                   ,Ilemeji
+NGA     ,Imeko Afon                                  ,Imeko-Afon
+NGA     ,Isuikwuato                                  ,Isuikwato
+NGA     ,Jemaa                                       ,Jema'a
+NGA     ,Karim-Lamido                                ,Karin-Lamido
+NGA     ,Kaura Namoda                                ,Kaura-Namoda
+NGA     ,Kolokuma-Opokuma                            ,Kolokuma/Opokuma
+NGA     ,Makarfi                                     ,Markafi
+NGA     ,Matazu                                      ,Matazuu
+NGA     ,Mbatoli                                     ,Mbaitoli
+NGA     ,Nasarawa Eggon                              ,Nasarawa-Eggon
+NGA     ,Obi Nwga                                    ,Obi Nwa
+NGA     ,Obio/Akpor                                  ,Obia/Akpor
+NGA     ,Ogori/Magongo                               ,Ogori/Mangongo
+NGA     ,Ogun Waterside                              ,Ogun waterside
+NGA     ,Oji River                                   ,Oji-River
+NGA     ,Ola-Oluwa                                   ,Ola-oluwa
+NGA     ,Olamaboro                                   ,Olamabolo
+NGA     ,Ona Ara                                     ,Ona-Ara
+NGA     ,Oshimili-North                              ,Oshimili North
+NGA     ,Oshimili-South                              ,Oshimili South
+NGA     ,Oshodi/Isolo                                ,Oshodi-Isolo
+NGA     ,Otukpo                                      ,Oturkpo
+NGA     ,Ovia North-East                             ,Ovia North East
+NGA     ,Ovia South-West                             ,Ovia South West
+NGA     ,Owerri Municipal                            ,Owerri-Municipal
+NGA     ,Paikoro                                     ,Pailoro
+NGA     ,Sabon Gari                                  ,Sabon-Gari
+NGA     ,Shongom                                     ,Shomgom
+NGA     ,Southern-Ijaw                               ,Southern Ijaw
+NGA     ,Takai                                       ,Takali
+NGA     ,Tarmuwa                                     ,Tarmua
+NGA     ,Umu-Nneochi                                 ,Umu-Neochi
+NGA     ,Onuimo                                      ,Unuimo
+NGA     ,Danko/Wasagu                                ,Wasagu/Danko
+NGA     ,Yenagoa                                     ,Yenegoa
+NGA     ,Zangon Kataf                                ,Zango-Kataf
+NGA     ,Kaita                                       ,kaita
+NGA     ,Kiyawa                                      ,kiyawa
+NGA     ,Abuja Municipal Area Council                ,Abuja Municipal
+NGA     ,Ayedaade                                    ,Aiyedade
+NGA     ,Ayedire                                     ,Aiyedire
+NGA     ,Busari                                      ,Bursari
+NGA     ,Ile-Oluji/Okeigbo                           ,Ile-Oluji-Okeigbo
+NGA     ,Ilesa East                                  ,Ilesha East
+NGA     ,Ilesa West                                  ,Ilesha West
+NGA      ,Obafemi Owode                               ,Obafemi-Owode
+NGA     ,Odo Otin                                    ,Odo-Otin
+NGA     ,Sagamu                                      ,Shagamu
+NGA     ,Umunneochi                                  ,Umu-Neochi
