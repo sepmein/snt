@@ -312,104 +312,6 @@ Resource <- R6::R6Class(
   )
 )
 
-# Rainfall ----------------------------------------------------------------
-#' @export
-Rainfall <- R6::R6Class(
-  # nolint
-  classname = "Rainfall",
-  inherit = Resource,
-  public = list(
-    africa_api = "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/africa_monthly/tifs/",
-    global_api = "ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/global_monthly/tifs/",
-    initialize = function(is_online = TRUE,
-                          is_batch = TRUE,
-                          api_url = NULL,
-                          local_destination,
-                          local_file_type = "raster",
-                          output_destination) {
-      super$initialize(
-        is_online,
-        is_batch,
-        api_url,
-        local_destination,
-        local_file_type,
-        output_destination
-      )
-      invisible(self)
-    },
-    download = function(target,
-                        path_to_save,
-                        start_date,
-                        end_date) {
-      setwd(path_to_save)
-      if (target == "africa") {
-        super$download_batch(api_url = self$africa_api,
-                             select_files <-
-                               self$select_files(start_date,
-                                                 end_date))
-      } else if (target == "global") {
-        super$download_batch(api_url = self$africa_api,
-                             select_files = self.select_files(start_date,
-                                                              end_date))
-      } else {
-        stop(paste0(
-          "Rainfall Resource Download, ",
-          "target should be africa or global"
-        ))
-      }
-      invisible(self)
-    },
-    load = function(country_shapefile_resource,
-                    country_adm2_code_resource) {
-      super$stack(country_shapefile_resource)
-      self$get_adm1_from_country(country_adm2_code_resource)
-      invisible(self)
-    },
-    clean = function() {
-
-    },
-    export = function(type, filename) {
-      setwd(self$output_destination)
-      if (type == "stacked") {
-        write.csv(self$data, file = filename)
-      }
-    },
-    plot = function() {
-      ggplot2::ggplot(self$data) +
-        ggplot2::geom_line(ggplot2::aes(x = date,
-                                        y = rain)) +
-        ggplot2::facet_wrap( ~ adm1)
-      invisible(self)
-    }
-  ),
-  private = list(
-    is_online = TRUE,
-    is_batch = TRUE,
-    local_file_type = "raster",
-    stacked_data = NULL,
-    select_files = function(start_date, end_date) {
-      return(function(filenames) {
-        start_id <- grep(start_date, filenames)
-        end_id <- grep(end_date, filenames)
-        filenames <- filenames[start_id:end_id]
-      })
-    },
-    get_adm1_from_country = function(path_to_country_adm2) {
-      self$data <- rename(self$data, amd2 = district)
-      self$data <- rename(self$data, rain = unlistrmeans)
-      self$data$date <- str_c(self$data$year,
-                              str_pad(self$data$month, 2, pad = 0),
-                              sep = "-")
-      self$data$date <- as.Date(sef.data$date)
-      country_adm2 <- read_dta(path_to_country_adm2)
-      rainfall_data_with_adm1 <- merge(self$data,
-                                       country_adm2,
-                                       by = "adm2")
-    }
-  )
-)
-
-
 # Shapefiles --------------------------------------------------------------
 #' @export
 CountryShapeFile <- R6::R6Class(
@@ -565,6 +467,14 @@ RasterResource <- R6::R6Class(
     clean = function() {
 
     },
+    get_district_raster_data = function(method,
+                                        extracted_raster_data) {
+      if (method == "mean") {
+        result <- lapply(extracted_raster_data,
+                         FUN = mean, na.rm = TRUE)
+      }
+      return(result)
+    },
     load_single_file = function(target_adm_level,
                                 adm1_name_in_shp,
                                 adm2_name_in_shp,
@@ -616,14 +526,6 @@ RasterResource <- R6::R6Class(
       }
 
       # return result
-      return(result)
-    },
-    get_district_raster_data = function(method,
-                                        extracted_raster_data) {
-      if (method == "mean") {
-        result <- lapply(extracted_raster_data,
-                         FUN = mean, na.rm = TRUE)
-      }
       return(result)
     },
     load_single_folder = function(target_adm_level,
@@ -804,6 +706,31 @@ RasterResource <- R6::R6Class(
         print(map)
       }
     }
+  )
+)
+
+
+# Rainfall ----------------------------------------------------------------
+#' @export
+Rainfall <- R6::R6Class(
+  # nolint
+  classname = "Rainfall",
+  inherit = RasterResource,
+  public = list(
+    global_api = "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/tifs/",
+    download = function(target,
+                        path_to_save,
+                        start_date,
+                        end_date) {
+    },
+    clean = function() {
+      self$data <-
+        self$data |>
+        dplyr::mutate(
+          year = stringr::str_extract(file, "\\d{4}"),
+          month = stringr::str_extract(file, "\\d{2}(?=.tif)")
+        )
+    },
   )
 )
 
