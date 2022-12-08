@@ -1,5 +1,9 @@
 ---
 title: "Nigeria 2022 SNT"
+editor_options:
+  markdown:
+    wrap: 72
+output: pdf_document
 ---
 
 ```{r, setup, include=FALSE}
@@ -17,6 +21,10 @@ library(tidyverse)
 library(haven)
 library(readxl)
 library(skimr)
+```
+
+```{r}
+snt_country <<- "NGA"
 ```
 
 # 1. cleaning
@@ -41,12 +49,16 @@ path_data_routine_hf_21 <- file.path(
     path_data_routine,
     "monthly_hf_2021.xlsx"
 )
+path_data_raw <- file.path(
+  path_data_routine,
+  "NGA_routineintdata_hf_month.dta"
+)
 ```
 
 ### 1.0.2 output
 
 ```{r}
-path_output_data <- ""
+path_output_data <- "/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR\ -\ Country_Analytical_Support/Countries/NGA/WHO_NGA/NGA_2022_SNT/Final\ database\ for\ analysis"
 ```
 
 ## 1.1 merging before 2021 and the 2021 data
@@ -89,6 +101,22 @@ skimr::skim(d_hf_21)
 head(d_hf_21)
 ```
 
+### 1.1.3 Data Ibrahim submitted on 11/06
+
+```{r}
+d_hf_21_raw <- read_dta(path_data_raw)
+```
+
+```{r}
+colnames(d_hf_21_raw)
+```
+
+Merge with d_hf_21
+
+```{r}
+d_hf_21 |> left_join(d_hf_21_raw)
+```
+
 ### 1.1.3 Reconstruct hf 2021
 
 #### Rename the columns
@@ -107,7 +135,6 @@ d_hf_21 <- d_hf_21 |>
     -clinical_a5,
     -severe_u5,
     -severe_a5,
-    
   ) |>
   rename(
     opd = allout,
@@ -121,14 +148,20 @@ d_hf_21 <- d_hf_21 |>
     tested_micro_u5  = test_mic_u5,
     micropos_u5  = conf_mic_u5,
     micropos_a5  = conf_mic_ov5,
-  #  clinical_preg  = pres_preg,
+    #  clinical_preg  = pres_preg,
     clinical_u5  = pres_u5,
     clinical_a5  = pres_ov5,
     conf_a5  = conf_ov5,
     severe_a5  = maladm_ov5,
     severe_u5  = maladm_u5,
     ipd  = alladm,
-    mal_death_u5  = maldth_u5
+    mal_death_u5  = maldth_u5,
+    conf_u5 = "conf_u5...61",
+    ipt1 = iptp1,
+    ipt2 = iptp2,
+    ipt3 = iptp3,
+    ipt4 = iptp4,
+    preg_llin = llins_anc
   )
 ```
 
@@ -157,7 +190,7 @@ d_hf_21 <- d_hf_21 |>
     #"conf_preg", # wait for Ibrahim to share data
     "clinical_u5",
     "clinical_a5",
-    #"conf_u5", # check in 21 database
+    "conf_u5",
     "conf_a5",
     "severe_u5",
     "severe_a5",
@@ -176,20 +209,20 @@ d_hf_21 <- d_hf_21 |>
     "anc_total",
     "anc_b20wks",
     "anc_a20wks",
-    #"ipt1", # in malvac but not so good
-    #"ipt2", # in malvac but not so good
-    #"preg_llin", # wait for Ibrahim to share data
+    "ipt1", 
+    "ipt2", 
+    "preg_llin",
     "fi_1yr_fixed",
     "fi_1yr_outreach",
     #"u5llin", 
     #"mal_ro", 
     #"mal_adr", 
-    #"stateuid", 
-    #"lgauid", 
-    #"facility_name", 
+    #stateuid, 
+    #lgauid, 
+    facility_name,
     "ownership",
-    #"facilityname", 
-    #"longid", 
+    #"facilityname",
+    #"longid",
     "year",
     "month",
     "state",
@@ -200,14 +233,14 @@ d_hf_21 <- d_hf_21 |>
 ```
 
 #### Fix the *periodname* column problem
-When combining rows of two database:
-Error in `bind_rows()`:
-! Can't combine `..1$periodname` <date> and `..2$periodname` <character>.
-fix that firstly
 
-I found that the date information was already well stored in the `periodcode` 
-column, so what I am going to do is to **drop** `periodname` colomn for both
-database.
+When combining rows of two database: Error in `bind_rows()`: ! Can't
+combine `..1$periodname` <date> and `..2$periodname` <character>. fix
+that firstly
+
+I found that the date information was already well stored in the
+`periodcode` column, so what I am going to do is to **drop**
+`periodname` column for both database.
 
 ```{r}
 d_hf_14_20 <- d_hf_14_20 |> select( -periodname)
@@ -215,15 +248,26 @@ d_hf_21 <- d_hf_21 |> select(-periodname)
 ```
 
 ### 1.1.3 Combine Rows for the two dbs
+
 bind rows between the old and new data
+
 ```{r}
 d_hf_14_21 <- bind_rows(d_hf_14_20, d_hf_21)
+```
+
+### 1.1.4 Treat blank as NA
+
+```{r}
+d_hf_14_21 <- d_hf_14_21 |> mutate_all(na_if,"")
+
 ```
 
 ## 1.2 Cleaning
 
 ### 1.2.1 state and stateuid
+
 As we can see from the merged data
+
 ```{r}
 state_db <- d_hf_14_21 |>
   distinct(
@@ -233,96 +277,245 @@ state_db <- d_hf_14_21 |>
   arrange(state)
 state_db
 ```
-We need to clean it a little bit.
-1. Get a standard state name and uid
-2. replace it with the incorrect names
-3. assign correct stateuid to the according column
+
+We need to clean it a little bit. 1. Get a standard state name and uid
+2. replace\_ it with the incorrect names 3. assign correct stateuid to
+the according column
 
 ```{r}
 # get a standard state name and uid
 
 # remove unneccesary lines
-state_db |> filter(!is.na(stateuid)) |> filter(!nchar(stateuid) == 0)
-# create a standard replace table for NGA
-std_replace_table_state <-  
+state_db <- state_db |> 
+  filter(!is.na(stateuid)) |> 
+  filter(!nchar(stateuid) == 0)
+  # use snt::routine_replace function to replace_ the state name
+state_db <- snt::import_replace(
+  state_db,
+  snt::import_routine_adm1_replace,
+  snt_country = snt_country,
+  column = "state"
+) |>
+  distinct()
+state_db
+```
 
+Now only have 37 rows.
+
+Check the current \# of states in the db.
+
+```{r}
+d_hf_14_21 |> select(state) |> distinct() |> arrange(state)
+```
+
+Next, replace\_ all the state names in the database,
+
+```{r}
+d_hf_14_21 <- snt::import_replace(d_hf_14_21,
+                                  snt::import_routine_adm1_replace,
+                                  "NGA",
+                                  "state") 
 
 d_hf_14_21 |>
-  mutate_at(c('state'),
-            
-            )
+  select(state) |>
+  distinct() |>
+  arrange()
 ```
+
+Remove the stateuid column then merge back the stata_db.
+
+```{r}
+d_hf_14_21 <- d_hf_14_21 |> 
+  select(-stateuid) |>
+  left_join(state_db)
+
+d_hf_14_21 |> skim(stateuid)
+```
+
+Now 100% complete for stateuid. Fixed.
+
+### 1.2.2 LGA names
+
+Check the \# LGAs firstly.
+
+```{r}
+d_hf_14_21 |> select(lga) |> distinct() |> arrange(lga)
+```
+
+There are 1560 different LGAs for the original data.
+
+The naming system in NGA for LGAs is like: "ak Mbo Local Government
+Area", this should be changed to "Mbo"
+
+```{r}
+d_hf_14_21 <- d_hf_14_21 |>
+  mutate_at(c("lga"), ~str_remove(., "^([a-z]{2} )")) |>
+  mutate_at(c("lga"), ~str_remove(., " Local Government Area")) 
+```
+
 Check if it's better now:
-```{r}
 
+```{r}
+d_hf_14_21 |> distinct( lga ) |> arrange(lga)
 ```
 
+I have created a database inside `snt` package for renaming, along with
+a very useful function called `snt::import_replace` for easy replacing.
 
-### 1.2.2 HF names
-
-### 1.2.3 Periods
-
-
-Correct LGA names to align with shapefile
-use `unique` to generate a database
-
-
+Standard `LGA/adm1` replacement from `snt` package looks like:
 
 ```{r}
-lga_db <-  d_hf_14_20 |>
-  distinct(
-    facilityuid,
-    facility_name,
-#    facilityname,
-    state,
-    stateuid,
-#    lgauid,
-#    lga,
-#    ward,
-#    periodname
-  )
+nga_import_routine_adm2_replace <- snt::import_routine_adm2_replace |>
+  filter(country == snt_country) |> arrange(from)
+nga_import_routine_adm2_replace
+```
+
+Next, use the `snt::import_routine_adm2_replace` database to replace the
+LGA column.
+
+```{r}
+# get routine rename database from snt database
+d_hf_14_21 <- snt::import_replace(
+  d_hf_14_21,
+  snt::import_routine_adm2_replace,
+  snt_country = snt_country,
+  column = "lga"
+)
+```
+
+Check if it's better now:
+
+```{r}
+d_hf_14_21 |> distinct( lga ) |> arrange(lga)
+```
+
+Next step, we need to rename the LGAs to align with those in shapefile.
+The problem for NGA is sometimes, different adm1(state) has same LGA
+name. E.g. both *Kogi* and *Plateau* has a LGA called *Bassa*. They
+should be renamed with a number. country \| adm1 \| from \| to NGA \|
+Kogi \| Bassa \| Bassa1\
+NGA \| Plateau \| Bassa \| Bassa2
+
+I have also recreated a db called
+`snt::import_routine_adm2_replace_by_adm1`
+
+replace LGAs to align the names in shapefile
+
+```{r}
+snt::import_routine_adm2_replace_by_adm1
+```
+
+Use `snt::import_replace` fn to replace those names.
+
+```{r}
+d_hf_14_21 <- snt::import_replace(
+  d_hf_14_21,
+  snt::import_routine_adm2_replace_by_adm1,
+  snt_country = snt_country,
+  column = "lga",
+  by = c("state" = "adm1")
+)
+```
+
+We can see the \# of lgas increased.
+
+```{r}
+d_hf_14_21 |> distinct(lga) |> arrange(lga)
+```
+
+#### TODO LGA UID
+
+As 21 data do not have LGAs, I need to fix the problem. Skim over LGA
+and lgauid column firstly.
+
+```{r}
+d_hf_14_21 |> skim(lga, lgauid)
+```
+
+Number of missing `lgauid` is 1677208
+
+Print out \# of unique `lgauid` and `lga`.
+
+```{r}
+d_hf_14_21 |> distinct(lga, lgauid) |> arrange(lga)
+```
+
+As lots of lgauid are missing, filter those blank lines.
+
+```{r}
+lga_db <- d_hf_14_21 |> distinct(lga, lgauid) |> 
+  arrange(lga) |>
+  filter(!is.na(lgauid)) |> 
+  filter(!nchar(lgauid) == 0)
 lga_db
 ```
 
+Now 774 rows.
+
+Remove the `lgauid` column in `d_hf_14_21` db, and merge it back with
+`lga_db`
+
 ```{r}
-d_hf_21 <- d_hf_21 |>
-  select(-state,
-         -lga,
-         -ward,
-         -periodname) |>
-  left_join(lga_db)
+d_hf_14_21 <- d_hf_14_21 |> select(-lgauid) |> left_join(lga_db) 
+d_hf_14_21 |>
+  distinct(lga, lgauid) |> 
+  arrange(lga) 
 ```
 
-if there is some facility in 21 but not in 1420?
-How did we do?
+No missing LGAs, but found a few blank LGA
 
-So the algorithm should be: if there is a facility from 1420,
-then keep all the **Meta** collumns from 1420
-Else, keep all the **Meta** collumns from 20
+Print out those lines.
 
-For those existed **Meta** collumn in 20
-should perform again the subsititute procedures,
-which seams to be not funny
-
-
-check whether some column in d_hf_21 are missing
 ```{r}
-d_hf_21 |>
+d_hf_14_21 |> select(-lgauid) |> left_join(lga_db) |>
+  filter(is.na(lga))
+```
+
+Try to find where they belongs to Search for 14-20 db
+
+```{r}
+facility_db <- d_hf_14_21 |>
+  select(facilityuid,
+         lga,
+         lgauid) |>
+  distinct()
+facility_db
+```
+
+```{r}
+d_hf_14_21 |>  
   select(
-    facilityuid,
-    facility_name,
-    facilityname,
-    state,
-    stateuid,
-    lgauid,
-    lga,
-    ward,
-    periodname
-  ) |>
-  skimr::skim()
+         -lga,
+         -lgauid) |>
+  left_join(facility_db) |>
+  select(facilityuid,
+         lga,
+         lgauid) |>
+  skim()
 ```
 
+Still 47676 missing, failed
 
-Use fuzzy matching in R methodology to calculate two columns
-detailed check this post
-https://www.statology.org/fuzzy-matching-in-r/#:~:text=Often%20you%20may%20want%20to,function%20from%20the%20fuzzyjoin%20package.
+### 1.2.3 HF names
+
+TODO later for RIA
+
+### 1.2.4 Periods
+
+Recreate the dropped `periodname` based on the `periodcode` column
+
+```{r}
+d_hf_14_21 |> skim()
+```
+
+# 2.0 Export
+
+Export to the right position.
+
+```{r}
+file_output <- file.path(
+  path_output_data,
+  "hflevel_14-21.csv"
+)
+d_hf_14_21 |> write_csv(file_output)
+```
