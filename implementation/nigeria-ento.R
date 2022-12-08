@@ -53,8 +53,7 @@ ento_result |>
 
 ggsave("nigeria_ento_classes.png")
 
-# cases_averted
-
+# cases_averted ------
 cases_and_deaths_averted <- dbq_select_adm0(
     adm0 = "NIGERIA",
     year_from = 2010,
@@ -63,7 +62,7 @@ cases_and_deaths_averted <- dbq_select_adm0(
 )
 View(cases_and_deaths_averted)
 
-scale <- mean(cases_and_deaths_averted$`cases_averted       `) / mean(cases_and_deaths_averted$`deaths_averted      `)
+scale <- mean(cases_and_deaths_averted$`cases_averted`) / mean(cases_and_deaths_averted$`deaths_averted`)
 
 cases_and_deaths_averted |>
     pivot_longer(cols = c(3:4)) |>
