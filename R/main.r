@@ -730,7 +730,7 @@ Rainfall <- R6::R6Class(
           year = stringr::str_extract(file, "\\d{4}"),
           month = stringr::str_extract(file, "\\d{2}(?=.tif)")
         )
-    },
+    }
   )
 )
 
@@ -1133,7 +1133,7 @@ PfPrevalence <- R6::R6Class(
 #' @export
 PfIncidence <- R6::R6Class(
   "PfIncidence",
-  inherit = PlasmodiumIndex,
+  inherit = MAPPlasmodiumIndex,
   public = list(
     api_url = NULL,
     is_online = NULL,
@@ -1189,7 +1189,7 @@ PfIncidence <- R6::R6Class(
 #' @export
 PfMortality <- R6::R6Class(
   "PfMortality",
-  inherit = PlasmodiumIndex,
+  inherit = MAPPlasmodiumIndex,
   public = list(
     api_url = NULL,
     is_online = NULL,
@@ -1244,7 +1244,7 @@ PfMortality <- R6::R6Class(
 #' @export
 PvPrevalence <- R6::R6Class(
   "PVPrevalence",
-  inherit = PlasmodiumIndex,
+  inherit = MAPPlasmodiumIndex,
   public = list(
     api_url = NULL,
     is_online = NULL,
@@ -1299,7 +1299,7 @@ PvPrevalence <- R6::R6Class(
 #' @export
 PvIncidence <- R6::R6Class(
   "PVIncidence",
-  inherit = PlasmodiumIndex,
+  inherit = MAPPlasmodiumIndex,
   public = list(
     api_url = NULL,
     is_online = NULL,
