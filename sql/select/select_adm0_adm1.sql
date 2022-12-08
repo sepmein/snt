@@ -1,0 +1,1 @@
+SELECT DISTINCT adm0, adm1 FROM public.adm0_adm1_adm2 where adm0 = %s;

@@ -1,49 +1,49 @@
-﻿country ,from                ,to
-BDI     ,Karusi              ,Karuzi
-BDI     ,Bugarama            ,Bugarama
-BDI     ,DS Bugarama         ,DS Bugarama
-BDI     ,Bujumbura centre    ,Zone Centre
-BDI     ,Bujumbura nord      ,Zone Nord
-BDI     ,Bujumbura sud       ,Zone Sud
-BDI     ,Bukinanyana         ,Mabayi
-BDI     ,DS Bukinanyana      ,DS Mabayi
-BDI     ,DS Bujumbura centre ,DS Zone Centre
-BDI     ,DS Bujumbura nord   ,DS Zone Nord
-BDI     ,DS Bujumbura sud    ,DS Zone Sud
-BDI     ,DS Bukinanyana      ,DS Mabayi
-BDI     ,DS Bujumbura centre ,DS Zone Centre
-BDI     ,DS Buja Centre      ,DS Zone Centre
-BDI     ,Ds Buja Centre      ,DS Zone Centre
-BDI     ,DS  Centre          ,DS Zone Centre
-BDI     ,DS Centre           ,DS Zone Centre
-BDI     ,DS Bujumbura nord   ,DS Zone Nord
-BDI     ,DS Buja Nord        ,DS Zone Nord
-BDI     ,DS  Buja Nord       ,DS Zone Nord
-BDI     ,DS Nord             ,DS Zone Nord
-BDI     ,DS Bujumbura sud    ,DS Zone Sud
-BDI     ,DS Sud              ,DS Zone Sud
-BDI     ,DS Bukinanyana      ,DS Mabayi
-BDI     ,DS  Centre          ,DS Zone Centre
-BDI     ,DS Nyanza lac       ,DS Nyanza-Lac
-BDI     ,DS Nyanza Lac       ,DS Nyanza-Lac
-BDI     ,DS Bujumbura centre ,DS Zone Centre
-BDI     ,DS Bujumbura nord   ,DS Zone Nord
-BDI     ,DS Bujumbura sud    ,DS Zone Sud
-BDI     ,DS Bukinanyana      ,DS Mabayi
-BDI     ,Bujumbura Rural     ,Bujumbura
-BDI     ,DS Bukinanyana      ,DS Mabayi
-SLE     ,January             ,1
-SLE     ,February            ,2
-SLE     ,March               ,3
-SLE     ,April               ,4
-SLE     ,May                 ,5
-SLE     ,June                ,6
-SLE     ,July                ,7
-SLE     ,August              ,8
-SLE     ,September           ,9
-SLE     ,October             ,10
-SLE     ,November            ,11
-SLE     ,December            ,12
+﻿country,from,to
+BDI,Karusi,Karuzi
+BDI,Bugarama,Bugarama
+BDI,DS Bugarama,DS Bugarama
+BDI,Bujumbura centre,Zone Centre
+BDI,Bujumbura nord,Zone Nord
+BDI,Bujumbura sud,Zone Sud
+BDI,Bukinanyana,Mabayi
+BDI,DS Bukinanyana,DS Mabayi
+BDI,DS Bujumbura centre,DS Zone Centre
+BDI,DS Bujumbura nord,DS Zone Nord
+BDI,DS Bujumbura sud,DS Zone Sud
+BDI,DS Bukinanyana,DS Mabayi
+BDI,DS Bujumbura centre,DS Zone Centre
+BDI,DS Buja Centre,DS Zone Centre
+BDI,Ds Buja Centre,DS Zone Centre
+BDI,DS  Centre,DS Zone Centre
+BDI,DS Centre,DS Zone Centre
+BDI,DS Bujumbura nord,DS Zone Nord
+BDI,DS Buja Nord,DS Zone Nord
+BDI,DS  Buja Nord,DS Zone Nord
+BDI,DS Nord,DS Zone Nord
+BDI,DS Bujumbura sud,DS Zone Sud
+BDI,DS Sud,DS Zone Sud
+BDI,DS Bukinanyana,DS Mabayi
+BDI,DS  Centre,DS Zone Centre
+BDI,DS Nyanza lac,DS Nyanza-Lac
+BDI,DS Nyanza Lac,DS Nyanza-Lac
+BDI,DS Bujumbura centre,DS Zone Centre
+BDI,DS Bujumbura nord,DS Zone Nord
+BDI,DS Bujumbura sud,DS Zone Sud
+BDI,DS Bukinanyana,DS Mabayi
+BDI,Bujumbura Rural,Bujumbura
+BDI,DS Bukinanyana,DS Mabayi
+SLE,January,1
+SLE,February,2
+SLE,March,3
+SLE,April,4
+SLE,May,5
+SLE,June,6
+SLE,July,7
+SLE,August,8
+SLE,September,9
+SLE,October,10
+SLE,November,11
+SLE,December,12
 SLE,BO,Bo
 SLE,kaialhun,Kailahun
 SLE,kailahun,Kailahun

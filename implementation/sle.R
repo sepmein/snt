@@ -1,7 +1,7 @@
 # reload package ----------------------------------------------------------
 
 
-setwd("/Users/sepmein/dev/working/snt")
+setwd("../snt")
 devtools::load_all()
 library(snt)
 library(tidyverse)
@@ -12,7 +12,7 @@ tmap_options(check.and.fix = TRUE)
 
 # meta data ---------------------------------------------------------------
 
-set_country(root_folder = "/Users/sepmein/dev/working/snt-data",
+set_country(root_folder = "../snt-data",
             country = "SLE")
 sle_adm2_shapefile <-
   "Countries/SLE/2022_malvac/shapefiles/sle_admn_adm2_py_who_district.shp"
@@ -23,6 +23,8 @@ ihme_all_cause_mortality <-
   "Global/Data/IHME/All-cause_mortality/mean/IHME_AFRICA_U5M_1998_2017_MEAN_UNDER5_2015_Y2017M09D25.TIF"
 output_destination <- "Countries/SLE/2022_malvac/output"
 
+# read map
+sle_adm2_map <- sf::st_read(sle_adm2_shapefile)
 
 ## read pop
 ## read mis_report
@@ -228,6 +230,38 @@ sle_monthly <- sle_monthly |> left_join(treatment_seeking_adm)
 pop <- readxl::read_xlsx(path = "SLE_pop.xlsx")
 sle_monthly <- sle_monthly |> left_join(pop)
 
+# immunization follow up rates
+
+immunization_follow_up <- sle_monthly |>
+  select(
+    adm1,
+    adm2,
+    adm3,
+    penta3_tot,
+    mr1_tot
+  ) |>
+  group_by(
+    adm2
+  ) |>
+  summarise(penta3_tot = sum(penta3_tot, na.rm = TRUE), mr1_tot = sum(mr1_tot, na.rm = TRUE))
+
+write_csv(immunization_follow_up, "SLE_adm2_immunization_follow_up.csv")
+  
+# dropout rate
+
+immunization_follow_up <- immunization_follow_up |>
+  mutate(dropout_rate = (penta3_tot - mr1_tot)/ penta3_tot)
+
+dropout_rate_map_and_data <- sle_adm2_map |>
+  left_join(immunization_follow_up,
+    by = c("New_Dist" = "adm2")
+  )
+dropout_rate_map <-
+  tm_shape(dropout_rate_map_and_data) +
+  tm_polygons("dropout_rate")
+print(dropout_rate_map)
+tmap_save(dropout_rate_map, "dropout_rate_map.png")
+  
 ## Sle monthly
 # sle_adm_monthly <-
 # sle_monthly |> group_by(adm2, adm3) |> summarise(n = n())
@@ -300,6 +334,84 @@ routine_data <- routine_data |> mutate(
 
 
 write.csv(routine_data, "SLE_routinedata_hf_month.csv")
+
+### slide 24 -----
+
+slide_24 <- routine_data |>
+  select(
+    adm1,
+    adm2,
+    adm3,
+    year,
+    month,
+    maladm,
+    conf,
+    alladm, maldth, alldth
+  ) |>
+  group_by(adm2, year) |>
+  summarise(
+    maladm = sum(maladm, na.rm = TRUE),
+    conf = sum(conf, na.rm = TRUE),
+    maldth = sum(maldth, na.rm = TRUE),
+    alladm = sum(alladm, na.rm = TRUE),
+    alldth = sum(alldth, na.rm = TRUE)
+  ) |>
+  mutate(
+    maladm_to_conf = maladm / conf,
+    maladm_to_alladm = maladm / alladm,
+    maldth_to_alldth = maldth / alldth
+  )
+View(slide_24)
+
+
+sle_adm2_slide24 <-
+  sle_adm2_map |> left_join(slide_24,
+    by = c("New_Dist" = "adm2")
+  )
+
+sle_adm2_maladm_to_conf_plot <-
+  tm_shape(sle_adm2_slide24) +
+  tm_polygons(
+    col = "maladm_to_conf",
+    # breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(
+      4,
+      "Blue-Red"
+    )
+  ) +
+  tmap::tm_facets(by = "year")
+print(sle_adm2_maladm_to_conf_plot)
+tmap_save(sle_adm2_maladm_to_conf_plot, "sle_adm2_maladm_to_conf_plot.png")
+
+
+sle_adm2_maladm_to_alladm_plot <-
+  tm_shape(sle_adm2_slide24) +
+  tm_polygons(
+    col = "maladm_to_alladm",
+    # breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(
+      4,
+      "Blue-Red"
+    )
+  ) +
+  tmap::tm_facets(by = "year")
+print(sle_adm2_maladm_to_alladm_plot)
+tmap_save(sle_adm2_maladm_to_alladm_plot, "sle_adm2_maladm_to_alladm_plot.png")
+
+
+sle_adm2_maldth_to_alldth_plot <-
+  tm_shape(sle_adm2_slide24) +
+  tm_polygons(
+    col = "maldth_to_alldth",
+    # breaks = c(0, 250, 350, 450, 20000),
+    palette = grDevices::hcl.colors(
+      4,
+      "Blue-Red"
+    )
+  ) +
+  tmap::tm_facets(by = "year")
+print(sle_adm2_maldth_to_alldth_plot)
+tmap_save(sle_adm2_maldth_to_alldth_plot, "sle_adm2_maldth_to_alldth_plot.png")
 
 ### 2.3 Outliers ------------------------------------------------------------
 
@@ -400,7 +512,7 @@ ggsave(
 #### 2.3.2 List --------------------------------------------------------------------
 outliers <- find_outlier(routine_data)
 outliers_by_hf <- outliers_find_hf(outliers)
-# per health facilties
+# per health facilities
 # outlier_test <- EnvStats::rosnerTest(routine_monthly$maldth, 10000)
 # outlier_test$all.stats
 ### 2.4 Consistency test --------------------------------------------------------
@@ -750,13 +862,13 @@ report_status_by_hf_and_date <- routine_data |>
          yearmon = str_c(year, str_pad(month, 2, pad = "0"))) |>
   select(adm1, adm2, adm3, hf, yearmon, reported)
 
-write_csv(report_status_by_hf_and_date, "SLE_hfmont_activity.csv")
+write_csv(report_status_by_hf_and_date, "SLE_hfmonth_activity.csv")
 
 report_status_by_hf_and_date |>
   ggplot(aes(x = yearmon, y = hf, fill = reported)) +
   geom_tile() +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
-  labs(title = "Report Status By Health Facilitis and Date",
+  labs(title = "Report Status By Health Facilities and Date",
        y = "Health Facilities",
        x = "Date") +
   theme(axis.text.y = element_blank()) +
@@ -816,6 +928,7 @@ ggplot(report_status_by_adm2_and_date) +
 # Categorization -----
 
 categorization <- function(PfPR, au5mr_cat) {
+
   if ((PfPR >= 0.2 & PfPR <= 0.4) & (au5mr_cat >= 0.095)) {
     cat <- 1
   } else if ((PfPR >= 0.4) & (au5mr_cat >= 0.095)) {
@@ -849,6 +962,8 @@ categorization <- function(PfPR, au5mr_cat) {
     cat <- 4
   } else if ((PfPR >= 0.1 & PfPR <= 0.2) & (au5mr_cat < 0.06)) {
     cat <- 5
+  } else if ((PfPR <= 0.1)) {
+    cat <- "excluded"
   }
   return(as.character(cat))
 }
@@ -901,3 +1016,47 @@ pop_map <-
   tm_borders(col = "grey")
 
 tmap_save(pop_map, filename = "SLE_pop_map.png")
+
+# pfpr mic new data on the workshop
+pfpr_by_mic_new <- read_xlsx("Sierra Leone Malaria Prevalence Data by microscopy_2021.xlsx", skip =1)
+pfpr_by_mic_new <- pfpr_by_mic_new |>
+  rename(pfpr_mic_u5 = "6- 59 month") |>
+  rename(pfpr_mic_ov5 = "5 - 9 yrs") |>
+  rename(pfpr_mic = "Average") |>
+  rename(adm2 = "District") |>
+  mutate(pfpr_mic_u5 = pfpr_mic_u5 / 100, pfpr_mic_ov5 = pfpr_mic_ov5 /100, pfpr_mic = pfpr_mic/ 100)
+
+View(pfpr_by_mic_new)
+
+# load map
+pfpr_by_mic_new_map_and_data <- sle_adm2_map |>
+  left_join(pfpr_by_mic_new, by=c("New_Dist"= "adm2"))
+# combine map and data
+pfpr_by_mic_new_map <-
+  tm_shape(pfpr_by_mic_new_map_and_data) +
+  tm_polygons(
+    col = "pfpr_mic",
+    breaks = c(0, 0.1, 0.2, 0.4, 1),
+    palette = c("#d5d5d5", "#8fbfe5", "#fbe484", "#782456"),
+  )
+print(pfpr_by_mic_new_map)
+tmap_save(pfpr_by_mic_new_map, "pfpr_by_mic_new_map.png")
+
+# new categorization
+sle_malvec_cat_adm2_new <-
+  pfpr_by_mic_new |>
+  left_join(ihme_all_mortality_u5_sle_adm2$data, by = c("adm2")) |>
+  select(adm2, pfpr_mic, au5mr_cat) |>
+  rowwise() |>
+  mutate(category = as.factor(categorization(pfpr_mic, au5mr_cat)))
+
+write_csv(sle_malvec_cat_adm2_new, "sle_malvec_cat_adm2_new.csv")
+
+sle_malvec_cat_adm2_new_map_data <-
+  sle_adm2_map |> left_join(sle_malvec_cat_adm2_new, by = c("New_Dist" = "adm2"))
+sle_malvec_cat_adm2_new_map <- tm_shape(sle_malvec_cat_adm2_new_map_data) +
+  tm_polygons("category",
+    palette = c("#761a7b", "#ee3d8d","#D3D3D3" , "#ef87be", "#4eac32", "#95d689")
+  )
+print(sle_malvec_cat_adm2_new_map)
+tmap_save(sle_malvec_cat_adm2_new_map, "sle_malvec_cat_adm2_new.png")
