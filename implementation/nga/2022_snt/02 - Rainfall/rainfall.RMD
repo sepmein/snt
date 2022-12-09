@@ -13,3 +13,29 @@ output:
         google: Proza Libre
 ---
 
+Meta, source `config.R`
+
+```{r}
+source("../../config.R")
+```
+
+```{r}
+rainfall <- Rainfall$new(
+  adm2_shapefile = config$shapefile,
+  local_destination = config$raster$rainfall$folder,
+  output_destination = ".",
+  index_name = "rainfall"
+)
+```
+
+```{r message = FALSE warning = FALSE}
+as_tibble(sf::st_read(config$shapefile))
+```
+
+```{r}
+rainfall$load(
+  target_adm_level = 2,
+  adm2_name_in_shp = "LGA"
+)
+
+```

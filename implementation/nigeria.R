@@ -405,7 +405,7 @@ nga_adm1 <- nga_adm1 |>
 wmr_one_page <- function(nga_adm1, district) {
   if (is.na(district)) {
     fct <- nga_adm1 |>
-      group_by(year)
+      dplyr::group_by(year)
 
     fct_survey <- nga_dhs_adm1
     district <- "nga"
@@ -414,19 +414,19 @@ wmr_one_page <- function(nga_adm1, district) {
       filter(
         adm1 == district
       ) |>
-      group_by(year)
+      dplyr::group_by(year)
 
     fct_survey <- nga_dhs_adm1 |>
       filter(State == district)
 
     wmr_filtered <- wmr |>
-      select(Name, Year, incidence, Pop) |>
-      rename(adm1 = Name, year = Year, WMR = incidence) |>
+      dplyr::select(Name, Year, incidence, Pop) |>
+      dplyr::rename(adm1 = Name, year = Year, WMR = incidence) |>
       filter(
         adm1 == district,
         year > 2013
       ) |>
-      group_by(year)
+      dplyr::group_by(year)
   }
 
   # plot pop
