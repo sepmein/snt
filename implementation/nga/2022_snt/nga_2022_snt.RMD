@@ -59,6 +59,10 @@ path_data_raw <- file.path(
 
 ```{r}
 path_output_data <- "/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR\ -\ Country_Analytical_Support/Countries/NGA/WHO_NGA/NGA_2022_SNT/Final\ database\ for\ analysis"
+file_output <- file.path(
+  path_output_data,
+  "hflevel_14-21.csv"
+)
 ```
 
 ## 1.1 merging before 2021 and the 2021 data
@@ -336,6 +340,8 @@ Now 100% complete for stateuid. Fixed.
 
 ### 1.2.2 LGA names
 
+#### LGA
+
 Check the \# LGAs firstly.
 
 ```{r}
@@ -425,8 +431,9 @@ d_hf_14_21 |> distinct(lga) |> arrange(lga)
 
 #### TODO LGA UID
 
-As 21 data do not have LGAs, I need to fix the problem. Skim over LGA
-and lgauid column firstly.
+Send to #Ibrahim ask for why.
+
+As 21 data do not have LGAs, I need to fix the problem. Skim over LGA and lgauid column firstly.
 
 ```{r}
 d_hf_14_21 |> skim(lga, lgauid)
@@ -496,16 +503,130 @@ d_hf_14_21 |>
 
 Still 47676 missing, failed
 
-### 1.2.3 HF names
+### 1.2.3 HF
 
-TODO later for RIA
-
-### 1.2.4 Periods
-
-Recreate the dropped `periodname` based on the `periodcode` column
+Number of `facility_name` and `facilityuid` is:
 
 ```{r}
-d_hf_14_21 |> skim()
+d_hf_14_21 |> 
+  select(facility_name, facilityuid) |>
+  distinct()
+```
+
+There are some facilities, which is actually the same one but has different names, merging those naming.
+
+```{r}
+unique_facilities <- d_hf_14_21 |>
+  select(facility_name, facilityuid) |>
+  distinct(facilityuid, .keep_all = TRUE)
+
+d_hf_14_21 <- d_hf_14_21 |> 
+  select(-facility_name) |>
+  left_join(unique_facilities)
+
+d_hf_14_21 |>
+  select(facility_name, facilityuid) |>
+  distinct()
+```
+
+#### The problem of OWNERSHIP
+
+Health Facilities should be either Private or Public, which means adding ownership would not add number of unique health facilities.
+
+While, in reality, running this code gives us 99231 rows of records, instead, hf should be around 50000~.
+
+TODO: ask @Bea whether this info is correct.
+
+```{r}
+d_hf_14_21 |>
+  select(   
+    state,
+    stateuid,
+    lga,
+    lgauid,
+    facility_name,
+    facilityuid,
+    ownership) |>
+  distinct()
+```
+
+#### Aggregation
+
+Aggregate by health facility, year, month
+Dropped the `ward` and `ownership` here.
+
+```{r}
+d_hf_14_21 <- d_hf_14_21 |>
+  select(
+    state,
+    stateuid,
+    lga,
+    lgauid,
+    facility_name,
+    facilityuid,
+    -ownership,
+    -facilityname,
+    -longid,
+    year,
+    month,
+    -ward,
+    #-periodname,
+    -periodid,
+    -periodcode,
+    -perioddesc,
+    attendance,
+    opd,
+    fever_u5,
+    fever_a5,
+    tested_rdt_u5,
+    tested_rdt_a5,
+    rdtpos_u5,
+    rdtpos_a5,
+    tested_micro_u5,
+    tested_micro_a5,
+    micropos_u5,
+    micropos_a5,
+    -clinical_preg,
+    -conf_preg,
+    clinical_u5,
+    clinical_a5,
+    conf_u5,
+    conf_a5,
+    severe_u5,
+    severe_a5,
+    conf_act_u5,
+    conf_act_a5,
+    clinical_act_u5,
+    clinical_act_a5,
+    conf_othantimal_u5,
+    conf_othantimal_a5,
+    ipd,
+    mal_death_u5,
+    -stockout_act,
+    -stockout_rdt,
+    -stockout_sp,
+    -stockout_llin,
+    anc_total,
+    anc_b20wks,
+    anc_a20wks,
+    ipt1,
+    ipt2,
+    preg_llin,
+    fi_1yr_fixed,
+    fi_1yr_outreach,
+    -u5llin,
+    -mal_ro,
+    -mal_adr,
+  ) |>
+  group_by(state,
+           stateuid,
+           lga,
+           lgauid,
+           facility_name,
+           facilityuid,
+           year,
+           month) |>
+  summarise_all( ~ sum(.x, na.rm = FALSE))
 ```
 
 # 2.0 Export
@@ -513,9 +634,199 @@ d_hf_14_21 |> skim()
 Export to the right position.
 
 ```{r}
-file_output <- file.path(
-  path_output_data,
-  "hflevel_14-21.csv"
-)
 d_hf_14_21 |> write_csv(file_output)
+```
+
+# 3.0 Quality and Consistency checks
+
+```{r}
+d_hf_14_21 <- read_csv(file_output)
+```
+
+### 3.1 Report rate - Plot by HF & Date
+
+Generate yearmon for plotting
+
+```{r}
+d_hf_14_21 <- d_hf_14_21 |> 
+  mutate(
+    yearmon = str_c(year, str_pad(month, 2, pad = "0"))
+  )
+```
+
+```{r}
+report_status_by_hf_and_date <- d_hf_14_21 |>
+  group_by(state,
+           stateuid,
+           lga,
+           lgauid,
+           facility_name,
+           facilityuid,
+           year,
+           month) |>
+  summarise(sum = sum(
+    c_across(attendance:fi_1yr_outreach), 
+    na.rm = TRUE)) |>
+  mutate(reported = if_else(sum > 0, "Y", "N"))
+
+report_status_by_hf_and_date |>
+  mutate() |>
+  ggplot(aes(x = yearmon, y = facility_name, fill = reported)) +
+  geom_tile() +
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  labs(title = "Report Status By Health Facilitis and Date",
+       y = "Health Facilities",
+       x = "Date") +
+  theme(axis.text.y = element_blank()) +
+  scale_fill_manual(values = c("N" = "white", "Y" = "blue"))
+```
+
+### 3.2 Report HFs by Adm1
+
+```{r}
+report_rate_by_adm1 <- d_hf_14_21 |>
+  group_by(state,
+           stateuid,
+           lga,
+           lgauid,
+           facility_name,
+           facilityuid,
+           year,
+           month) |>
+  summarise(sum = sum(c_across(attendance:fi_1yr_outreach),
+                      na.rm = TRUE)) |>
+  mutate(reported = if_else(sum >= 0, 1, 0)) |>
+  group_by(state) |>
+  summarise(report_rate = 1 - sum(reported) / n()) |>
+  arrange(desc(report_rate))
+
+ggplot(report_rate_by_adm1) +
+  geom_col(aes(y = fct_reorder(state, report_rate), x = report_rate), orientation =
+             "y") +
+  labs(title = "Percentage of Never Reported HFs",
+       y = "Adm1",
+       x = "Percentage")
+```
+
+### TODO 3.2 Outliers
+
+```{r}
+find_outlier(
+  d_hf_14_21,
+  columns = c(  
+    "attendance",
+    "opd",
+    "fever_u5",
+    "fever_a5",
+    "tested_rdt_u5",
+    "tested_rdt_a5",
+    "rdtpos_u5",
+    "rdtpos_a5",
+    "tested_micro_u5",
+    "tested_micro_a5",
+    "micropos_u5",
+    "micropos_a5",
+    "clinical_u5",
+    "clinical_a5",
+    "conf_u5",
+    "conf_a5",
+    "severe_u5",
+    "severe_a5",
+    "conf_act_u5",
+    "conf_act_a5",
+    "clinical_act_u5",
+    "clinical_act_a5",
+    "conf_othantimal_u5",
+    "conf_othantimal_a5",
+    "ipd",
+    "mal_death_u5",
+    "anc_total",
+    "anc_b20wks",
+    "anc_a20wks",
+    "ipt1",
+    "ipt2",
+    "preg_llin",
+    "fi_1yr_fixed",
+    "fi_1yr_outreach")
+)
+```
+
+### TODO 3.0.2 Missing rate by indexes
+
+Choose indexes
+
+```{r}
+missing_rate_by_indexes <- routine_monthly |>
+  pivot_longer(
+    cols = c(
+      "test",
+      "susp",
+      "test_rdt",
+      "test_mic",
+      "test_rdt_lab",
+      "abn_mic",
+      "abn_rdt",
+      "conf_rdt",
+      "maltreat_u5",
+      "maltreat_ov5",
+      "maltreat",
+      "maldth",
+    ),
+    names_to = "index",
+    values_to = "value"
+  ) |>
+  mutate(reported = if_else(value > 0, 1, 0)) |>
+  group_by(index) |>
+  summarise(reports = sum(reported, na.rm = TRUE), n = n()) |>
+  mutate(report_rate = 1 - reports / n)
+
+ggplot(missing_rate_by_indexes) +
+  geom_col(aes(y = fct_reorder(index, report_rate), x = report_rate), orientation =
+             "y") +
+  labs(title = "% missing indexes",
+       y = "Indexes",
+       x = "Percentage")
+```
+
+### TODO 3.0.3 Consistency test
+
+#### 3.0.3.1 Suspect vs Test
+
+```{r}
+consis_susp_test <-
+  routine_monthly |>
+  mutate(susp_gt_test = if_else(susp < test, TRUE, FALSE)) |>
+  ggplot() +
+  geom_point(aes(y = susp, x = test, color = susp_gt_test)) +
+  geom_abline(slope = 1)
+
+print(consis_susp_test)
+```
+
+#### 3.0.3.2 test_rdt vs conf_rdt
+
+```{r}
+# change color
+# and the legend
+consis_test_conf_rdt <-
+  routine_monthly |>
+  mutate(test_rdt_lt_conf_rdt = if_else(test_rdt < conf_rdt, TRUE, FALSE)) |>
+  ggplot() +
+  geom_point(aes(y = test_rdt, x = conf_rdt, color = test_rdt_lt_conf_rdt)) +
+  geom_abline(slope = 1)
+
+print(consis_test_conf_rdt)
+```
+
+#### 3.0.3.3 conf vs maltreat
+
+```{r}
+consis_conf_maltreat <-
+  routine_monthly |>
+  mutate(conf_lt_maltreat = if_else(conf_rdt < maltreat, TRUE, FALSE)) |>
+  ggplot() +
+  geom_point(aes(y = conf_rdt, x = maltreat, color = conf_lt_maltreat)) +
+  geom_abline(slope = 1)
+
+print(consis_conf_maltreat)
 ```
