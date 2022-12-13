@@ -5,6 +5,7 @@ editor_options:
     wrap: 72
 output:
   html_document:
+    number_sections: true
     df_print: paged
 ---
 
