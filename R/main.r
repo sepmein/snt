@@ -1687,15 +1687,21 @@ find_outlier <-
              "hf",
              "year",
              "month",
-             "yearmon",
-             "index",
-             "value"
-           )) {
+             "yearmon"
+           )
+           ) {
     result <- tibble::tibble(
-      ID = integer(),
+      ID = character(),
       value = numeric(),
       index = character()
     )
+    # add two columns to be added
+    select_rows <- c(
+      select_rows, "index",
+      "value"
+    )
+
+    df <- df |> gen_id_if_not_exist()
     for (column in columns) {
       ### algorithm upper bound
       upper_bound <- quantile(df[[column]], alpha, na.rm = TRUE)
@@ -1715,6 +1721,11 @@ find_outlier <-
   }
 
 #' @export
+fix_outliers <- function(data, outliers_df) {
+
+}
+
+#' @export
 outliers_find_hf <- function(outliers,
                              group_by_column = "hf") {
   result <-
@@ -1729,4 +1740,19 @@ outliers_find_hf <- function(outliers,
 faster_mean <- function(data) {
   # https://stackoverflow.com/a/18604487/886198
   return(sum(data, na.rm = TRUE) / length(data))
+}
+
+#' @export
+#' #' @importFrom rlang :=
+gen_id_if_not_exist <- function(data,
+                                id_column = "ID") {
+  if (!(id_column %in% colnames(data))) {
+    data <- data |>
+      dplyr::mutate(
+        !!id_column := replicate(
+          dplyr::n(), uuid::UUIDgenerate()
+        )
+      )
+  }
+  return(data)
 }

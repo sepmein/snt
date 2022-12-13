@@ -3,7 +3,9 @@ title: "Nigeria 2022 SNT"
 editor_options:
   markdown:
     wrap: 72
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r, setup, include=FALSE}
@@ -63,6 +65,57 @@ file_output <- file.path(
   path_output_data,
   "hflevel_14-21.csv"
 )
+file_output_fixed_outlier <- file.path(
+  path_output_data,
+  "hflevel_14-21-fixed_outlier.csv"
+)
+outliers_output <- file.path(
+  path_output_data,
+  "outliers_14-21.csv"
+)
+fixed_outliers_output <- file.path(
+  path_output_data,
+  "fixed_outliers_14-21.csv"
+)
+```
+
+### 1.0.3 variable columns
+```{r}
+variable_columns <- c(  
+    "attendance",
+    "opd",
+    "fever_u5",
+    "fever_a5",
+    "tested_rdt_u5",
+    "tested_rdt_a5",
+    "rdtpos_u5",
+    "rdtpos_a5",
+    "tested_micro_u5",
+    "tested_micro_a5",
+    "micropos_u5",
+    "micropos_a5",
+    "clinical_u5",
+    "clinical_a5",
+    "conf_u5",
+    "conf_a5",
+    "severe_u5",
+    "severe_a5",
+    "conf_act_u5",
+    "conf_act_a5",
+    "clinical_act_u5",
+    "clinical_act_a5",
+    "conf_othantimal_u5",
+    "conf_othantimal_a5",
+    "ipd",
+    "mal_death_u5",
+    "anc_total",
+    "anc_b20wks",
+    "anc_a20wks",
+    "ipt1",
+    "ipt2",
+    "preg_llin",
+    "fi_1yr_fixed",
+    "fi_1yr_outreach")
 ```
 
 ## 1.1 merging before 2021 and the 2021 data
@@ -670,7 +723,7 @@ report_status_by_hf_and_date <- d_hf_14_21 |>
   mutate(reported = if_else(sum > 0, "Y", "N"))
 
 report_status_by_hf_and_date |>
-  mutate() |>
+  mutate(yearmon = str_c(year, str_pad(month, 2, pad = "0"))) |>
   ggplot(aes(x = yearmon, y = facility_name, fill = reported)) +
   geom_tile() +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
@@ -708,12 +761,29 @@ ggplot(report_rate_by_adm1) +
        x = "Percentage")
 ```
 
-### TODO 3.2 Outliers
+### 3.2 Outliers
 
 ```{r}
-find_outlier(
+outliers <- find_outlier(
   d_hf_14_21,
-  columns = c(  
+  columns = variable_columns,
+  alpha = 0.99999,
+  select_rows = c(
+          "state",
+           "stateuid",
+           "lga",
+           "lgauid",
+           "facility_name",
+           "facilityuid",
+           "year",
+           "month"
+           )
+)
+outliers |> write_csv(outliers_output)
+```
+
+```{r}
+d_hf_14_21 |> skim(
     "attendance",
     "opd",
     "fever_u5",
@@ -747,7 +817,80 @@ find_outlier(
     "ipt2",
     "preg_llin",
     "fi_1yr_fixed",
-    "fi_1yr_outreach")
+    "fi_1yr_outreach"
+)
+```
+
+Using the same year data as an average
+
+1. Get the data from the same year
+There is a problem, after the joining, the original outliers were also included in the dataset. We need to **exclude** them.
+
+```{r}
+outliers_moving_average <- outliers |>
+  select(-month, -value) |>
+  left_join(d_hf_14_21 |>
+  pivot_longer(cols = variable_columns, names_to = "index"))
+```
+
+2. exclude them use anti join
+```{r}
+fixed_outliers <- outliers_moving_average |> anti_join(outliers) |>
+  group_by(state,
+           stateuid,
+           lga,
+           lgauid,
+           facility_name,
+           facilityuid,
+           year,
+           index) |>
+  summarise(value = mean(value, na.rm = TRUE))
+
+fixed_outliers <-
+  fixed_outliers |> left_join(outliers |> select(-value))
+
+fixed_outliers |> write_csv(fixed_outliers_output)
+```
+
+3. Merging them back to database
+
+```{r}
+by_hf_year_month <- c(
+  "state",
+  "stateuid",
+  "lga",
+  "lgauid",
+  "facility_name",
+  "facilityuid",
+  "year",
+  "month",
+  "index"
+)
+fixed_outliers <- read_csv(fixed_outliers_output)
+
+d_hf_14_21 <- d_hf_14_21 |>
+  pivot_longer(cols = variable_columns, names_to = "index") |>
+  rows_update(fixed_outliers, by = by_hf_year_month) |>
+  pivot_wider(names_from = "index", values_from = value) |>
+  write_csv(file_output_fixed_outlier)
+```
+
+```{r}
+d_hf_14_21 <- read_csv(file_output_fixed_outlier)
+outliers_after_fixed <- find_outlier(
+  d_hf_14_21,
+  columns = variable_columns,
+  alpha = 0.99999,
+  select_rows = c(
+          "state",
+           "stateuid",
+           "lga",
+           "lgauid",
+           "facility_name",
+           "facilityuid",
+           "year",
+           "month"
+           )
 )
 ```
 
