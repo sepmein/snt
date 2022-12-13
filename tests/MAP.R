@@ -1,8 +1,10 @@
 library(snt)
 
 # add year to this function
-set_country(root_folder = "/Users/sepmein/dev/working/snt-data",
-            country = "BDI")
+set_country(
+  root_folder = "/Users/sepmein/dev/working/snt-data",
+  country = "BDI"
+)
 bdi_shapefile <-
   paste(
     "Countries", "BDI", "2020_SNT", "Analysis", "orig", "data",
@@ -11,8 +13,10 @@ bdi_shapefile <-
     sep = "/"
   )
 # PfPR
-pfpr <- PfPrevalence$new(api_url = "https://malariaatlas.org/wp-content/uploads/2022-gbd2020/pfpr.zip",
-                         with_95CI =  TRUE)
+pfpr <- PfPrevalence$new(
+  api_url = "https://malariaatlas.org/wp-content/uploads/2022-gbd2020/pfpr.zip",
+  with_95CI = TRUE
+)
 # pfpr$download(destfile = "pfPR.zip")
 # added time when generated these data
 pfpr$load(bdi_shapefile)$export()

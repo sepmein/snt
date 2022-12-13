@@ -450,7 +450,8 @@ RasterResource <- R6::R6Class(
                                         extracted_raster_data) {
       if (method == "mean") {
         result <- lapply(extracted_raster_data,
-                         FUN = mean, na.rm = TRUE)
+          FUN = mean, na.rm = TRUE
+        )
       }
       return(result)
     },
@@ -1624,17 +1625,17 @@ update_database <- function() {
     readr::read_csv("inst//extdata//routine//01_rename.csv")
   usethis::use_data(import_routine_rename, overwrite = TRUE)
 
-import_routine_adm1_replace <-
-  readr::read_csv("inst//extdata//routine//01_adm1_replace.csv")
-usethis::use_data(import_routine_adm1_replace, overwrite = TRUE)
+  import_routine_adm1_replace <-
+    readr::read_csv("inst//extdata//routine//01_adm1_replace.csv")
+  usethis::use_data(import_routine_adm1_replace, overwrite = TRUE)
 
-import_routine_adm2_replace <-
-  readr::read_csv("inst//extdata//routine//01_adm2_replace.csv")
-usethis::use_data(import_routine_adm2_replace, overwrite = TRUE)
+  import_routine_adm2_replace <-
+    readr::read_csv("inst//extdata//routine//01_adm2_replace.csv")
+  usethis::use_data(import_routine_adm2_replace, overwrite = TRUE)
 
-import_routine_adm2_replace_by_adm1 <-
-  readr::read_csv("inst//extdata//routine//01_adm2_replace_by_adm1.csv")
-usethis::use_data(import_routine_adm2_replace_by_adm1, overwrite = TRUE)
+  import_routine_adm2_replace_by_adm1 <-
+    readr::read_csv("inst//extdata//routine//01_adm2_replace_by_adm1.csv")
+  usethis::use_data(import_routine_adm2_replace_by_adm1, overwrite = TRUE)
 
   import_routine_replace <-
     readr::read_csv("inst//extdata//routine//02_replace.csv")
