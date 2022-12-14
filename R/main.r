@@ -41,6 +41,10 @@ config <- function(country,
     map_folder <- file.path(raster_root, map_folder)
     ihme_folder <- file.path(raster_root, ihme_folder)
   }
+
+  # cores
+  cores <- parallel::detectCores()
+
   result <- list(
     "country" = country,
     "raster" = list(
@@ -53,6 +57,9 @@ config <- function(country,
       "ihme" = list(
         "folder" = ihme_folder
       )
+    ),
+    "parallel" = list(
+      "cores" = cores
     )
   )
   return(result)
@@ -445,15 +452,6 @@ RasterResource <- R6::R6Class(
     },
     clean = function() {
 
-    },
-    get_district_raster_data = function(method,
-                                        extracted_raster_data) {
-      if (method == "mean") {
-        result <- lapply(extracted_raster_data,
-          FUN = mean, na.rm = TRUE
-        )
-      }
-      return(result)
     },
     load_single_file = function(target_adm_level,
                                 adm0_name_in_shp,
