@@ -44,7 +44,9 @@ config <- function(country,
     ihme_folder <- file.path(raster_root, ihme_folder)
   }
   
-  
+  # cores
+  cores <- parallel::detectCores()
+
   result <- list(
     "country" = country,
     "raster" = list(
@@ -57,6 +59,10 @@ config <- function(country,
       "ihme" = list(
         "folder" = ihme_folder
       )
+    ),
+
+    "parallel" = list(
+      "cores" = cores
     ),
     "shapefile" = shapefile
   )
@@ -472,6 +478,7 @@ RasterResource <- R6::R6Class(
         )
       }
       return(result)
+
     },
     load_single_file = function(target_adm_level,
                                 adm0_name_in_shp,
@@ -1631,17 +1638,17 @@ update_database <- function() {
     readr::read_csv("inst//extdata//routine//01_rename.csv")
   usethis::use_data(import_routine_rename, overwrite = TRUE)
 
-import_routine_adm1_replace <-
-  readr::read_csv("inst//extdata//routine//01_adm1_replace.csv")
-usethis::use_data(import_routine_adm1_replace, overwrite = TRUE)
+  import_routine_adm1_replace <-
+    readr::read_csv("inst//extdata//routine//01_adm1_replace.csv")
+  usethis::use_data(import_routine_adm1_replace, overwrite = TRUE)
 
-import_routine_adm2_replace <-
-  readr::read_csv("inst//extdata//routine//01_adm2_replace.csv")
-usethis::use_data(import_routine_adm2_replace, overwrite = TRUE)
+  import_routine_adm2_replace <-
+    readr::read_csv("inst//extdata//routine//01_adm2_replace.csv")
+  usethis::use_data(import_routine_adm2_replace, overwrite = TRUE)
 
-import_routine_adm2_replace_by_adm1 <-
-  readr::read_csv("inst//extdata//routine//01_adm2_replace_by_adm1.csv")
-usethis::use_data(import_routine_adm2_replace_by_adm1, overwrite = TRUE)
+  import_routine_adm2_replace_by_adm1 <-
+    readr::read_csv("inst//extdata//routine//01_adm2_replace_by_adm1.csv")
+  usethis::use_data(import_routine_adm2_replace_by_adm1, overwrite = TRUE)
 
   import_routine_replace <-
     readr::read_csv("inst//extdata//routine//02_replace.csv")
@@ -1736,23 +1743,3 @@ outliers_find_hf <- function(outliers,
   return(result)
 }
 
-#' @export
-faster_mean <- function(data) {
-  # https://stackoverflow.com/a/18604487/886198
-  return(sum(data, na.rm = TRUE) / length(data))
-}
-
-#' @export
-#' #' @importFrom rlang :=
-gen_id_if_not_exist <- function(data,
-                                id_column = "ID") {
-  if (!(id_column %in% colnames(data))) {
-    data <- data |>
-      dplyr::mutate(
-        !!id_column := replicate(
-          dplyr::n(), uuid::UUIDgenerate()
-        )
-      )
-  }
-  return(data)
-}

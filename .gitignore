@@ -44,3 +44,6 @@ vignettes/*.pdf
 .Rproj.user
 .DS_Store
 .Rdata
+
+# Docs
+docs/*
