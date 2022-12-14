@@ -1717,8 +1717,3 @@ outliers_find_hf <- function(outliers,
   return(result)
 }
 
-#' @export
-faster_mean <- function(data) {
-  # https://stackoverflow.com/a/18604487/886198
-  return(sum(data, na.rm = TRUE) / length(data))
-}
