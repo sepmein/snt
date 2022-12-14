@@ -16,7 +16,9 @@ config <- function(country,
                    map_folder = FALSE,
                    ihme_folder = FALSE,
                    rainfall_folder = FALSE,
-                   rainfall_output = FALSE) {
+                   rainfall_output = FALSE,
+                   shapefile = FALSE
+                   ) {
   # todo add a formatter function to format country to ISO3 code
   country <- country
 
@@ -41,7 +43,7 @@ config <- function(country,
     map_folder <- file.path(raster_root, map_folder)
     ihme_folder <- file.path(raster_root, ihme_folder)
   }
-
+  
   # cores
   cores <- parallel::detectCores()
 
@@ -58,9 +60,11 @@ config <- function(country,
         "folder" = ihme_folder
       )
     ),
+
     "parallel" = list(
       "cores" = cores
-    )
+    ),
+    "shapefile" = shapefile
   )
   return(result)
 }
@@ -374,6 +378,15 @@ RasterResource <- R6::R6Class(
       self$adm3_shapefile <- adm3_shapefile
       self$cores <- parallel::detectCores()
     },
+    load_shp = function(shp) {
+      shp <- sf::st_read(shp)
+      # test if GUID column exist
+      # if not generate GUID column
+      if (!("GUID" %in% names(shp))) {
+        shp <- shp |> dplyr::mutate(GUID = uuid::UUIDgenerate())
+      }
+      return(shp)
+    },
     load = function(target_adm_level = 2,
                     adm0_name_in_shp = NULL,
                     adm1_name_in_shp = NULL,
@@ -402,7 +415,7 @@ RasterResource <- R6::R6Class(
       }
 
       # read shapefile
-      loaded_shp <- sf::st_read(target_shapefile)
+      loaded_shp <- self$load_shp(target_shapefile)
 
 
       if (typeof(self$local_destination) == "list") {
@@ -451,6 +464,20 @@ RasterResource <- R6::R6Class(
       invisible(self)
     },
     clean = function() {
+
+    },    
+    get_district_raster_data = function(method,
+                                        extracted_raster_data) {
+      # mean method in R is slow
+      # changed to this method based on
+      # https://stackoverflow.com/a/18604487/886198
+      if (method == "mean") {
+        result <- parallel::mclapply(extracted_raster_data,
+          FUN = snt::faster_mean,
+          mc.cores = self$cores
+        )
+      }
+      return(result)
 
     },
     load_single_file = function(target_adm_level,
@@ -526,19 +553,7 @@ RasterResource <- R6::R6Class(
       # return result
       return(result)
     },
-    get_district_raster_data = function(method,
-                                        extracted_raster_data) {
-      # mean method in R is slow
-      # changed to this method based on
-      # https://stackoverflow.com/a/18604487/886198
-      if (method == "mean") {
-        result <- parallel::mclapply(extracted_raster_data,
-          FUN = snt::faster_mean,
-          mc.cores = self$cores
-        )
-      }
-      return(result)
-    },
+
     load_single_folder = function(target_adm_level,
                                   adm0_name_in_shp,
                                   adm1_name_in_shp,
@@ -1679,15 +1694,21 @@ find_outlier <-
              "hf",
              "year",
              "month",
-             "yearmon",
-             "index",
-             "value"
-           )) {
+             "yearmon"
+           )
+           ) {
     result <- tibble::tibble(
-      ID = integer(),
+      ID = character(),
       value = numeric(),
       index = character()
     )
+    # add two columns to be added
+    select_rows <- c(
+      select_rows, "index",
+      "value"
+    )
+
+    df <- df |> gen_id_if_not_exist()
     for (column in columns) {
       ### algorithm upper bound
       upper_bound <- quantile(df[[column]], alpha, na.rm = TRUE)
@@ -1705,6 +1726,11 @@ find_outlier <-
       dplyr::select(!!select_rows)
     return(result)
   }
+
+#' @export
+fix_outliers <- function(data, outliers_df) {
+
+}
 
 #' @export
 outliers_find_hf <- function(outliers,
