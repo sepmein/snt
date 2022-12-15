@@ -5,8 +5,7 @@ Authors@R:
     person("Chunzhe", "Zhang", , "zhangc@who.int", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
@@ -30,7 +29,8 @@ Imports:
     R.utils,
     magrittr,
     tibble,
-    rlang (>= 0.4.11)
+    rlang (>= 0.4.11),
+    tmap
 Depends: 
     R (>= 2.10)
 LazyData: true
