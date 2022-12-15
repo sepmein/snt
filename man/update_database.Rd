@@ -11,6 +11,7 @@ When importing data, snt often requires a lot of renaming
 those db were created for reusable renaming process
 }
 \examples{
-edit db in inst/extdata, then run
+# edit db in inst/extdata, then run
 update_database()
+
 }
