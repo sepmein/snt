@@ -1,46 +1,74 @@
-
+#' Central Configuration for SNT analysis
+#'
+#' @param country ISO3 code for a country, e.g. nigeria should be NGA
+#' @param root path of the root file, could be NULL
+#' if set, will be combined with other root folders
+#' @param root_input path of the input root, could be NULL
+#' @param root_output path of the output root. If set, will be combined with
+#'
+#' @param root_raster
+#' @param map_folder
+#' @param ihme_folder
+#' @param rainfall_folder
+#' @param rainfall_output
+#' @param shapefile
+#'
+#' @return
 #' @export
-set_country <- function(root_folder, country) {
-  #  folder <- normalizePath(file.path(root_folder, country), mustWork = FALSE)
-  setwd(root_folder)
-  snt_country <<- country # nolint
-}
-
-#' @export
+#'
+#' @examples
+#' config(
+#'   country = "NGA",
+#'   root = "/Users/sepmein/snt/NGA",
+#'   root_input = "input",
+#'   root_output =
+#'   )
+#' @description Central Configuration settings for SNT analysis.
+#' This function could set the following configurations:
+#' 1. the target subnational analysis country
+#' 2. folder structure
+#'  All the folder structure could be set separately,
+#' however it will be nice if they are all under one root folder.
+#'  Separate setting
+#'  1. root
+#' 3. postgresql db connection
 config <- function(country,
-                   root = FALSE,
-                   input_root = FALSE,
-                   output_root = FALSE,
-                   raster_root = FALSE,
-                   map_folder = FALSE,
-                   ihme_folder = FALSE,
-                   rainfall_folder = FALSE,
-                   rainfall_output = FALSE,
-                   shapefile = FALSE
+                   root = NULL,
+                   root_input = NULL,
+                   root_output = NULL,
+                   root_raster = NULL,
+                   raster_map_input = NULL,
+                   ihme_folder = NULL,
+                   rainfall_folder = NULL,
+                   rainfall_output = NULL,
+                   shapefile = NULL,
+                   db_name = NULL,
+                   db_user = NULL,
+                   db_pass = NULL
                    ) {
   # TODO add a re-format function to format country to ISO3 code
   country <- country
 
-  if (!(isFALSE(root))) {
-    input_root <- file.path(root, input_root)
-    output_root <- file.path(root, output_root)
-    raster_root <- file.path(root, raster_root)
+  if (!(is.null(root))) {
+    root_input <- file.path(root, root_input)
+    root_output <- file.path(root, root_output)
+     root_raster <- file.path(root, root_raster)
   }
 
   # output folder
-  if (!(isFALSE(output_root))) {
+  if (!(is.null(root_output))) {
     # set by relative path
-    rainfall_output <- file.path(raster_root, rainfall_output)
-    map_output <- file.path(raster_root, map_output)
-    ihme_output <- file.path(raster_root, ihme_output)
+    rainfall_output <- file.path(root_raster, rainfall_output)
+    map_output <- file.path(root_raster, map_output)
+    ihme_output <- file.path(root_raster, ihme_output)
   }
 
   # raster root folder
-  if (!(isFALSE(raster_root))) {
+  if (!(is.null(root_raster))) {
     # Set by relative path
-    rainfall_folder <- file.path(raster_root, rainfall_folder)
-    map_folder <- file.path(raster_root, map_folder)
-    ihme_folder <- file.path(raster_root, ihme_folder)
+    rainfall_folder <- file.path(root_raster, rainfall_folder)
+    map_folder <- file.path(root_raster, raster_map_input)
+    ihme_folder <- file.path(root_raster, ihme_folder)
   }
 
   # cores
@@ -53,7 +81,7 @@ config <- function(country,
         "folder" = rainfall_folder
       ),
       "map" = list(
-        "folder" = map_folder
+        "folder" = raster_map_input
       ),
       "ihme" = list(
         "folder" = ihme_folder
