@@ -84,11 +84,11 @@ import_replace <- function(df,
   if (isFALSE(by)) {
     df <- df |>
       dplyr::left_join(filtered_replace_database)
-  } else if (is.vector(by)){
-    by[column] = column
+  } else if (is.vector(by)) {
+    by[column] <- column
     df <- df |>
       dplyr::left_join(filtered_replace_database,
-                       by = by
+        by = by
       )
   }
   df <- df |>

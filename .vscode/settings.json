@@ -4,6 +4,7 @@
         "dataframe",
         "ggbetweenstats",
         "hfmonth",
+        "pkgdown",
         "rosner",
         "shapefiles",
         "tibble"

@@ -45,5 +45,5 @@ vignettes/*.pdf
 .DS_Store
 .Rdata
 
-# html
+# Docs
 docs/*
