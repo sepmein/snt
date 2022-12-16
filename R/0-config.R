@@ -18,11 +18,11 @@
 #'
 #' @examples
 #' config(
-#'   country = "NGA",
-#'   root = "/Users/sepmein/snt/NGA",
-#'   root_input = "input",
-#'   root_output =
-#'   )
+#'     country = "NGA",
+#'     root = "/Users/sepmein/snt/NGA",
+#'     root_input = "input",
+#'     root_output =
+#'     )
 #' @description Central Configuration settings for SNT analysis.
 #' This function could set the following configurations:
 #' 1. the target subnational analysis country
@@ -36,64 +36,197 @@ config <- function(country,
                    root = NULL,
                    root_input = NULL,
                    root_output = NULL,
-                   root_raster = NULL,
-                   raster_map_input = NULL,
-                   ihme_folder = NULL,
-                   rainfall_folder = NULL,
-                   rainfall_output = NULL,
-                   shapefile = NULL,
+                   path_raster = NULL,
+                   path_raster_map = NULL,
+                   path_raster_ihme = NULL,
+                   path_raster_rainfall = NULL,
+                   path_routine = NULL,
+                   path_intervention = NULL,
                    db_name = NULL,
                    db_user = NULL,
-                   db_pass = NULL) {
-  # TODO add a re-format function to format country to ISO3 code
+                   db_pass = NULL,
+                   path_shapefile = NULL) {
+    # TODO add a re-format function to format country to ISO3 code
 
-  if (!(is.null(root))) {
-    root_input <- file.path(root, root_input)
-    root_output <- file.path(root, root_output)
-    root_raster <- file.path(root, root_raster)
-  }
-
-  # output folder
-  if (!(is.null(root_output))) {
-    # set by relative path
-    rainfall_output <- file.path(root_raster, rainfall_output)
-    map_output <- file.path(root_raster, map_output)
-    ihme_output <- file.path(root_raster, ihme_output)
-  }
-
-  # raster root folder
-  if (!(is.null(root_raster))) {
-    # Set by relative path
-    rainfall_folder <- file.path(root_raster, rainfall_folder)
-    map_folder <- file.path(root_raster, raster_map_input)
-    ihme_folder <- file.path(root_raster, ihme_folder)
-  }
-
-  result <- list(
-    "country" = config_country(country = country),
-    "raster" = list(
-      "rainfall" = list("folder" = rainfall_folder),
-      "map" = list("folder" = raster_map_input),
-      "ihme" = list("folder" = ihme_folder)
-    ),
-    "parallel" = config_parallel(),
-    "shapefile" = shapefile,
-    "db" = config_db(
-      db_name = db_name,
-      db_user = db_user,
-      db_pass = db_pass
+    result <- list(
+        "data_folder" = config_data_folder(
+            root,
+            root_input,
+            path_raster,
+            path_raster_map,
+            path_raster_ihme,
+            path_raster_rainfall,
+            path_routine,
+            path_intervention
+        ),
+        "parallel" = config_parallel(),
+        "shapefile" = config_shapefile(root, path_shapefile),
+        "db" = config_db(
+            db_name = db_name,
+            db_user = db_user,
+            db_pass = db_pass
+        )
     )
-  )
-  return(result)
+    return(result)
 }
 
+#' @title config data folder
+#' @description config data folder for SNT analysis
+#' @param root path of the root file, could be null
+#' @param root_input path of the input root, could be null
+#' @param path_raster path of the raster root, could be null
+#' @param path_raster_map path of the MAP estimation, could not be null
+#' @param path_raster_ihme path of the IHME estimation, could not be null
+#' @param path_rainfall path of the rainfall data, could not be null
+#' @param path_routine path of the routine root, contains the routine data
+#' @param path_intervention path of the intervention root,
+#' contains the intervention data
+#' @return a list of data folder
+config_data_folder <- function(root = NULL,
+                               root_input,
+                               path_raster,
+                               path_raster_map,
+                               path_raster_ihme,
+                               path_raster_rainfall,
+                               path_routine,
+                               path_intervention,
+                               root_output) {
+    path_input <- use_relative_or_absolute(root, root_input)
+    input <- config_input(
+        path_input,
+        path_raster,
+        path_raster_map,
+        path_raster_ihme,
+        path_raster_rainfall,
+        path_routine,
+        path_intervention
+    )
+    path_output <- use_relative_or_absolute(root, root_output)
+    output <- config_output(
+        path_output
+    )
+    return(list(
+        "input" = input,
+        "output" = output
+    ))
+}
 
-config_data_folder <- function() {
+#' @title config input folder
+#' @description config input folder for SNT analysis
+#' @param path_input path of the input root, could be NULL
+#' @param path_raster path of the raster root, could be NULL
+#' @param path_raster_map path of the MAP estimation
+#' @param path_raster_ihme path of the IHME estimation
+#' @param path_rainfall path of the rainfall data
+#' @param path_country path of the country root, contains the country submitted
+#' data
+#' @param path_routine path of the routine root, contains the routine data
+#' @param path_intervention path of the intervention
+#' @param path_dhs path of the DHS data
+#' @return a list of input folder
+config_input <- function(path_input,
+                         path_raster,
+                         path_raster_map,
+                         path_raster_ihme,
+                         path_raster_rainfall,
+                         path_country,
+                         path_routine,
+                         path_intervention,
+                         path_dhs) {
+    raster <- config_raster(
+        use_relative_or_absolute(path_input, path_raster),
+        path_raster_map,
+        path_raster_ihme,
+        path_raster_rainfall
+    )
+    country <- config_country(
+        use_relative_or_absolute(path_input, path_country),
+        path_routine,
+        path_intervention
+    )
+    dhs <- config_dhs(
+        use_relative_or_absolute(path_input, path_dhs)
+    )
+
+    return(
+        list(
+            "country" = country,
+            "raster" = raster,
+            "dhs" = dhs
+        )
+    )
+}
+
+#' @title config raster folders
+#' @description config raster folders for SNT analysis
+#' @param path_raster path of the raster root, could be NULL
+#' @param path_raster_map path of the MAP estimation, could not be null
+#' @param path_raster_ihme path of the IHME estimation, could not be NULL
+#' @param path_raster_rainfall path of the rainfall data, could not be NULL
+#' @return a list of raster folders
+config_raster <- function(path_raster,
+                          path_raster_map,
+                          path_raster_ihme,
+                          path_raster_rainfall) {
+    return(
+        list(
+            "map" = use_relative_or_absolute(path_raster, path_raster_map),
+            "ihme" = use_relative_or_absolute(path_raster, path_raster_ihme),
+            "rainfall" = use_relative_or_absolute(
+                path_raster, path_raster_rainfall
+            )
+        )
+    )
+}
+
+#' @title config country folders
+#' @description config country folders for SNT analysis
+#' @param path_country path of the country root
+#' @param path_routine path of the routine, contains the routine data
+#' @param path_intervention path of the intervention
+#' contains the intervention data
+#' @return a list of country folders
+config_country <- function(path_country,
+                           path_routine,
+                           path_intervention) {
+    routine <- use_relative_or_absolute(path_country, path_routine)
+    intervention <- use_relative_or_absolute(path_country, path_intervention)
+    return(
+        list(
+            "routine" = routine,
+            "intervention" = intervention
+        )
+    )
+}
+
+#' @title config DHS folders
+#' @description config DHS folders for SNT analysis
+#' @param path_input path of the input root, could be NULL
+#' @param path_dhs path of the DHS root
+#' @return a list of DHS folders
+config_dhs <- function(path_input = NULL,
+                       path_dhs = NULL) {
+    dhs <- use_relative_or_absolute(path_input, path_dhs)
+    return(
+        dhs
+    )
+}
+
+config_output <- function( path_output) {
+	
+	return(
+		list(
+			"incidence" = use_relative_or_absolute(path_output, "incidence"),
+			"mortality" = use_relative_or_absolute(path_output, "mortality"),
+
+		)
+	)
 
 }
 
-config_raster <- function() {
-
+# TODO
+config_shapefile <- function(root, shapefile) {
+	return(use_relative_or_absolute(root, shapefile))
 }
 
 #' Config country
@@ -102,7 +235,7 @@ config_raster <- function() {
 #'
 #' @return ISO3 country code
 config_country <- function(country) {
-  return(country)
+    return(country)
 }
 
 #' Config database
@@ -115,17 +248,26 @@ config_country <- function(country) {
 config_db <- function(db_name = NULL,
                       db_user = NULL,
                       db_pass = NULL) {
-  return(list(
-    "db_name" = db_name,
-    "db_user" = db_user,
-    "db_pass" = db_pass
-  ))
+    return(list(
+        "db_name" = db_name,
+        "db_user" = db_user,
+        "db_pass" = db_pass
+    ))
 }
 
 #' Configuration for parallel execution
 #'
 #' @return a list contain the parallel execution info
 config_parallel <- function() {
-  cores <- parallel::detectCores()
-  return(list("cores" = cores))
+    cores <- parallel::detectCores()
+    return(list("cores" = cores))
+}
+
+# TODO
+#' @title Setup a folder for analysis
+#' @description Provide a path, snt will setup a whole folder settings for you.
+#' @param path Path to where you want the folder will be
+#' @return NULL
+setup <- function(path) {
+
 }

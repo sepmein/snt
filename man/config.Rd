@@ -4,21 +4,7 @@
 \alias{config}
 \title{Central Configuration for SNT analysis}
 \usage{
-config(
-  country,
-  root = NULL,
-  root_input = NULL,
-  root_output = NULL,
-  root_raster = NULL,
-  raster_map_input = NULL,
-  ihme_folder = NULL,
-  rainfall_folder = NULL,
-  rainfall_output = NULL,
-  shapefile = NULL,
-  db_name = NULL,
-  db_user = NULL,
-  db_pass = NULL
-)
+config()
 }
 \arguments{
 \item{country}{ISO3 code for a country, e.g. nigeria should be NGA}
@@ -47,9 +33,9 @@ Separate setting
 }
 \examples{
 config(
-  country = "NGA",
-  root = "/Users/sepmein/snt/NGA",
-  root_input = "input",
-  root_output =
-  )
+    country = "NGA",
+    root = "/Users/sepmein/snt/NGA",
+    root_input = "input",
+    root_output =
+    )
 }
