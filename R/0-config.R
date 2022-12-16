@@ -1,3 +1,57 @@
+#' @title Check type of path
+#' @description check type of path. check the existence of the dir or file
+#' if they exist then return the type of the path
+#' else return false
+#' @param path String path
+#' @export
+type_of_path <- function(path) {
+    result <- NULL
+    # If the path is not a character string, return an error
+    if (!is.character(path)) {
+        stop("Error: path must be a character string")
+    }
+
+    # If the path is an empty string, return an error
+    if (nchar(path) == 0) {
+        stop("Error: path cannot be an empty string")
+    }
+    if (dir.exists(path)) {
+        result <- "dir"
+    } else if (file_test("-f", path)) {
+        result <- "file"
+    } else {
+        result <- FALSE
+    }
+    return(result)
+}
+
+#' @title Check to use relative or absolute path
+#' @description Combine root and relative check if they exist in path
+#' Check relative path exists
+#' if it is true then use the combined path
+#' if it is false then use the relative path
+#'
+#' @param root String, root path
+#' @param relative String, relative path
+#' @return path
+#' @export
+use_relative_or_absolute <- function(root, relative) {
+    relative_path_type <- type_of_path(relative)
+
+    if (!isFALSE(relative_path_type)) {
+        return(relative)
+    }
+
+    combined_root <- file.path(root, relative)
+    combined_root_path_type <- type_of_path(combined_root)
+
+    if (!(isFALSE(combined_root_path_type))) {
+        return(combined_root)
+    }
+
+    return(FALSE)
+}
+
 #' Central Configuration for SNT analysis
 #'
 #' @param country ISO3 code for a country, e.g. nigeria should be NGA
@@ -40,8 +94,10 @@ config <- function(country,
                    path_raster_map = NULL,
                    path_raster_ihme = NULL,
                    path_raster_rainfall = NULL,
+                   path_country = NULL,
                    path_routine = NULL,
                    path_intervention = NULL,
+                   path_dhs = NULL,
                    db_name = NULL,
                    db_user = NULL,
                    db_pass = NULL,
@@ -49,6 +105,7 @@ config <- function(country,
     # TODO add a re-format function to format country to ISO3 code
 
     result <- list(
+        "country" = country,
         "data_folder" = config_data_folder(
             root,
             root_input,
@@ -56,8 +113,11 @@ config <- function(country,
             path_raster_map,
             path_raster_ihme,
             path_raster_rainfall,
+            path_country,
             path_routine,
-            path_intervention
+            path_intervention,
+            path_dhs,
+            root_output
         ),
         "parallel" = config_parallel(),
         "shapefile" = config_shapefile(root, path_shapefile),
@@ -88,8 +148,10 @@ config_data_folder <- function(root = NULL,
                                path_raster_map,
                                path_raster_ihme,
                                path_raster_rainfall,
+                               path_country,
                                path_routine,
                                path_intervention,
+                               path_dhs,
                                root_output) {
     path_input <- use_relative_or_absolute(root, root_input)
     input <- config_input(
@@ -98,8 +160,10 @@ config_data_folder <- function(root = NULL,
         path_raster_map,
         path_raster_ihme,
         path_raster_rainfall,
+        path_country,
         path_routine,
-        path_intervention
+        path_intervention,
+        path_dhs
     )
     path_output <- use_relative_or_absolute(root, root_output)
     output <- config_output(
@@ -212,30 +276,17 @@ config_dhs <- function(path_input = NULL,
     )
 }
 
-config_output <- function( path_output) {
-	
-	return(
-		list(
-			"incidence" = use_relative_or_absolute(path_output, "incidence"),
-			"mortality" = use_relative_or_absolute(path_output, "mortality"),
-
-		)
-	)
-
+config_output <- function(path_output) {
+    return(
+        list(
+            "incidence" = use_relative_or_absolute(path_output, "incidence"),
+            "mortality" = use_relative_or_absolute(path_output, "mortality")
+        )
+    )
 }
 
-# TODO
 config_shapefile <- function(root, shapefile) {
-	return(use_relative_or_absolute(root, shapefile))
-}
-
-#' Config country
-#'
-#' @param country The country name
-#'
-#' @return ISO3 country code
-config_country <- function(country) {
-    return(country)
+    return(use_relative_or_absolute(root, shapefile))
 }
 
 #' Config database
@@ -271,3 +322,21 @@ config_parallel <- function() {
 setup <- function(path) {
 
 }
+
+config(
+    country = "NGA",
+    root = "/Users/sepmein/x/snt",
+    root_input = "input",
+    root_output = "output",
+    path_raster = "raster",
+    path_raster_map = "map",
+    path_raster_ihme = "ihme",
+    path_raster_rainfall = "rainfall",
+    path_country = "country",
+    path_routine = "routine",
+    path_intervention = "intervention",
+    path_dhs = "dhs",
+    db_name = malaria,
+    db_user = sepmein,
+    path_shapefile = "shapefile"
+)
