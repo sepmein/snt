@@ -14,3 +14,29 @@ type_of_path <- function(path) {
     }
     return(result)
 }
+
+#' @title Check to use relative or absolute path
+#' @description Combine root and relative check if they exist in path
+#' Check relative path exists
+#' if it is true then use the combined path
+#' if it is false then use the relative path
+#'
+#' @param root String, root path
+#' @param relative String, relative path
+#' @return path
+use_relative_or_absolute <- function(root, relative) {
+    relative_path_type <- type_of_path(relative)
+
+    if (!(isFALSE(relative_path_type))) {
+        return(relative)
+    }
+
+    combined_root <- file.path(root, relative)
+    combined_root_path_type <- type_of_path(combined_root)
+
+    if (!(isFALSE(combined_root_path_type))) {
+        return(combined_root)
+    }
+
+    return(FALSE)
+}

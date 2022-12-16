@@ -44,15 +44,13 @@ config <- function(country,
                    shapefile = NULL,
                    db_name = NULL,
                    db_user = NULL,
-                   db_pass = NULL
-                   ) {
+                   db_pass = NULL) {
   # TODO add a re-format function to format country to ISO3 code
-  country <- country
 
   if (!(is.null(root))) {
     root_input <- file.path(root, root_input)
     root_output <- file.path(root, root_output)
-     root_raster <- file.path(root, root_raster)
+    root_raster <- file.path(root, root_raster)
   }
 
   # output folder
@@ -71,53 +69,63 @@ config <- function(country,
     ihme_folder <- file.path(root_raster, ihme_folder)
   }
 
-  # cores
-  cores <- parallel::detectCores()
-
   result <- list(
-    "country" = country,
+    "country" = config_country(country = country),
     "raster" = list(
-      "rainfall" = list(
-        "folder" = rainfall_folder
-      ),
-      "map" = list(
-        "folder" = raster_map_input
-      ),
-      "ihme" = list(
-        "folder" = ihme_folder
-      )
+      "rainfall" = list("folder" = rainfall_folder),
+      "map" = list("folder" = raster_map_input),
+      "ihme" = list("folder" = ihme_folder)
     ),
-
-    "parallel" = list(
-      "cores" = cores
-    ),
-    "shapefile" = shapefile
+    "parallel" = config_parallel(),
+    "shapefile" = shapefile,
+    "db" = config_db(
+      db_name = db_name,
+      db_user = db_user,
+      db_pass = db_pass
+    )
   )
   return(result)
 }
 
-#' @title Check to use relative or absolute path
-#' @description Combine root and relative check if they exist in path
-#' Check relative path exists
-#' if it is true then use the combined path
-#' if it is false then use the relative path
+
+config_data_folder <- function() {
+
+}
+
+config_raster <- function() {
+
+}
+
+#' Config country
 #'
-#' @param root String, root path
-#' @param relative String, relative path
-#' @return path
-use_relative_or_absolute <- function(root, relative) {
-  relative_path_type <- type_of_path(relative)
+#' @param country The country name
+#'
+#' @return ISO3 country code
+config_country <- function(country) {
+  return(country)
+}
 
-  if (!(isFALSE(relative_path_type))) {
-    return(relative)
-  }
+#' Config database
+#'
+#' @param db_name name of database, example malaria
+#' @param db_user username of the database, for connection
+#' @param db_pass password of the database, for connection
+#'
+#' @return a list contain the db info
+config_db <- function(db_name = NULL,
+                      db_user = NULL,
+                      db_pass = NULL) {
+  return(list(
+    "db_name" = db_name,
+    "db_user" = db_user,
+    "db_pass" = db_pass
+  ))
+}
 
-  combined_root <- file.path(root, relative)
-  combined_root_path_type <- type_of_path(combined_root)
-
-  if (!(isFALSE(combined_root_path_type))) {
-    return(combined_root)
-  }
-
-  return(FALSE)
+#' Configuration for parallel execution
+#'
+#' @return a list contain the parallel execution info
+config_parallel <- function() {
+  cores <- parallel::detectCores()
+  return(list("cores" = cores))
 }
