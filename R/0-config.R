@@ -29,8 +29,13 @@
 #' 2. folder structure
 #'  All the folder structure could be set separately,
 #' however it will be nice if they are all under one root folder.
-#'  Separate setting
-#'  1. root
+#'  root
+#'  | --- output the status of data
+#'  | --- input
+#'        | --- 
+#'  | --- graph the type of output
+#'  | --- report
+#'  | --- raster 
 #' 3. postgresql db connection
 config <- function(country,
                    root = NULL,

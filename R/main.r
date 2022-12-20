@@ -1,6 +1,3 @@
-# Never use library() or require() in a R package!
-
-
 # Resource ----------------------------------------------------------------
 #' @export
 Resource <- R6::R6Class(
