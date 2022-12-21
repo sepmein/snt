@@ -5,22 +5,21 @@
 #' @param path String path
 #' @export
 type_of_path <- function(path) {
-    result <- NULL
     # If the path is not a character string, return an error
-    if (!is.character(path)) {
-        stop("Error: path must be a character string")
-    }
+    # if (!is.character(path)) {
+    #     stop("Error: path must be a character string")
+    # }
 
-    # If the path is an empty string, return an error
-    if (nchar(path) == 0) {
-        stop("Error: path cannot be an empty string")
-    }
+    # # If the path is an empty string, return an error
+    # if (nchar(path) == 0) {
+    #     stop("Error: path cannot be an empty string")
+    # }
     if (dir.exists(path)) {
         result <- "dir"
     } else if (file_test("-f", path)) {
         result <- "file"
     } else {
-        result <- FALSE
+        result <- NULL
     }
     return(result)
 }
@@ -38,14 +37,14 @@ type_of_path <- function(path) {
 use_relative_or_absolute <- function(root, relative) {
     relative_path_type <- type_of_path(relative)
 
-    if (!isFALSE(relative_path_type)) {
+    if (!is.null(relative_path_type)) {
         return(relative)
     }
 
     combined_root <- file.path(root, relative)
     combined_root_path_type <- type_of_path(combined_root)
 
-    if (!(isFALSE(combined_root_path_type))) {
+    if (!is.null(combined_root_path_type)) {
         return(combined_root)
     }
 
