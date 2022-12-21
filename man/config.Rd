@@ -4,7 +4,24 @@
 \alias{config}
 \title{Central Configuration for SNT analysis}
 \usage{
-config()
+config(
+  country,
+  root = NULL,
+  root_input = NULL,
+  root_output = NULL,
+  path_raster = NULL,
+  path_raster_map = NULL,
+  path_raster_ihme = NULL,
+  path_raster_rainfall = NULL,
+  path_country = NULL,
+  path_routine = NULL,
+  path_intervention = NULL,
+  path_dhs = NULL,
+  db_name = NULL,
+  db_user = NULL,
+  db_pass = NULL,
+  path_shapefile = NULL
+)
 }
 \arguments{
 \item{country}{ISO3 code for a country, e.g. nigeria should be NGA}
