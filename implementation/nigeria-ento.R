@@ -54,7 +54,7 @@ ento_result |>
     theme(legend.title = element_blank()) +
     facet_wrap(~insecticide_class)
 
-ggsave("nigeria_ento_classes.png")
+ggsave("nigeria_ento_classes.eps")
 
 # cases_averted ------
 cases_and_deaths_averted <- dbq_select(
@@ -80,7 +80,7 @@ cases_and_deaths_averted |>
         axis.title.y = element_blank()
     )
 
-ggsave("nigeria_cases_mortality_averted.png")
+ggsave("nigeria_cases_mortality_averted.eps")
 
 p_hf_routine <- "/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR - Country_Analytical_Support/Countries/NGA/WHO_NGA/NGA_2022_SNT/_Submitted_data/Routine data/hflevel_14-20.dta"
 
@@ -125,6 +125,6 @@ for (x in adm1s$adm1) {
             legend.title = element_blank()
         )
     ggsave(
-        paste0(x, " ipt-cov.png")
+        paste0(x, " ipt-cov.eps")
     )
 }
