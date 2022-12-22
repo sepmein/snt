@@ -42,6 +42,9 @@ ento_result <- ento |>
 View(ento_result)
 
 ento_result |>
+    write_csv("nigeria_ento.csv")
+
+ento_result |>
     pivot_longer(c(2:5)) |>
     ggplot(aes(fill = name, y = value, x = year)) +
     geom_bar(
@@ -54,11 +57,12 @@ ento_result |>
 ggsave("nigeria_ento_classes.png")
 
 # cases_averted ------
-cases_and_deaths_averted <- dbq_select_adm0(
+cases_and_deaths_averted <- dbq_select(
     adm0 = "NIGERIA",
     year_from = 2010,
     year_to = 2022,
-    indicators = c("cases_averted", "deaths_averted")
+    indicators = c("cases_averted", "deaths_averted"),
+    level = "adm0"
 )
 View(cases_and_deaths_averted)
 
@@ -78,7 +82,7 @@ cases_and_deaths_averted |>
 
 ggsave("nigeria_cases_mortality_averted.png")
 
-p_hf_routine <- "/Users/sepmein/Library/CloudStorage/OneDrive-WorldHealthOrganization/NGA/WHO_NGA/NGA_2022_SNT/_Submitted_data/Routine\ data/hflevel_14-20.dta"
+p_hf_routine <- "/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR - Country_Analytical_Support/Countries/NGA/WHO_NGA/NGA_2022_SNT/_Submitted_data/Routine data/hflevel_14-20.dta"
 
 hf_routine <- read_dta(p_hf_routine)
 ipt <- hf_routine |>
@@ -100,7 +104,15 @@ ipt <- hf_routine |>
 adm1s <- hf_routine |>
     select(adm1) |>
     unique()
+
 for (x in adm1s$adm1) {
+    ipt |>
+        filter(adm1 == x) |>
+        write_csv(paste0(x, " ipt-cov.csv"))
+}
+
+for (x in adm1s$adm1) {
+
     ipt |>
         filter(adm1 == x) |>
         filter(value <= 1) |>

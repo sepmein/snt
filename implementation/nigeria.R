@@ -433,6 +433,10 @@ wmr_one_page <- function(nga_adm1, district) {
   fct |>
     select(year, pop) |>
     summarise(pop = sum(pop, na.rm = TRUE)) |>
+    write_csv(paste0(district, " - 1. pop.csv"))
+  fct |>
+    select(year, pop) |>
+    summarise(pop = sum(pop, na.rm = TRUE)) |>
     ggplot(aes(year, pop)) +
     geom_line() +
     geom_point() +
@@ -441,6 +445,13 @@ wmr_one_page <- function(nga_adm1, district) {
   ggsave(paste0(district, " - 1. pop.png"), height = 1.8, width = 3)
 
   # plot confirmed cases
+  fct |>
+    select(year, conf, pop) |>
+    summarise(
+      conf = sum(conf, na.rm = TRUE),
+      pop = sum(pop, na.rm = TRUE)
+    ) |>
+    write_csv(paste0(district, " - 2. conf.csv"))
   fct |>
     select(year, conf, pop) |>
     summarise(
@@ -472,6 +483,8 @@ wmr_one_page <- function(nga_adm1, district) {
     rename(`Routine Data(Adjusted)` = inci)
 
   incid |>
+    write_csv(paste0(district, " - 3. incidence.csv"))
+  incid |>
     left_join(wmr_filtered) |>
     select(year, `Routine Data(Adjusted)`, WMR) |>
     pivot_longer(c(2:3)) |>
@@ -492,6 +505,9 @@ wmr_one_page <- function(nga_adm1, district) {
   min_incidences_y_lab <- minimum_incidences / 4
   wmr_filtered |>
     select(year, WMR) |>
+    write_csv(paste0(district, " - 3. WMR incidence.csv"))
+  wmr_filtered |>
+    select(year, WMR) |>
     ggplot(aes(
       x = year,
       y = WMR
@@ -509,6 +525,10 @@ wmr_one_page <- function(nga_adm1, district) {
   wmr_filtered |>
     select(year, WMR, Pop) |>
     mutate(cases = WMR * Pop / 1000) |>
+    write_csv(paste0(district, " - 2. WMR cases.csv"))
+  wmr_filtered |>
+    select(year, WMR, Pop) |>
+    mutate(cases = WMR * Pop / 1000) |>
     ggplot(aes(
       x = year,
       y = cases
@@ -520,7 +540,7 @@ wmr_one_page <- function(nga_adm1, district) {
     theme(text = element_text(size = 5))
   ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
 
-  fct_survey |>
+  prev_rdt_mic <- fct_survey |>
     filter(Year != 2013) |>
     mutate(Year = as.factor(Year)) |>
     select(
@@ -529,7 +549,11 @@ wmr_one_page <- function(nga_adm1, district) {
       "Malaria prevalence according to microscopy"
     ) |>
     rename(prev_rdt = "Malaria prevalence according to RDT") |>
-    rename(prev_mic = "Malaria prevalence according to microscopy") |>
+    rename(prev_mic = "Malaria prevalence according to microscopy")
+
+  prev_rdt_mic |>
+    write_csv(paste0(district, "  - 4. prev_rdt_mic.csv"))
+  prev_rdt_mic |>
     pivot_longer(
       cols = c("prev_rdt", "prev_mic"),
       names_to = "index",
@@ -551,8 +575,7 @@ wmr_one_page <- function(nga_adm1, district) {
     labs(y = "Prevalence in Children Under 5")
   ggsave(paste0(district, " - 4. prev_rdt_mic.png"), height = 1.6, width = 3)
 
-
-  fct_survey |>
+  itn_usage <- fct_survey |>
     mutate(Year = as.factor(Year)) |>
     select(
       Year,
@@ -564,7 +587,11 @@ wmr_one_page <- function(nga_adm1, district) {
     rename(itn_usage = "Population who slept under an insecticide-treated mosquito net (ITN) last night") |>
     rename(itn_usage_u5 = "Children under 5 who slept under an insecticide-treated net (ITN)") |>
     rename(anynet_usage_u5 = "Children under 5 who slept under any net") |>
-    rename(exist_itn_usage = "Existing insecticide-treated mosquito nets (ITNs) used last night") |>
+    rename(exist_itn_usage = "Existing insecticide-treated mosquito nets (ITNs) used last night")
+  
+  itn_usage |> write_csv(paste0(district, " - 5. itn - usage.csv"))
+  
+  itn_usage |>
     pivot_longer(
       cols = c("itn_usage", "itn_usage_u5", "anynet_usage_u5", "exist_itn_usage"),
       names_to = "index",
@@ -587,7 +614,7 @@ wmr_one_page <- function(nga_adm1, district) {
 
   ggsave(paste0(district, " - 5. itn - usage.png"), height = 1.6, width = 3)
 
-  fct_survey |>
+  fever <- fct_survey |>
     mutate(Year = as.factor(Year)) |>
     select(
       Year,
@@ -595,7 +622,10 @@ wmr_one_page <- function(nga_adm1, district) {
       "Children with fever who had blood taken from a finger or heel for testing"
     ) |>
     rename(Treatment_Seeking = "Advice or treatment for fever sought from a health facility or provider") |>
-    rename(Fever_Blood_Taken_u5 = "Children with fever who had blood taken from a finger or heel for testing") |>
+    rename(Fever_Blood_Taken_u5 = "Children with fever who had blood taken from a finger or heel for testing") 
+    
+    fever |> write_csv(paste0(district, " - 6. fever.csv"))
+    fever |>
     pivot_longer(
       cols = c("Treatment_Seeking", "Fever_Blood_Taken_u5"),
       names_to = "index",
@@ -672,7 +702,7 @@ rainfall$data |>
   write_csv("rainfall_nga_adm1.csv")
 
 ## add population graph
-rainfall <- read_csv("rainfall_nga_adm1.csv")
+rainfall <- read_csv("/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR - Nigeria/Data/Clean/rainfall_nga_adm1.csv")
 rainfall <- rainfall |>
   mutate(
     date = lubridate::make_date(year = year, month = month)
@@ -699,7 +729,7 @@ rainfall_line_plot <- function(data, district, country) {
     filter(adm1 == district)
   # group_by(date) |>
   # summarise(rainfall = sum(rainfall))
-
+  data |> write_csv(paste0(district, " - 8 rainfall.csv"))
   ggplot(data, aes(x = date, y = rainfall)) +
     geom_line() +
     geom_point() +
@@ -769,7 +799,7 @@ smc_plot <- function(data, district, country) {
     filter(adm1 == district)
   # group_by(date) |>
   # summarise(rainfall = sum(rainfall))
-
+  data |> write_csv(paste0(district, " - 9 smc.csv"))
   ggplot(data, aes(x = year)) +
     geom_bar(
       aes(fill = name, y = value),
@@ -848,21 +878,22 @@ llins_plot <- function(data, district, country) {
   data <- data |>
     filter(adm1 == district)
 
-  ggplot(data, aes(x = year)) +
-    geom_bar(
-      aes(y = llins_num),
-      stat = "identity"
-    ) +
-    theme(text = element_text(size = 5))
+  data |> write_csv(paste0(district, " - 10 llins.csv"))
+  # data |> ggplot(data, aes(x = year)) +
+  #   geom_bar(
+  #     aes(y = llins_num),
+  #     stat = "identity"
+  #   ) +
+  #   theme(text = element_text(size = 5))
 
-  ggsave(
-    paste0(
-      district,
-      " - 10 llins.png"
-    ),
-    height = 2.5,
-    width = 4
-  )
+  # ggsave(
+  #   paste0(
+  #     district,
+  #     " - 10 llins.png"
+  #   ),
+  #   height = 2.5,
+  #   width = 4
+  # )
 }
 
 for (district in adm1) {
@@ -1042,7 +1073,7 @@ indicator <- indicator |>
 
 View(indicator)
 indicator |>
-mutate_if(is.numeric, ~round(.,digits=1)) |>
+  mutate_if(is.numeric, ~ round(., digits = 1)) |>
   write_csv(
     "nga_indicators.csv"
   )
