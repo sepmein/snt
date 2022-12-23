@@ -5,23 +5,20 @@
 #' @param path String path
 #' @export
 type_of_path <- function(path) {
-    # If the path is not a character string, return an error
-    # if (!is.character(path)) {
-    #     stop("Error: path must be a character string")
-    # }
-
-    # # If the path is an empty string, return an error
-    # if (nchar(path) == 0) {
-    #     stop("Error: path cannot be an empty string")
-    # }
-    if (dir.exists(path)) {
+    result <- NULL
+    if (is.null(path)) {
+        # If the path is NULL
+        return(result)
+    } else if (dir.exists(path)) {
         result <- "dir"
+        return(result)
     } else if (file_test("-f", path)) {
         result <- "file"
+        return(result)
     } else {
         result <- NULL
+        return(result)
     }
-    return(result)
 }
 
 #' @title Check to use relative or absolute path
@@ -33,22 +30,22 @@ type_of_path <- function(path) {
 #' @param root String, root path
 #' @param relative String, relative path
 #' @return path
+#' @importFrom R.utils isAbsolutePath
 #' @export
 use_relative_or_absolute <- function(root, relative) {
-    relative_path_type <- type_of_path(relative)
-
-    if (!is.null(relative_path_type)) {
+    # relative_path_type <- type_of_path(relative)
+    if (R.utils::isAbsolutePath(relative)) {
         return(relative)
     }
 
     combined_root <- file.path(root, relative)
-    combined_root_path_type <- type_of_path(combined_root)
+    # combined_root_path_type <- type_of_path(combined_root)
 
-    if (!is.null(combined_root_path_type)) {
+    if (R.utils::isAbsolutePath(combined_root)) {
         return(combined_root)
+    } else {
+        return(NULL)
     }
-
-    return(FALSE)
 }
 
 #' Central Configuration for SNT analysis
@@ -85,10 +82,10 @@ use_relative_or_absolute <- function(root, relative) {
 #'  root
 #'  | --- output the status of data
 #'  | --- input
-#'        | --- 
+#'        | ---
 #'  | --- graph the type of output
 #'  | --- report
-#'  | --- raster 
+#'  | --- raster
 #' 3. postgresql db connection
 config <- function(country,
                    root = NULL,
@@ -107,29 +104,32 @@ config <- function(country,
                    db_pass = NULL,
                    path_shapefile = NULL) {
     # TODO add a re-format function to format country to ISO3 code
-
+    data_folder <- config_data_folder(
+        root,
+        root_input,
+        path_raster,
+        path_raster_map,
+        path_raster_ihme,
+        path_raster_rainfall,
+        path_country,
+        path_routine,
+        path_intervention,
+        path_dhs,
+        root_output
+    )
+    parallel <- config_parallel()
+    shapefile <- config_shapefile(root, path_shapefile)
+    db <- config_db(
+        db_name = db_name,
+        db_user = db_user,
+        db_pass = db_pass
+    )
     result <- list(
         "country" = country,
-        "data_folder" = config_data_folder(
-            root,
-            root_input,
-            path_raster,
-            path_raster_map,
-            path_raster_ihme,
-            path_raster_rainfall,
-            path_country,
-            path_routine,
-            path_intervention,
-            path_dhs,
-            root_output
-        ),
-        "parallel" = config_parallel(),
-        "shapefile" = config_shapefile(root, path_shapefile),
-        "db" = config_db(
-            db_name = db_name,
-            db_user = db_user,
-            db_pass = db_pass
-        )
+        "data_folder" = data_folder,
+        "parallel" = parallel,
+        "shapefile" = shapefile,
+        "db" = db
     )
     return(result)
 }
@@ -146,7 +146,7 @@ config <- function(country,
 #' @param path_intervention path of the intervention root,
 #' contains the intervention data
 #' @return a list of data folder
-config_data_folder <- function(root = NULL,
+config_data_folder <- function(root,
                                root_input,
                                path_raster,
                                path_raster_map,
@@ -329,7 +329,7 @@ setup <- function(path) {
 
 config(
     country = "NGA",
-    root = "/Users/sepmein/x/snt",
+    root = "/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR - Country_Analytical_Support/Countries/NGA/2022_RIA",
     root_input = "input",
     root_output = "output",
     path_raster = "raster",
@@ -340,7 +340,7 @@ config(
     path_routine = "routine",
     path_intervention = "intervention",
     path_dhs = "dhs",
-    db_name = malaria,
-    db_user = sepmein,
+    db_name = "malaria",
+    db_user = "sepmein",
     path_shapefile = "shapefile"
 )

@@ -1,0 +1,23 @@
+---
+title: "Nigeria 2022 RIA"
+editor_options:
+  markdown:
+    wrap: 72
+output:
+  html_document:
+    number_sections: true
+    df_print: paged
+---
+
+```{r}
+library(snt)
+```
+
+```{r}
+config(
+    country = "NGA",
+    root = "/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR - Country_Analytical_Support/Countries/SOM/WHO_SOM/SOM_2022_SNT/SNT_Spencer",
+    
+
+)
+```
