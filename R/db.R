@@ -1,5 +1,6 @@
 
 # db connection -------
+## TODO remove this into env settings
 db_name <- "malaria"
 db_user <- "sepmein"
 db_pass <- "crimson"
