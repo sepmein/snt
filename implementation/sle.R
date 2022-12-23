@@ -260,7 +260,7 @@ dropout_rate_map <-
   tm_shape(dropout_rate_map_and_data) +
   tm_polygons("dropout_rate")
 print(dropout_rate_map)
-tmap_save(dropout_rate_map, "dropout_rate_map.png")
+tmap_save(dropout_rate_map, "dropout_rate_map.eps")
   
 ## Sle monthly
 # sle_adm_monthly <-
@@ -381,7 +381,7 @@ sle_adm2_maladm_to_conf_plot <-
   ) +
   tmap::tm_facets(by = "year")
 print(sle_adm2_maladm_to_conf_plot)
-tmap_save(sle_adm2_maladm_to_conf_plot, "sle_adm2_maladm_to_conf_plot.png")
+tmap_save(sle_adm2_maladm_to_conf_plot, "sle_adm2_maladm_to_conf_plot.eps")
 
 
 sle_adm2_maladm_to_alladm_plot <-
@@ -396,7 +396,7 @@ sle_adm2_maladm_to_alladm_plot <-
   ) +
   tmap::tm_facets(by = "year")
 print(sle_adm2_maladm_to_alladm_plot)
-tmap_save(sle_adm2_maladm_to_alladm_plot, "sle_adm2_maladm_to_alladm_plot.png")
+tmap_save(sle_adm2_maladm_to_alladm_plot, "sle_adm2_maladm_to_alladm_plot.eps")
 
 
 sle_adm2_maldth_to_alldth_plot <-
@@ -411,7 +411,7 @@ sle_adm2_maldth_to_alldth_plot <-
   ) +
   tmap::tm_facets(by = "year")
 print(sle_adm2_maldth_to_alldth_plot)
-tmap_save(sle_adm2_maldth_to_alldth_plot, "sle_adm2_maldth_to_alldth_plot.png")
+tmap_save(sle_adm2_maldth_to_alldth_plot, "sle_adm2_maldth_to_alldth_plot.eps")
 
 ### 2.3 Outliers ------------------------------------------------------------
 
@@ -442,7 +442,7 @@ routine_data |>
 #                               y = value,
 #                               pairwise.comparisons = FALSE)
 ggsave(
-  "SLE_outliers_1.png",
+  "SLE_outliers_1.eps",
   width = 5,
   height = 4,
   dpi = 300
@@ -473,7 +473,7 @@ routine_data |>
 #                             y = value,
 #                             pairwise.comparisons = FALSE)
 ggsave(
-  "SLE_outliers_2.png",
+  "SLE_outliers_2.eps",
   width = 5,
   height = 4,
   dpi = 300
@@ -503,7 +503,7 @@ routine_data |>
 #                             y = value,
 #                             pairwise.comparisons = FALSE)
 ggsave(
-  "SLE_outliers_3.png",
+  "SLE_outliers_3.eps",
   width = 5,
   height = 4,
   dpi = 300
@@ -525,7 +525,7 @@ routine_data |>
   geom_point(aes(y = allout, x = test, color = error)) +
   scale_color_manual("test > allout", values = consistency_color) +
   geom_abline(slope = 1)
-ggsave("SLE_consistency_1.png")
+ggsave("SLE_consistency_1.eps")
 
 routine_data |>
   mutate(error = if_else(conf > test, TRUE, FALSE)) |>
@@ -533,7 +533,7 @@ routine_data |>
   geom_point(aes(y = test, x = conf, color = error)) +
   scale_color_manual("conf > test", values = consistency_color) +
   geom_abline(slope = 1)
-ggsave("SLE_consistency_2.png")
+ggsave("SLE_consistency_2.eps")
 
 routine_data |>
   mutate(error = if_else(maltreat > conf, TRUE, FALSE)) |>
@@ -541,7 +541,7 @@ routine_data |>
   geom_point(aes(y = conf, x = maltreat, color = error)) +
   scale_color_manual("maltreat > conf", values = consistency_color) +
   geom_abline(slope = 1)
-ggsave("SLE_consistency_3.png")
+ggsave("SLE_consistency_3.eps")
 
 routine_data |>
   mutate(error = if_else(maldth > maladm, TRUE, FALSE)) |>
@@ -550,7 +550,7 @@ routine_data |>
   geom_point(aes(y = maladm, x = maldth, color = error)) +
   scale_color_manual("maldth > maladm", values = consistency_color) +
   geom_abline(slope = 1)
-ggsave("SLE_consistency_4.png")
+ggsave("SLE_consistency_4.eps")
 
 routine_data |>
   mutate(error = if_else(maldth > alldth, TRUE, FALSE)) |>
@@ -558,7 +558,7 @@ routine_data |>
   geom_point(aes(y = alldth, x = maldth, color = error)) +
   scale_color_manual("maldth > alldth", values = consistency_color) +
   geom_abline(slope = 1)
-ggsave("SLE_consistency_5.png")
+ggsave("SLE_consistency_5.eps")
 
 routine_data |>
   mutate(error = if_else(maladm > alladm, TRUE, FALSE)) |>
@@ -566,7 +566,7 @@ routine_data |>
   geom_point(aes(y = alladm, x = maladm, color = error)) +
   scale_color_manual("maladm > alladm", values = consistency_color) +
   geom_abline(slope = 1)
-ggsave("SLE_consistency_6.png")
+ggsave("SLE_consistency_6.eps")
 
 # Incidence -----------------------------------------------------------
 ## By Adm2 -----
@@ -753,7 +753,7 @@ incidence_crude_map_adm2 <-
   ) +
   tmap::tm_facets(by = "year")
 print(incidence_crude_map_adm2)
-tmap_save(incidence_crude_map_adm2, "sle_incidence_crude_adm2.png")
+tmap_save(incidence_crude_map_adm2, "sle_incidence_crude_adm2.eps")
 
 incidence_n1_map_adm2 <-
   tm_shape(sle_adm2_incidence_map_and_data) +
@@ -765,7 +765,7 @@ incidence_n1_map_adm2 <-
   ) +
   tmap::tm_facets(by = "year")
 print(incidence_n1_map_adm2)
-tmap_save(incidence_n1_map_adm2, "sle_incidence_n1_adm2.png")
+tmap_save(incidence_n1_map_adm2, "sle_incidence_n1_adm2.eps")
 
 
 incidence_n2_map_adm2 <-
@@ -778,7 +778,7 @@ incidence_n2_map_adm2 <-
   ) +
   tmap::tm_facets(by = "year")
 print(incidence_n2_map_adm2)
-tmap_save(incidence_n2_map_adm2, "sle_incidence_n2_adm2.png")
+tmap_save(incidence_n2_map_adm2, "sle_incidence_n2_adm2.eps")
 
 
 incidence_n3_map_adm2 <-
@@ -791,7 +791,7 @@ incidence_n3_map_adm2 <-
   ) +
   tmap::tm_facets(by = "year")
 print(incidence_n3_map_adm2)
-tmap_save(incidence_n3_map_adm2, "sle_incidence_n3_adm2.png")
+tmap_save(incidence_n3_map_adm2, "sle_incidence_n3_adm2.eps")
 
 ## By adm3 year ------------------------------------------------------------
 sle_adm3_map <- sf::st_read(sle_chiefdom_shapefile)
@@ -812,7 +812,7 @@ incidence_crude_map_adm3 <-
   ) +
   tmap::tm_facets(by = "year")
 print(incidence_crude_map_adm3)
-tmap_save(incidence_crude_map_adm3, "sle_incidence_crude_adm3.png")
+tmap_save(incidence_crude_map_adm3, "sle_incidence_crude_adm3.eps")
 
 incidence_n1_map_adm3 <-
   tm_shape(sle_adm3_incidence_map_and_data) +
@@ -824,7 +824,7 @@ incidence_n1_map_adm3 <-
   ) +
   tmap::tm_facets(by = "year")
 print(incidence_n1_map_adm3)
-tmap_save(incidence_n1_map_adm3, "sle_incidence_n1_adm3.png")
+tmap_save(incidence_n1_map_adm3, "sle_incidence_n1_adm3.eps")
 
 
 incidence_n2_map_adm3 <-
@@ -837,7 +837,7 @@ incidence_n2_map_adm3 <-
   ) +
   tmap::tm_facets(by = "year")
 print(incidence_n2_map_adm3)
-tmap_save(incidence_n2_map_adm3, "sle_incidence_n2_adm3.png")
+tmap_save(incidence_n2_map_adm3, "sle_incidence_n2_adm3.eps")
 
 
 incidence_n3_map_adm3 <-
@@ -850,7 +850,7 @@ incidence_n3_map_adm3 <-
   ) +
   tmap::tm_facets(by = "year")
 print(incidence_n3_map_adm3)
-tmap_save(incidence_n3_map_adm3, "sle_incidence_n3_adm3.png")
+tmap_save(incidence_n3_map_adm3, "sle_incidence_n3_adm3.eps")
 
 
 # Missing check -----
@@ -874,7 +874,7 @@ report_status_by_hf_and_date |>
   theme(axis.text.y = element_blank()) +
   scale_fill_manual(values = c("N" = "white", "Y" = "red3"))
 ggsave(
-  filename = "report_status_by_hf_and_date.png",
+  filename = "report_status_by_hf_and_date.eps",
   width = 7,
   height = 5,
 )
@@ -902,7 +902,7 @@ ggplot(report_status_by_indicators_and_date) +
   geom_tile(aes(x = year, y = index, fill = report_rate)) +
   scale_fill_viridis_c()
 
-ggsave(filename = "report_status_by_indicators_and_date.png",
+ggsave(filename = "report_status_by_indicators_and_date.eps",
        width = 7,
        height = 6)
 
@@ -983,7 +983,7 @@ sle_malvec_cat_adm2_map <- tm_shape(sle_malvec_cat_adm2_map_data) +
   tm_polygons("category",
               palette = c("#761a7b", "#ee3d8d", "#ef87be", "#4eac32", "#95d689"))
 print(sle_malvec_cat_adm2_map)
-tmap_save(sle_malvec_cat_adm2_map, "sle_malvec_cat_adm2.png")
+tmap_save(sle_malvec_cat_adm2_map, "sle_malvec_cat_adm2.eps")
 
 
 ### adm3 -----
@@ -1001,7 +1001,7 @@ sle_malvec_cat_adm3_map <- tm_shape(sle_malvec_cat_adm3_map_data) +
   tm_polygons("category",
               palette = c("#761a7b", "#ee3d8d", "#ef87be", "#4eac32", "#95d689"))
 print(sle_malvec_cat_adm3_map)
-tmap_save(sle_malvec_cat_adm3_map, "sle_malvec_cat_adm3.png")
+tmap_save(sle_malvec_cat_adm3_map, "sle_malvec_cat_adm3.eps")
 
 ## Population map
 pop_data_adm2  <-
@@ -1015,7 +1015,7 @@ pop_map <-
   tm_shape(sle_adm3_map) +
   tm_borders(col = "grey")
 
-tmap_save(pop_map, filename = "SLE_pop_map.png")
+tmap_save(pop_map, filename = "SLE_pop_map.eps")
 
 # pfpr mic new data on the workshop
 pfpr_by_mic_new <- read_xlsx("Sierra Leone Malaria Prevalence Data by microscopy_2021.xlsx", skip =1)
@@ -1040,7 +1040,7 @@ pfpr_by_mic_new_map <-
     palette = c("#d5d5d5", "#8fbfe5", "#fbe484", "#782456"),
   )
 print(pfpr_by_mic_new_map)
-tmap_save(pfpr_by_mic_new_map, "pfpr_by_mic_new_map.png")
+tmap_save(pfpr_by_mic_new_map, "pfpr_by_mic_new_map.eps")
 
 # new categorization
 sle_malvec_cat_adm2_new <-
@@ -1059,4 +1059,4 @@ sle_malvec_cat_adm2_new_map <- tm_shape(sle_malvec_cat_adm2_new_map_data) +
     palette = c("#761a7b", "#ee3d8d","#D3D3D3" , "#ef87be", "#4eac32", "#95d689")
   )
 print(sle_malvec_cat_adm2_new_map)
-tmap_save(sle_malvec_cat_adm2_new_map, "sle_malvec_cat_adm2_new.png")
+tmap_save(sle_malvec_cat_adm2_new_map, "sle_malvec_cat_adm2_new.eps")
