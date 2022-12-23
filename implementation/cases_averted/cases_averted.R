@@ -25,6 +25,8 @@ adm1 <- cases_averted |> dplyr::distinct(adm1)
 adm1_list <- adm1$adm1
 
 for (x in adm1_list) {
+    cases_averted |> write_csv(paste0(x, " - 11. cases_averted.csv"))
+
     cases_averted |>
         dplyr::filter(adm1 == x) |>
         ggplot2::ggplot(ggplot2::aes(
@@ -43,15 +45,15 @@ for (x in adm1_list) {
             guide = ggplot2::guide_axis(check.overlap = TRUE)
         )
     ggplot2::ggsave(
-        paste0(x, " - 11. cases_averted.png")
+        paste0(x, " - 11. cases_averted.eps")
     )
 }
 
 # plot the cases for nassawara
-cases_averted |>
-    filter(adm1 == "NASARAWA") |>
-    rename(cases_2000 = base_case, cases = value) |>
-    pivot_longer(cols = c("cases_2000", "cases")) |>
-    ggplot(aes(x = year)) +
-    geom_line(aes(y = value, group = name, color = name)) +
-    ylab("cases")
+# cases_averted |>
+#     filter(adm1 == "NASARAWA") |>
+#     rename(cases_2000 = base_case, cases = value) |>
+#     pivot_longer(cols = c("cases_2000", "cases")) |>
+#     ggplot(aes(x = year)) +
+#     geom_line(aes(y = value, group = name, color = name)) +
+#     ylab("cases")
