@@ -1,18 +1,23 @@
 # load data ------
-wmr <- read_csv("Data/00_incidence_rate_all_age_table_Nigeria_admin1_2000-2023.csv") |>
+wmr <- read_csv(
+  "Data/00_incidence_rate_all_age_table_Nigeria_admin1_2000-2023.csv"
+) |>
   mutate(incidence_rate_all_age_rmean = incidence_rate_all_age_rmean * 1000) |>
   mutate_at(c("Name"), ~ str_replace(., "Akwa Ibom", "Akwa lbom")) |>
   mutate_at(c("Name"), ~ str_replace(., "Nassarawa", "Nasarawa")) |>
-  mutate_at(c("Name"), ~ str_replace(., "Abuja", "Federal Capital Territory")) |>
+  mutate_at(
+    c("Name"), ~ str_replace(., "Abuja", "Federal Capital Territory")
+  ) |>
   rename(incidence = incidence_rate_all_age_rmean)
 
-wmr_2021 <- read_csv("Data/00_incidence_rate_all_age_table_Nigeria_admin1_2000-2023.csv") |>
+wmr_2021 <- read_csv(
+  "Data/00_incidence_rate_all_age_table_Nigeria_admin1_2000-2023.csv"
+) |>
   filter(Year %in% c(2014, 2018, 2021)) |>
   mutate(incidence_rate_all_age_rmean = incidence_rate_all_age_rmean * 1000) |>
   mutate_at(c("Name"), ~ str_replace(., "Akwa Ibom", "Akwa lbom")) |>
   mutate_at(c("Name"), ~ str_replace(., "Nassarawa", "Nasarawa")) |>
   mutate_at(c("Name"), ~ str_replace(., "Abuja", "Federal Capital Territory"))
-
 
 ## Map and data -----
 nga_dhs_adm1 <-
@@ -53,8 +58,7 @@ pop_map <-
   tm_shape(pop_three_years) +
   tm_polygons("pop") +
   tm_facets(by = "year")
-print(pop_map)
-tmap_save(pop_map, "Nigeria - country - population - map.png")
+tmap_save(pop_map, "Nigeria - country - population - map.tiff")
 
 #### District - Trends------
 ggplot(pop, aes(y = pop, x = as.factor(year))) +
@@ -62,7 +66,7 @@ ggplot(pop, aes(y = pop, x = as.factor(year))) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   labs(title = "Trend of Population", y = "Population", x = "Year") +
   facet_wrap(~adm1)
-ggsave("Nigeria - states - population - barplot.png")
+ggsave("Nigeria - states - population - barplot.eps")
 
 # Prevalence DHS or MAP
 # [Monday 23:58] GALATAS ANDRADE, Beatriz
@@ -80,7 +84,7 @@ nga_adm1_prevalence_rdt_map <-
   tm_facets(by = "Year")
 tmap_save(
   nga_adm1_prevalence_rdt_map,
-  "Nigeria - country - Malaria prevalence according to RDT - map.png"
+  "Nigeria - country - Malaria prevalence according to RDT - map.tiff"
 )
 
 #### Barplot facet ADM1 ------
@@ -98,7 +102,7 @@ nga_dhs_adm1 |>
   labs(y = "Malaria prevalence according to RDT", x = "Year") +
   facet_wrap(~State)
 
-ggsave("Nigeria - States - Malaria prevalence according to RDT - Barplot.png")
+ggsave("Nigeria - States - Malaria prevalence according to RDT - Barplot.eps")
 
 ### Microscopy -----
 #### Country ------
@@ -110,7 +114,7 @@ nga_adm1_prevalence_mic_map <-
   tm_facets(by = "Year")
 tmap_save(
   nga_adm1_prevalence_mic_map,
-  "Nigeria - country - Malaria prevalence according to microscopy - map.png"
+  "Nigeria - country - Malaria prevalence according to microscopy - map.tiff"
 )
 
 #### Barplot facet ADM1 ------
@@ -128,7 +132,7 @@ nga_dhs_adm1 |>
   labs(y = "Malaria prevalence according to microscopy", x = "Year") +
   facet_wrap(~State)
 
-ggsave("Nigeria - States - Malaria prevalence according to microscopy - Barplot.png")
+ggsave("Nigeria - States - Malaria prevalence according to microscopy - Barplot.eps")
 
 
 ## Cases ------
@@ -150,7 +154,7 @@ nga_adm1_conf_map <-
   tm_facets(by = "year")
 tmap_save(
   nga_adm1_conf_map,
-  "Nigeria - country - confirmed cases - map.png"
+  "Nigeria - country - confirmed cases - map.tiff"
 )
 
 ### Barplot facet by adm1 -----
@@ -169,7 +173,7 @@ nga_adm1 |>
   labs(y = "Confirmed Malaria Cases", x = "year") +
   facet_wrap(~adm1)
 
-ggsave("Nigeria - States - confirmed cases - Barplot.png")
+ggsave("Nigeria - States - confirmed cases - Barplot.eps")
 
 ## Incidences ------
 # [Monday 23:59] GALATAS ANDRADE, Beatriz
@@ -197,7 +201,7 @@ nga_adm1_inci_map <-
   tm_facets(by = "year")
 tmap_save(
   nga_adm1_inci_map,
-  "Nigeria - country - incidence per thousand - map.png"
+  "Nigeria - country - incidence per thousand - map.tiff"
 )
 
 ### Barplot facet adm1------
@@ -222,7 +226,7 @@ nga_adm1_inci <- nga_adm1 |>
   labs(y = "Malaria Incidence(per thousand)", x = "year") +
   facet_wrap(~adm1)
 
-ggsave("Nigeria - States - Malaria Incidence(per thousand - Barplot.png")
+ggsave("Nigeria - States - Malaria Incidence(per thousand - Barplot.eps")
 
 # [Yesterday 00:00] GALATAS ANDRADE, Beatriz
 # All others, you can extract them from Stat compiler at the regional level (in Nigeria, one region covers many adm1s). I dont think we can get lower level estimates without a small area estimation analysis
@@ -242,7 +246,7 @@ nga_dhs_adm1 |>
   labs(y = "Population who slept under an insecticide-treated mosquito net (ITN) last night", x = "Year") +
   facet_wrap(~State)
 
-ggsave("Nigeria - States - Population who slept under an insecticide-treated mosquito net (ITN) last night - Barplot.png")
+ggsave("Nigeria - States - Population who slept under an insecticide-treated mosquito net (ITN) last night - Barplot.eps")
 
 # ITN-usage u5
 nga_adm1_itn_u5_map <-
@@ -252,7 +256,7 @@ nga_adm1_itn_u5_map <-
   tm_facets(by = "Year")
 tmap_save(
   nga_adm1_itn_u5_map,
-  "Nigeria - country - Children under 5 who slept under an insecticide-treated net (ITN) - map.png"
+  "Nigeria - country - Children under 5 who slept under an insecticide-treated net (ITN) - map.tiff"
 )
 # ITN-usage all
 nga_adm1_itn_all_map <-
@@ -262,7 +266,7 @@ nga_adm1_itn_all_map <-
   tm_facets(by = "Year")
 tmap_save(
   nga_adm1_itn_all_map,
-  "Nigeria - country - Population who slept under an insecticide-treated mosquito net (ITN) last night - map.png"
+  "Nigeria - country - Population who slept under an insecticide-treated mosquito net (ITN) last night - map.tiff"
 )
 
 # ITN-usage ov5
@@ -281,7 +285,7 @@ nga_adm1_itn_ov5_map <- nga_dhs_adm1_map_and_data |>
   tm_facets(by = "Year")
 tmap_save(
   nga_adm1_itn_ov5_map,
-  "Nigeria - country - ITN usage in Population ov5 - map.png"
+  "Nigeria - country - ITN usage in Population ov5 - map.tiff"
 )
 
 # per state plot
@@ -298,7 +302,7 @@ nga_dhs_adm1 |>
   labs(y = "Population who slept under an insecticide-treated mosquito net (ITN) last night", x = "Year") +
   facet_wrap(~State)
 
-ggsave("Nigeria - States - Population who slept under an insecticide-treated mosquito net (ITN) last night - Barplot.png")
+ggsave("Nigeria - States - Population who slept under an insecticide-treated mosquito net (ITN) last night - Barplot.eps")
 
 nga_dhs_adm1 |>
   ggplot() +
@@ -313,7 +317,7 @@ nga_dhs_adm1 |>
   labs(y = "Children under 5 who slept under an insecticide-treated net (ITN)", x = "Year") +
   facet_wrap(~State)
 
-ggsave("Nigeria - States - Children under 5 who slept under an insecticide-treated net (ITN) - Barplot.png")
+ggsave("Nigeria - States - Children under 5 who slept under an insecticide-treated net (ITN) - Barplot.eps")
 
 nga_dhs_adm1_map_and_data |>
   left_join(pop, by = c("State" = "adm1", "Year" = "year")) |>
@@ -337,7 +341,7 @@ nga_dhs_adm1_map_and_data |>
   labs(y = "itn_ov5", x = "Year") +
   facet_wrap(~State)
 
-ggsave("Nigeria - States - itn_ov5 - Barplot.png")
+ggsave("Nigeria - States - itn_ov5 - Barplot.eps")
 
 # Treatment for fever
 nga_adm1_treatment_fever_map <-
@@ -347,7 +351,7 @@ nga_adm1_treatment_fever_map <-
   tm_facets(by = "Year")
 tmap_save(
   nga_adm1_treatment_fever_map,
-  "Nigeria - country - Advice or treatment for fever sought from a health facility or provider - map.png"
+  "Nigeria - country - Advice or treatment for fever sought from a health facility or provider - map.tiff"
 )
 
 nga_dhs_adm1 |>
@@ -363,7 +367,7 @@ nga_dhs_adm1 |>
   labs(y = "Advice or treatment for fever sought from a health facility or provider", x = "Year") +
   facet_wrap(~State)
 
-ggsave("Nigeria - States - Advice or treatment for fever sought from a health facility or provider - Barplot.png")
+ggsave("Nigeria - States - Advice or treatment for fever sought from a health facility or provider - Barplot.eps")
 
 # Percentage of fever finger/nillpic
 nga_adm1_fever_blood_taken <-
@@ -373,7 +377,7 @@ nga_adm1_fever_blood_taken <-
   tm_facets(by = "Year")
 tmap_save(
   nga_adm1_fever_blood_taken,
-  "Nigeria - country - Children with fever who had blood taken from a finger or heel for testing - map.png"
+  "Nigeria - country - Children with fever who had blood taken from a finger or heel for testing - map.tiff"
 )
 
 nga_dhs_adm1 |>
@@ -389,7 +393,7 @@ nga_dhs_adm1 |>
   labs(y = "Children with fever who had blood taken from a finger or heel for testing", x = "Year") +
   facet_wrap(~State)
 
-ggsave("Nigeria - States - Children with fever who had blood taken from a finger or heel for testing - Barplot.png")
+ggsave("Nigeria - States - Children with fever who had blood taken from a finger or heel for testing - Barplot.eps")
 
 nga_adm1 <- nga_adm1 |>
   group_by(adm1, year) |>
@@ -409,6 +413,13 @@ wmr_one_page <- function(nga_adm1, district) {
 
     fct_survey <- nga_dhs_adm1
     district <- "nga"
+    wmr_filtered <- wmr |>
+      dplyr::select(Name, Year, incidence, Pop) |>
+      dplyr::rename(adm1 = Name, year = Year, WMR = incidence) |>
+      filter(
+        year > 2013
+      ) |>
+      dplyr::group_by(year)
   } else {
     fct <- nga_adm1 |>
       filter(
@@ -433,14 +444,25 @@ wmr_one_page <- function(nga_adm1, district) {
   fct |>
     select(year, pop) |>
     summarise(pop = sum(pop, na.rm = TRUE)) |>
+    write_csv(paste0(district, " - 1. pop.csv"))
+  fct |>
+    select(year, pop) |>
+    summarise(pop = sum(pop, na.rm = TRUE)) |>
     ggplot(aes(year, pop)) +
     geom_line() +
     geom_point() +
     labs(y = "Population") +
     theme(text = element_text(size = 5))
-  ggsave(paste0(district, " - 1. pop.png"), height = 1.8, width = 3)
+  ggsave(paste0(district, " - 1. pop.eps"), height = 1.8, width = 3)
 
   # plot confirmed cases
+  fct |>
+    select(year, conf, pop) |>
+    summarise(
+      conf = sum(conf, na.rm = TRUE),
+      pop = sum(pop, na.rm = TRUE)
+    ) |>
+    write_csv(paste0(district, " - 2. conf.csv"))
   fct |>
     select(year, conf, pop) |>
     summarise(
@@ -458,7 +480,7 @@ wmr_one_page <- function(nga_adm1, district) {
     geom_point() +
     labs(y = "Confirmed Cases") +
     theme(text = element_text(size = 5))
-  ggsave(paste0(district, " - 2. conf.png"), height = 1.2, width = 3)
+  ggsave(paste0(district, " - 2. conf.eps"), height = 1.2, width = 3)
 
   # incidence
   incid <- fct |>
@@ -471,6 +493,8 @@ wmr_one_page <- function(nga_adm1, district) {
     mutate(inci = adjinc3_pop / pop) |>
     rename(`Routine Data(Adjusted)` = inci)
 
+  incid |>
+    write_csv(paste0(district, " - 3. incidence.csv"))
   incid |>
     left_join(wmr_filtered) |>
     select(year, `Routine Data(Adjusted)`, WMR) |>
@@ -485,11 +509,14 @@ wmr_one_page <- function(nga_adm1, district) {
     geom_point() +
     labs(y = "Malaria Incidence / 1000") +
     theme(text = element_text(size = 5))
-  ggsave(paste0(district, " - 3. incidence.png"), height = 1.2, width = 5)
+  ggsave(paste0(district, " - 3. incidence.eps"), height = 1.2, width = 5)
 
   # WMR only incidence
   minimum_incidences <- min(wmr_filtered$WMR)
   min_incidences_y_lab <- minimum_incidences / 4
+  wmr_filtered |>
+    select(year, WMR) |>
+    write_csv(paste0(district, " - 3. WMR incidence.csv"))
   wmr_filtered |>
     select(year, WMR) |>
     ggplot(aes(
@@ -501,11 +528,15 @@ wmr_one_page <- function(nga_adm1, district) {
     labs(y = "Estimated Incidence / 1000") +
     ylim(min_incidences_y_lab, NA) +
     theme(text = element_text(size = 5))
-  ggsave(paste0(district, " - 3. WMR incidence.png"), height = 1.2, width = 3)
+  ggsave(paste0(district, " - 3. WMR incidence.eps"), height = 1.2, width = 3)
 
   # WMR only cases
   minimum_cases <- min(wmr_filtered$WMR * wmr_filtered$Pop / 1000)
   min_cases_y_lab <- minimum_cases / 4
+  wmr_filtered |>
+    select(year, WMR, Pop) |>
+    mutate(cases = WMR * Pop / 1000) |>
+    write_csv(paste0(district, " - 2. WMR cases.csv"))
   wmr_filtered |>
     select(year, WMR, Pop) |>
     mutate(cases = WMR * Pop / 1000) |>
@@ -518,9 +549,9 @@ wmr_one_page <- function(nga_adm1, district) {
     labs(y = "Estimated Cases") +
     ylim(min_cases_y_lab, NA) +
     theme(text = element_text(size = 5))
-  ggsave(paste0(district, " - 2. WMR cases.png"), height = 1.2, width = 3)
+  ggsave(paste0(district, " - 2. WMR cases.eps"), height = 1.2, width = 3)
 
-  fct_survey |>
+  prev_rdt_mic <- fct_survey |>
     filter(Year != 2013) |>
     mutate(Year = as.factor(Year)) |>
     select(
@@ -529,7 +560,11 @@ wmr_one_page <- function(nga_adm1, district) {
       "Malaria prevalence according to microscopy"
     ) |>
     rename(prev_rdt = "Malaria prevalence according to RDT") |>
-    rename(prev_mic = "Malaria prevalence according to microscopy") |>
+    rename(prev_mic = "Malaria prevalence according to microscopy")
+
+  prev_rdt_mic |>
+    write_csv(paste0(district, "  - 4. prev_rdt_mic.csv"))
+  prev_rdt_mic |>
     pivot_longer(
       cols = c("prev_rdt", "prev_mic"),
       names_to = "index",
@@ -549,10 +584,9 @@ wmr_one_page <- function(nga_adm1, district) {
       labels = c("Microscopy", "RDT")
     ) +
     labs(y = "Prevalence in Children Under 5")
-  ggsave(paste0(district, " - 4. prev_rdt_mic.png"), height = 1.6, width = 3)
+  ggsave(paste0(district, " - 4. prev_rdt_mic.eps"), height = 1.6, width = 3)
 
-
-  fct_survey |>
+  itn_usage <- fct_survey |>
     mutate(Year = as.factor(Year)) |>
     select(
       Year,
@@ -564,7 +598,11 @@ wmr_one_page <- function(nga_adm1, district) {
     rename(itn_usage = "Population who slept under an insecticide-treated mosquito net (ITN) last night") |>
     rename(itn_usage_u5 = "Children under 5 who slept under an insecticide-treated net (ITN)") |>
     rename(anynet_usage_u5 = "Children under 5 who slept under any net") |>
-    rename(exist_itn_usage = "Existing insecticide-treated mosquito nets (ITNs) used last night") |>
+    rename(exist_itn_usage = "Existing insecticide-treated mosquito nets (ITNs) used last night")
+
+  itn_usage |> write_csv(paste0(district, " - 5. itn - usage.csv"))
+
+  itn_usage |>
     pivot_longer(
       cols = c("itn_usage", "itn_usage_u5", "anynet_usage_u5", "exist_itn_usage"),
       names_to = "index",
@@ -585,9 +623,9 @@ wmr_one_page <- function(nga_adm1, district) {
     ) +
     labs(y = "% Usage")
 
-  ggsave(paste0(district, " - 5. itn - usage.png"), height = 1.6, width = 3)
+  ggsave(paste0(district, " - 5. itn - usage.eps"), height = 1.6, width = 3)
 
-  fct_survey |>
+  fever <- fct_survey |>
     mutate(Year = as.factor(Year)) |>
     select(
       Year,
@@ -595,7 +633,10 @@ wmr_one_page <- function(nga_adm1, district) {
       "Children with fever who had blood taken from a finger or heel for testing"
     ) |>
     rename(Treatment_Seeking = "Advice or treatment for fever sought from a health facility or provider") |>
-    rename(Fever_Blood_Taken_u5 = "Children with fever who had blood taken from a finger or heel for testing") |>
+    rename(Fever_Blood_Taken_u5 = "Children with fever who had blood taken from a finger or heel for testing")
+
+  fever |> write_csv(paste0(district, " - 6. fever.csv"))
+  fever |>
     pivot_longer(
       cols = c("Treatment_Seeking", "Fever_Blood_Taken_u5"),
       names_to = "index",
@@ -615,7 +656,7 @@ wmr_one_page <- function(nga_adm1, district) {
       labels = c("% Blood Taken", "% Treatment Sought")
     ) +
     labs(y = "% in Children had Fever in Last Two Weeks")
-  ggsave(paste0(district, " - 6. fever.png"), height = 1.6, width = 3)
+  ggsave(paste0(district, " - 6. fever.eps"), height = 1.6, width = 3)
 
   ## add map for each country
   district_only_map <- nga_adm1_map |>
@@ -625,7 +666,7 @@ wmr_one_page <- function(nga_adm1, district) {
       palette = c("#949393", "#fb8039")
     ) +
     tm_layout(legend.show = FALSE)
-  tmap_save(district_only_map, paste0(district, " - 7. maps.png"))
+  tmap_save(district_only_map, paste0(district, " - 7. maps.tiff"))
 }
 
 adm1 <- distinct(nga_adm1, adm1)$ adm1
@@ -641,8 +682,7 @@ wmr_2021_map <-
   tm_shape(wmr_2021_map_and_data) +
   tm_polygons("incidence_rate_all_age_rmean") +
   tm_facets(by = "Year")
-print(wmr_2021_map)
-tmap_save(wmr_2021_map, "Nigeria - country - Incidence_wmr - map.png")
+tmap_save(wmr_2021_map, "Nigeria - country - Incidence_wmr - map.tiff")
 
 ## Rainfall -------
 ### Extract rainfall data -----
@@ -672,7 +712,7 @@ rainfall$data |>
   write_csv("rainfall_nga_adm1.csv")
 
 ## add population graph
-rainfall <- read_csv("rainfall_nga_adm1.csv")
+rainfall <- read_csv("/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR - Nigeria/Data/Clean/rainfall_nga_adm1.csv")
 rainfall <- rainfall |>
   mutate(
     date = lubridate::make_date(year = year, month = month)
@@ -688,10 +728,13 @@ rainfall |>
   ggplot(aes(x = date, y = rainfall)) +
   geom_line() +
   geom_point() +
-  scale_x_date(NULL, date_labels = "%b %y", breaks = "month", guide = guide_axis(check.overlap = TRUE)) +
+  scale_x_date(NULL,
+    date_labels = "%b %y", breaks = "month",
+    guide = guide_axis(check.overlap = TRUE)
+  ) +
   theme(text = element_text(size = 5))
 
-ggsave("nga_rainfall.png", height = 2.5, width = 4)
+ggsave("nga_rainfall.eps", height = 2.5, width = 4)
 
 ## fct rainfall plot
 rainfall_line_plot <- function(data, district, country) {
@@ -699,7 +742,7 @@ rainfall_line_plot <- function(data, district, country) {
     filter(adm1 == district)
   # group_by(date) |>
   # summarise(rainfall = sum(rainfall))
-
+  data |> write_csv(paste0(district, " - 8 rainfall.csv"))
   ggplot(data, aes(x = date, y = rainfall)) +
     geom_line() +
     geom_point() +
@@ -713,7 +756,7 @@ rainfall_line_plot <- function(data, district, country) {
   ggsave(
     paste0(
       district,
-      " - 8 rainfall.png"
+      " - 8 rainfall.eps"
     ),
     height = 2.5,
     width = 4
@@ -769,7 +812,7 @@ smc_plot <- function(data, district, country) {
     filter(adm1 == district)
   # group_by(date) |>
   # summarise(rainfall = sum(rainfall))
-
+  data |> write_csv(paste0(district, " - 9 smc.csv"))
   ggplot(data, aes(x = year)) +
     geom_bar(
       aes(fill = name, y = value),
@@ -788,7 +831,7 @@ smc_plot <- function(data, district, country) {
   ggsave(
     paste0(
       district,
-      " - 9 smc.png"
+      " - 9 smc.eps"
     ),
     height = 2.5,
     width = 4
@@ -827,7 +870,7 @@ nga_smc_plot <- nga_adm1_smc |>
   labs(y = "Number of SMC")
 
 ggsave(
-  "nga - 9 smc.png",
+  "nga - 9 smc.eps",
   height = 2.5,
   width = 4
 )
@@ -848,7 +891,8 @@ llins_plot <- function(data, district, country) {
   data <- data |>
     filter(adm1 == district)
 
-  ggplot(data, aes(x = year)) +
+  data |> write_csv(paste0(district, " - 10 llins.csv"))
+  data |> ggplot(aes(x = year)) +
     geom_bar(
       aes(y = llins_num),
       stat = "identity"
@@ -858,7 +902,7 @@ llins_plot <- function(data, district, country) {
   ggsave(
     paste0(
       district,
-      " - 10 llins.png"
+      " - 10 llins.eps"
     ),
     height = 2.5,
     width = 4
@@ -873,7 +917,7 @@ for (district in adm1) {
   )
 }
 
-# SMC country graph
+# LLLINs country graph
 nga_llins_plot <- nga_adm1_llins |>
   mutate(year = as.factor(year)) |>
   group_by(year) |>
@@ -888,7 +932,7 @@ nga_llins_plot <- nga_adm1_llins |>
   theme(text = element_text(size = 5))
 
 ggsave(
-  "nga - 10 llins.png",
+  "nga - 10 llins.eps",
   height = 2.5,
   width = 4
 )
@@ -1042,7 +1086,7 @@ indicator <- indicator |>
 
 View(indicator)
 indicator |>
-mutate_if(is.numeric, ~round(.,digits=1)) |>
+  mutate_if(is.numeric, ~ round(., digits = 1)) |>
   write_csv(
     "nga_indicators.csv"
   )
