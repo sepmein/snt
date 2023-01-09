@@ -9,15 +9,18 @@ config(
   root = NULL,
   root_input = NULL,
   root_output = NULL,
-  root_raster = NULL,
-  raster_map_input = NULL,
-  ihme_folder = NULL,
-  rainfall_folder = NULL,
-  rainfall_output = NULL,
-  shapefile = NULL,
+  path_raster = NULL,
+  path_raster_map = NULL,
+  path_raster_ihme = NULL,
+  path_raster_rainfall = NULL,
+  path_country = NULL,
+  path_routine = NULL,
+  path_intervention = NULL,
+  path_dhs = NULL,
   db_name = NULL,
   db_user = NULL,
-  db_pass = NULL
+  db_pass = NULL,
+  path_shapefile = NULL
 )
 }
 \arguments{
@@ -40,16 +43,21 @@ This function could set the following configurations:
 \item folder structure
 All the folder structure could be set separately,
 however it will be nice if they are all under one root folder.
-Separate setting
-\item root
+root
+| --- output the status of data
+| --- input
+| ---
+| --- graph the type of output
+| --- report
+| --- raster
 \item postgresql db connection
 }
 }
 \examples{
 config(
-  country = "NGA",
-  root = "/Users/sepmein/snt/NGA",
-  root_input = "input",
-  root_output =
-  )
+    country = "NGA",
+    root = "/Users/sepmein/snt/NGA",
+    root_input = "input",
+    root_output =
+    )
 }

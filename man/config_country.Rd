@@ -4,13 +4,9 @@
 \alias{config_country}
 \title{config country folders}
 \usage{
-config_country(country)
-
-config_country(country)
+config_country(path_country, path_routine, path_intervention)
 }
 \arguments{
-\item{country}{The country name}
-
 \item{path_country}{path of the country root}
 
 \item{path_routine}{path of the routine, contains the routine data}
@@ -20,8 +16,6 @@ contains the intervention data}
 }
 \value{
 a list of country folders
-
-ISO3 country code
 }
 \description{
 config country folders for SNT analysis
