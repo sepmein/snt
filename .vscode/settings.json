@@ -1,13 +1,23 @@
 {
     "cSpell.words": [
         "admn",
+        "amatch",
+        "corge",
         "dataframe",
+        "garply",
         "ggbetweenstats",
+        "grault",
         "hfmonth",
         "pkgdown",
+        "plugh",
+        "quux",
+        "quuz",
         "rosner",
         "shapefiles",
-        "tibble"
+        "stringdist",
+        "stringdistmatrix",
+        "tibble",
+        "xyzzy"
     ],
     "r.bracketedPaste": true,
     "r.lsp.debug": true,

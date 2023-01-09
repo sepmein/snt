@@ -11,8 +11,11 @@ config_data_folder(
   path_raster_map,
   path_raster_ihme,
   path_raster_rainfall,
+  path_country,
   path_routine,
-  path_intervention
+  path_intervention,
+  path_dhs,
+  root_output
 )
 }
 \arguments{

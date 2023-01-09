@@ -326,21 +326,3 @@ config_parallel <- function() {
 setup <- function(path) {
 
 }
-
-config(
-    country = "NGA",
-    root = "/Users/sepmein/x/snt",
-    root_input = "input",
-    root_output = "output",
-    path_raster = "raster",
-    path_raster_map = "map",
-    path_raster_ihme = "ihme",
-    path_raster_rainfall = "rainfall",
-    path_country = "country",
-    path_routine = "routine",
-    path_intervention = "intervention",
-    path_dhs = "dhs",
-    db_name = malaria,
-    db_user = sepmein,
-    path_shapefile = "shapefile"
-)
