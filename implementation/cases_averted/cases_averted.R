@@ -48,12 +48,3 @@ for (x in adm1_list) {
         paste0(x, " - 11. cases_averted.eps")
     )
 }
-
-# plot the cases for nassawara
-# cases_averted |>
-#     filter(adm1 == "NASARAWA") |>
-#     rename(cases_2000 = base_case, cases = value) |>
-#     pivot_longer(cols = c("cases_2000", "cases")) |>
-#     ggplot(aes(x = year)) +
-#     geom_line(aes(y = value, group = name, color = name)) +
-#     ylab("cases")

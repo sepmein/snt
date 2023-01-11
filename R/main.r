@@ -1439,4 +1439,3 @@ outliers_find_hf <- function(outliers,
     dplyr::arrange(dplyr::desc(dplyr::count))
   return(result)
 }
-

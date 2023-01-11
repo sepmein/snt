@@ -1,11 +1,8 @@
 test_that("fuzzy match", {
-  df <- data.frame(
-    col <- c(
-      "a", "b", "c", "aa", "foo",
-      "bar", "baz", "qux", "quux", "quuz", "corge",
-      "grault", "garply", "waldo", "fred", "plugh", "xyzzy", "thud"
-    )
-  )
+  df <- data.frame(col = c("a", "b", "c", "aa"))
   result <- fuzzy_match(df, "col")
-  expect_equal(2 * 2, 4)
+  expect_equal(result, tibble::tibble(
+    col = c("a", "b", "c", "aa"),
+    match = c("b", "a", "a", "a")
+  ))
 })

@@ -5,6 +5,6 @@ test_that("Replace double space", {
   df_correct <- data.frame(
     col = c("a b", "b c", "c d")
   )
-  df_replaced <- replace_double_space(df, col)
+  df_replaced <- str_trim_space(df, col)
   expect_equal(df_replaced, df_correct)
 })
