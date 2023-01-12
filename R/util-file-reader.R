@@ -70,7 +70,7 @@ smart_read_excel_by_year <-
            clean = TRUE,
            country = snt_country) {
     if (is.null(snt_country)) {
-      warning("snt::set_country method has not runned yet, this will cause problem.")
+      warning("snt::set_country method has not run yet, this will cause problem.")
     }
     file_list <-
       reader(smart_path)
@@ -123,9 +123,12 @@ smart_get_all_files_in_dir <-
     if (clean) {
       result <- result %>%
         # rename using internal rename database
-        dplyr::mutate(data = purrr::map(data, ~ routine_rename(.x, cty = country))) %>%
+        dplyr::mutate(
+          data = purrr::map(data, ~ routine_rename(.x, cty = country))) %>%
         # replace using internal replace database
-        dplyr::mutate(data = purrr::map(data, ~ routine_replace(.x, cty = country)))
+        dplyr::mutate(
+          data = purrr::map(data, ~ routine_replace(.x, cty = country))
+        )
     }
     return(result)
   }

@@ -1009,7 +1009,7 @@ MAPPlasmodiumIndex <- R6::R6Class(
 
         # if title is false, display no title
         # if title is true, display default title
-        # if title is string, display the setted title
+        # if title is string, display the preset title
         if (is.logical(title)) {
           if (title == TRUE) {
             map <- map + tmap::tm_layout(title = paste(snt_country, year,
@@ -1397,7 +1397,9 @@ IHME_mortality <- R6::R6Class(
       }
       self$data <-
         self$data |>
-        dplyr::mutate(year = stringr::str_extract(file, "(\\d{4})(?=_Y2017M09D25)"))
+        dplyr::mutate(
+          year = stringr::str_extract(file, "(\\d{4})(?=_Y2017M09D25)")
+        )
     },
     export = function(to = NULL, filename = NULL) {
       if (is.null(to)) {

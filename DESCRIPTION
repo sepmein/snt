@@ -1,10 +1,10 @@
 Package: snt
-Title: Malaria country analysis
-Version: 0.0.1.0000
+Title: Malaria Subnational Tailoring
+Version: 0.0.2.0000
 Authors@R: 
     person("Chunzhe", "Zhang", , "zhangc@who.int", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: This package provides functions to download, process and visualize malaria data at subnational level.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -30,7 +30,8 @@ Imports:
     magrittr,
     tibble,
     rlang (>= 0.4.11),
-    tmap
+    tmap,
+    config
 Depends: 
     R (>= 2.10)
 LazyData: true

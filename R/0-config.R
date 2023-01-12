@@ -1,3 +1,74 @@
+#' @title Generate Default Config
+#' @description Write config.yml if not exists
+#' @export
+#' @seealso https://github.com/johnaponte/repana
+generate_default_config <- function() {
+  if (!file.exists("config.yml")) {
+    cat(
+      "default:\n",
+      " country: Repana\n",
+      " dirs:\n",
+      "   data: _data\n",
+      "   functions: _functions\n",
+      "   handmade: handmade\n",
+      "   database: database\n",
+      "   reports: reports\n",
+      "   logs: logs\n",
+      " clean_before_new_analysis:\n",
+      "   - database\n",
+      "   - reports\n",
+      "   - logs\n",
+      " defaultdb:\n",
+      "   package: RSQLite\n",
+      "   dbconnect: SQLite\n",
+      '   dbname: ":memory:"\n',
+      file = "config.yml"
+    )
+  }
+}
+
+#' @title Generate Default .gitignore
+#' @description Write .gitignore if not exists
+#' @export
+#' @seealso https://github.com/johnaponte/repana
+#' @importFrom config get
+#' @keywords git, gitignore, file
+generate_default_gitignore <- function() {
+  # Process the .gitignore file
+  if (!file.exists(".gitignore")) {
+    cat("# Created by make_structure\n", file = ".gitignore")
+  }
+  xx <- trimws(readLines(".gitignore"), "both")
+  if (get_os() == "osx" && !any(grep("^\\.DS_Store$", xx))) {
+    cat(".DS_Store\n", file = ".gitignore", append = TRUE)
+  }
+  if (!any(grepl(paste0("^config.yml$"), xx))) {
+    cat("config.yml", "\n", file = ".gitignore", append = TRUE)
+  }
+  in_gitignore <- config::get("clean_before_new_analysis")
+  lapply(in_gitignore, function(x) {
+    tdir <- trimws(config::get("dirs")[[x]], "both")
+    if (length(tdir) == 0) {
+      stop(
+        x,
+        " not defined in dirs. check the config.yml file\n"
+      )
+    }
+    if (!any(grepl(paste0("^", tdir, "$"), xx))) {
+      cat(tdir, "\n", file = ".gitignore", append = TRUE)
+    }
+  })
+}
+
+#' @title Make Structure
+#' @description Make the structure of the project
+#' @export
+make_structure <- function() {
+  generate_default_config()
+  generate_default_gitignore()
+  mkdir()
+}
+
 #' @title Check type of path
 #' @description check type of path. check the existence of the dir or file
 #' if they exist then return the type of the path
