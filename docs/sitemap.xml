@@ -25,6 +25,9 @@
     <loc>https://sepmein.github.io/snt/index.html</loc>
   </url>
   <url>
+    <loc>https://sepmein.github.io/snt/reference/bind_who_gis_adm2_shp.html</loc>
+  </url>
+  <url>
     <loc>https://sepmein.github.io/snt/reference/config.html</loc>
   </url>
   <url>
@@ -55,6 +58,15 @@
     <loc>https://sepmein.github.io/snt/reference/fuzzy_match.html</loc>
   </url>
   <url>
+    <loc>https://sepmein.github.io/snt/reference/generate_default_config.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/generate_default_gitignore.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/get_os.html</loc>
+  </url>
+  <url>
     <loc>https://sepmein.github.io/snt/reference/import_replace.html</loc>
   </url>
   <url>
@@ -71,6 +83,12 @@
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/make_structure.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/mkdir.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/pipe.html</loc>

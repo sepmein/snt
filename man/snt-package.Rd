@@ -4,9 +4,9 @@
 \name{snt-package}
 \alias{snt}
 \alias{snt-package}
-\title{snt: Malaria country analysis}
+\title{snt: Malaria Subnational Tailoring}
 \description{
-What the package does (one paragraph).
+This package provides functions to download, process and visualize malaria data at subnational level.
 }
 \seealso{
 Useful links:

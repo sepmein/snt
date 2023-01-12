@@ -55,9 +55,9 @@ root
 }
 \examples{
 config(
-    country = "NGA",
-    root = "/Users/sepmein/snt/NGA",
-    root_input = "input",
-    root_output =
-    )
+  country = "NGA",
+  root = "/Users/sepmein/snt/NGA",
+  root_input = "input",
+  root_output =
+  )
 }

@@ -24,7 +24,7 @@ https://stackoverflow.com/a/41560524/886198
 }
 \examples{
 df <- data.frame(
-    col = c("a", "b", "c", "aa")
+  col = c("a", "b", "c", "aa")
 )
 fuzzy_match(df, col, match_col)
 fuzzy_match(df, col, match_col, threshold = 1)
