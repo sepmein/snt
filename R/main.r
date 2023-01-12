@@ -407,7 +407,6 @@ RasterResource <- R6::R6Class(
         )
       }
       return(result)
-
     },
     load_single_file = function(target_adm_level,
                                 adm0_name_in_shp,
@@ -482,7 +481,6 @@ RasterResource <- R6::R6Class(
       # return result
       return(result)
     },
-
     load_single_folder = function(target_adm_level,
                                   adm0_name_in_shp,
                                   adm1_name_in_shp,

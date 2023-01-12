@@ -5,23 +5,23 @@
 #' @param path String path
 #' @export
 type_of_path <- function(path) {
-    # If the path is not a character string, return an error
-    # if (!is.character(path)) {
-    #     stop("Error: path must be a character string")
-    # }
+  # If the path is not a character string, return an error
+  # if (!is.character(path)) {
+  #     stop("Error: path must be a character string")
+  # }
 
-    # # If the path is an empty string, return an error
-    # if (nchar(path) == 0) {
-    #     stop("Error: path cannot be an empty string")
-    # }
-    if (dir.exists(path)) {
-        result <- "dir"
-    } else if (file_test("-f", path)) {
-        result <- "file"
-    } else {
-        result <- NULL
-    }
-    return(result)
+  # # If the path is an empty string, return an error
+  # if (nchar(path) == 0) {
+  #     stop("Error: path cannot be an empty string")
+  # }
+  if (dir.exists(path)) {
+    result <- "dir"
+  } else if (file_test("-f", path)) {
+    result <- "file"
+  } else {
+    result <- NULL
+  }
+  return(result)
 }
 
 #' @title Check to use relative or absolute path
@@ -35,20 +35,20 @@ type_of_path <- function(path) {
 #' @return path
 #' @export
 use_relative_or_absolute <- function(root, relative) {
-    relative_path_type <- type_of_path(relative)
+  relative_path_type <- type_of_path(relative)
 
-    if (!is.null(relative_path_type)) {
-        return(relative)
-    }
+  if (!is.null(relative_path_type)) {
+    return(relative)
+  }
 
-    combined_root <- file.path(root, relative)
-    combined_root_path_type <- type_of_path(combined_root)
+  combined_root <- file.path(root, relative)
+  combined_root_path_type <- type_of_path(combined_root)
 
-    if (!is.null(combined_root_path_type)) {
-        return(combined_root)
-    }
+  if (!is.null(combined_root_path_type)) {
+    return(combined_root)
+  }
 
-    return(FALSE)
+  return(FALSE)
 }
 
 #' Central Configuration for SNT analysis
@@ -71,11 +71,11 @@ use_relative_or_absolute <- function(root, relative) {
 #'
 #' @examples
 #' config(
-#'     country = "NGA",
-#'     root = "/Users/sepmein/snt/NGA",
-#'     root_input = "input",
-#'     root_output =
-#'     )
+#'   country = "NGA",
+#'   root = "/Users/sepmein/snt/NGA",
+#'   root_input = "input",
+#'   root_output =
+#'   )
 #' @description Central Configuration settings for SNT analysis.
 #' This function could set the following configurations:
 #' 1. the target subnational analysis country
@@ -85,10 +85,10 @@ use_relative_or_absolute <- function(root, relative) {
 #'  root
 #'  | --- output the status of data
 #'  | --- input
-#'        | --- 
+#'        | ---
 #'  | --- graph the type of output
 #'  | --- report
-#'  | --- raster 
+#'  | --- raster
 #' 3. postgresql db connection
 config <- function(country,
                    root = NULL,
@@ -106,32 +106,32 @@ config <- function(country,
                    db_user = NULL,
                    db_pass = NULL,
                    path_shapefile = NULL) {
-    # TODO add a re-format function to format country to ISO3 code
+  # TODO add a re-format function to format country to ISO3 code
 
-    result <- list(
-        "country" = country,
-        "data_folder" = config_data_folder(
-            root,
-            root_input,
-            path_raster,
-            path_raster_map,
-            path_raster_ihme,
-            path_raster_rainfall,
-            path_country,
-            path_routine,
-            path_intervention,
-            path_dhs,
-            root_output
-        ),
-        "parallel" = config_parallel(),
-        "shapefile" = config_shapefile(root, path_shapefile),
-        "db" = config_db(
-            db_name = db_name,
-            db_user = db_user,
-            db_pass = db_pass
-        )
+  result <- list(
+    "country" = country,
+    "data_folder" = config_data_folder(
+      root,
+      root_input,
+      path_raster,
+      path_raster_map,
+      path_raster_ihme,
+      path_raster_rainfall,
+      path_country,
+      path_routine,
+      path_intervention,
+      path_dhs,
+      root_output
+    ),
+    "parallel" = config_parallel(),
+    "shapefile" = config_shapefile(root, path_shapefile),
+    "db" = config_db(
+      db_name = db_name,
+      db_user = db_user,
+      db_pass = db_pass
     )
-    return(result)
+  )
+  return(result)
 }
 
 #' @title config data folder
@@ -157,26 +157,26 @@ config_data_folder <- function(root = NULL,
                                path_intervention,
                                path_dhs,
                                root_output) {
-    path_input <- use_relative_or_absolute(root, root_input)
-    input <- config_input(
-        path_input,
-        path_raster,
-        path_raster_map,
-        path_raster_ihme,
-        path_raster_rainfall,
-        path_country,
-        path_routine,
-        path_intervention,
-        path_dhs
-    )
-    path_output <- use_relative_or_absolute(root, root_output)
-    output <- config_output(
-        path_output
-    )
-    return(list(
-        "input" = input,
-        "output" = output
-    ))
+  path_input <- use_relative_or_absolute(root, root_input)
+  input <- config_input(
+    path_input,
+    path_raster,
+    path_raster_map,
+    path_raster_ihme,
+    path_raster_rainfall,
+    path_country,
+    path_routine,
+    path_intervention,
+    path_dhs
+  )
+  path_output <- use_relative_or_absolute(root, root_output)
+  output <- config_output(
+    path_output
+  )
+  return(list(
+    "input" = input,
+    "output" = output
+  ))
 }
 
 #' @title config input folder
@@ -201,28 +201,28 @@ config_input <- function(path_input,
                          path_routine,
                          path_intervention,
                          path_dhs) {
-    raster <- config_raster(
-        use_relative_or_absolute(path_input, path_raster),
-        path_raster_map,
-        path_raster_ihme,
-        path_raster_rainfall
-    )
-    country <- config_country(
-        use_relative_or_absolute(path_input, path_country),
-        path_routine,
-        path_intervention
-    )
-    dhs <- config_dhs(
-        use_relative_or_absolute(path_input, path_dhs)
-    )
+  raster <- config_raster(
+    use_relative_or_absolute(path_input, path_raster),
+    path_raster_map,
+    path_raster_ihme,
+    path_raster_rainfall
+  )
+  country <- config_country(
+    use_relative_or_absolute(path_input, path_country),
+    path_routine,
+    path_intervention
+  )
+  dhs <- config_dhs(
+    use_relative_or_absolute(path_input, path_dhs)
+  )
 
-    return(
-        list(
-            "country" = country,
-            "raster" = raster,
-            "dhs" = dhs
-        )
+  return(
+    list(
+      "country" = country,
+      "raster" = raster,
+      "dhs" = dhs
     )
+  )
 }
 
 #' @title config raster folders
@@ -236,15 +236,15 @@ config_raster <- function(path_raster,
                           path_raster_map,
                           path_raster_ihme,
                           path_raster_rainfall) {
-    return(
-        list(
-            "map" = use_relative_or_absolute(path_raster, path_raster_map),
-            "ihme" = use_relative_or_absolute(path_raster, path_raster_ihme),
-            "rainfall" = use_relative_or_absolute(
-                path_raster, path_raster_rainfall
-            )
-        )
+  return(
+    list(
+      "map" = use_relative_or_absolute(path_raster, path_raster_map),
+      "ihme" = use_relative_or_absolute(path_raster, path_raster_ihme),
+      "rainfall" = use_relative_or_absolute(
+        path_raster, path_raster_rainfall
+      )
     )
+  )
 }
 
 #' @title config country folders
@@ -257,14 +257,14 @@ config_raster <- function(path_raster,
 config_country <- function(path_country,
                            path_routine,
                            path_intervention) {
-    routine <- use_relative_or_absolute(path_country, path_routine)
-    intervention <- use_relative_or_absolute(path_country, path_intervention)
-    return(
-        list(
-            "routine" = routine,
-            "intervention" = intervention
-        )
+  routine <- use_relative_or_absolute(path_country, path_routine)
+  intervention <- use_relative_or_absolute(path_country, path_intervention)
+  return(
+    list(
+      "routine" = routine,
+      "intervention" = intervention
     )
+  )
 }
 
 #' @title config DHS folders
@@ -274,23 +274,23 @@ config_country <- function(path_country,
 #' @return a list of DHS folders
 config_dhs <- function(path_input = NULL,
                        path_dhs = NULL) {
-    dhs <- use_relative_or_absolute(path_input, path_dhs)
-    return(
-        dhs
-    )
+  dhs <- use_relative_or_absolute(path_input, path_dhs)
+  return(
+    dhs
+  )
 }
 
 config_output <- function(path_output) {
-    return(
-        list(
-            "incidence" = use_relative_or_absolute(path_output, "incidence"),
-            "mortality" = use_relative_or_absolute(path_output, "mortality")
-        )
+  return(
+    list(
+      "incidence" = use_relative_or_absolute(path_output, "incidence"),
+      "mortality" = use_relative_or_absolute(path_output, "mortality")
     )
+  )
 }
 
 config_shapefile <- function(root, shapefile) {
-    return(use_relative_or_absolute(root, shapefile))
+  return(use_relative_or_absolute(root, shapefile))
 }
 
 #' Config database
@@ -303,19 +303,19 @@ config_shapefile <- function(root, shapefile) {
 config_db <- function(db_name = NULL,
                       db_user = NULL,
                       db_pass = NULL) {
-    return(list(
-        "db_name" = db_name,
-        "db_user" = db_user,
-        "db_pass" = db_pass
-    ))
+  return(list(
+    "db_name" = db_name,
+    "db_user" = db_user,
+    "db_pass" = db_pass
+  ))
 }
 
 #' Configuration for parallel execution
 #'
 #' @return a list contain the parallel execution info
 config_parallel <- function() {
-    cores <- parallel::detectCores()
-    return(list("cores" = cores))
+  cores <- parallel::detectCores()
+  return(list("cores" = cores))
 }
 
 # TODO

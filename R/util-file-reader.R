@@ -13,15 +13,19 @@ smart_get_file_list_by_year <- function(smart_path) {
   result_years <- c()
   for (i in seq_along(target_years)) {
     replacement_year <- as.character(target_years[i])
-    target_file_path <- file.path(stringr::str_replace(smart_path,
-                                                       pattern, replacement_year))
+    target_file_path <- file.path(stringr::str_replace(
+      smart_path,
+      pattern, replacement_year
+    ))
     if (file.exists(target_file_path)) {
       result_file_list <- append(result_file_list, target_file_path)
       result_years <- append(result_years, target_years[i])
     }
   }
-  return(list(files = result_file_list,
-              years = result_years))
+  return(list(
+    files = result_file_list,
+    years = result_years
+  ))
 }
 
 smart_get_file_list_by_year_and_month <- function(smart_path) {
@@ -43,10 +47,14 @@ smart_get_file_list_by_year_and_month <- function(smart_path) {
     for (j in seq_along(target_months)) {
       replacement_year <- as.character(target_years[i])
       replacement_month <- as.character(target_months[j])
-      target_file_path <- file.path(stringr::str_replace(smart_path,
-                                                         year_pattern, replacement_year))
-      target_file_path <- file.path(stringr::str_replace(smart_path,
-                                                         month_pattern, replacement_month))
+      target_file_path <- file.path(stringr::str_replace(
+        smart_path,
+        year_pattern, replacement_year
+      ))
+      target_file_path <- file.path(stringr::str_replace(
+        smart_path,
+        month_pattern, replacement_month
+      ))
     }
     if (file.exists(target_file_path)) {
       result_file_list <- append(result_file_list, target_file_path)
@@ -67,11 +75,15 @@ smart_read_excel_by_year <-
     file_list <-
       reader(smart_path)
     data_tables <-
-      purrr::map(file_list$files,
-                 ~ readxl::read_excel(.x, skip = skip))
+      purrr::map(
+        file_list$files,
+        ~ readxl::read_excel(.x, skip = skip)
+      )
     # create a nested tibble
-    result <- tibble::tibble(year = file_list$years,
-                             data = data_tables)
+    result <- tibble::tibble(
+      year = file_list$years,
+      data = data_tables
+    )
     if (clean) {
       result <- result |>
         # rename using internal rename database
@@ -92,16 +104,22 @@ smart_get_all_files_in_dir <-
     }
     file_list <- list.files(smart_path)
     # remove temp xlsx file "~$Bo District.xlsx"
-    file_list <- purrr::keep(file_list,
-                             ~ !stringr::str_starts(.x, "~"))
+    file_list <- purrr::keep(
+      file_list,
+      ~ !stringr::str_starts(.x, "~")
+    )
     # map get full path
     file_list <- file.path(smart_path, file_list)
     data_tables <-
-      purrr::map(file_list,
-                 ~ readxl::read_excel(.x, skip = skip))
+      purrr::map(
+        file_list,
+        ~ readxl::read_excel(.x, skip = skip)
+      )
     # create a nested tibble
-    result <- tibble::tibble(file = file_list,
-                             data = data_tables)
+    result <- tibble::tibble(
+      file = file_list,
+      data = data_tables
+    )
     if (clean) {
       result <- result %>%
         # rename using internal rename database

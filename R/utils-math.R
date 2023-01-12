@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' faster_mean(c(1,2,3))
+#' faster_mean(c(1, 2, 3))
 #' @author Spencer Zhang (sepmein@gmail.com)
 #' @description
 #' Detailed the reasons please refer to this

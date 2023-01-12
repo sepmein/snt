@@ -5,7 +5,8 @@ test_that("Util Sting Slice to end", {
       "B General Hospital Awa Onna",
       "C   General Hospital Awa Onna",
       "Awa Onna"
-      ))
+    )
+  )
   pattern <- "General Hospital"
   result <-
     tibble::tibble(hospital = c(
@@ -13,7 +14,6 @@ test_that("Util Sting Slice to end", {
       "B Awa Onna General Hospital",
       "C Awa Onna General Hospital",
       "Awa Onna"
-      ))
+    ))
   expect_equal(target |> str_slice_to_end(hospital, pattern), result)
 })
-

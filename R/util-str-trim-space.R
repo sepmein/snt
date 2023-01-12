@@ -8,12 +8,12 @@
 #' @importFrom stringr str_replace
 #' @examples
 #' df <- data.frame(
-#'     col = c("a  b", "b  c", "c  d")
+#'   col = c("a  b", "b  c", "c  d")
 #' )
 #' replace_double_space(df, col)
 str_trim_space <- function(df, column) {
-    df |>
-        mutate(
-            {{ column }} := str_replace({{ column }}, " +|\t+", " ")
-        )
+  df |>
+    mutate(
+      {{ column }} := str_replace({{ column }}, " +|\t+", " ")
+    )
 }

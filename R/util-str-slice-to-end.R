@@ -18,8 +18,8 @@ str_slice_to_end <-
       mutate({{ column }} := str_replace(
         {{ column }},
         str_c("(.*)(", pattern, ")(.*)"),
-        "\\1 \\3 \\2")
-        ) |>
+        "\\1 \\3 \\2"
+      )) |>
       str_trim_space({{ column }}) |>
       mutate({{ column }} := str_trim({{ column }}))
   }
