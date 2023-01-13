@@ -4,10 +4,20 @@
 \alias{generate_default_config}
 \title{Generate Default Config}
 \usage{
-generate_default_config()
+generate_default_config(country = "Nigeria", db = "SQLite")
+}
+\arguments{
+\item{country}{country name}
+
+\item{db}{database type, either "postgres" or "SQLite"}
 }
 \description{
 Write config.yml if not exists
+}
+\examples{
+generate_default_config(country = "nigeria")
+generate_default_config(country = "nigeria", db = "postgres")
+generate_default_config(country = "nigeria", db = "SQLite")
 }
 \seealso{
 https://github.com/johnaponte/repana

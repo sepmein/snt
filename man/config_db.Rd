@@ -4,7 +4,7 @@
 \alias{config_db}
 \title{Config database}
 \usage{
-config_db(db_name = NULL, db_user = NULL, db_pass = NULL)
+config_db(db = "SQLite", db_name = NULL, db_user = NULL, db_pass = NULL)
 }
 \arguments{
 \item{db_name}{name of database, example malaria}

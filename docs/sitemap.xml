@@ -28,6 +28,9 @@
     <loc>https://sepmein.github.io/snt/reference/bind_who_gis_adm2_shp.html</loc>
   </url>
   <url>
+    <loc>https://sepmein.github.io/snt/reference/confgi_get_db.html</loc>
+  </url>
+  <url>
     <loc>https://sepmein.github.io/snt/reference/config.html</loc>
   </url>
   <url>
@@ -62,6 +65,9 @@
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/generate_default_gitignore.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/get_db.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/get_os.html</loc>

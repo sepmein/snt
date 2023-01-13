@@ -2,11 +2,21 @@
 #' @description Write config.yml if not exists
 #' @export
 #' @seealso https://github.com/johnaponte/repana
-generate_default_config <- function() {
+#' @param country country name
+#' @param db database type, either "postgres" or "SQLite"
+#' @examples
+#' generate_default_config(country = "nigeria")
+#' generate_default_config(country = "nigeria", db = "postgres")
+#' generate_default_config(country = "nigeria", db = "SQLite")
+generate_default_config <- function(country = "Nigeria", db = "SQLite") {
+  country <- paste0(" country: ", country, "\n")
+  cores <- config_parallel()
+  db <- config_db(db)
+
   if (!file.exists("config.yml")) {
     cat(
       "default:\n",
-      " country: Repana\n",
+      country,
       " dirs:\n",
       "   data: _data\n",
       "   functions: _functions\n",
@@ -18,10 +28,8 @@ generate_default_config <- function() {
       "   - database\n",
       "   - reports\n",
       "   - logs\n",
-      " defaultdb:\n",
-      "   package: RSQLite\n",
-      "   dbconnect: SQLite\n",
-      '   dbname: ":memory:"\n',
+      db,
+      cores,
       file = "config.yml"
     )
   }
@@ -371,14 +379,30 @@ config_shapefile <- function(root, shapefile) {
 #' @param db_pass password of the database, for connection
 #'
 #' @return a list contain the db info
-config_db <- function(db_name = NULL,
+config_db <- function(db = "SQLite",
+                      db_name = NULL,
                       db_user = NULL,
                       db_pass = NULL) {
-  return(list(
-    "db_name" = db_name,
-    "db_user" = db_user,
-    "db_pass" = db_pass
-  ))
+  if (db == "postgres") {
+    db <- paste0(
+      " db:\n",
+      "   package: RPostgres\n",
+      "   dbconnect: Postgres\n",
+      "   dbname: malaria\n",
+      "   dbhost: localhost\n",
+      "   dbport: 5432\n"
+    )
+  } else if (db == "SQLite") {
+    db <- paste0(
+      " db:\n",
+      "   package: RSQLite\n",
+      "   dbconnect: SQLite\n",
+      '   dbname: ":memory:"\n'
+    )
+  } else {
+    stop("db must be either 'postgres' or 'SQLite'")
+  }
+  return(db)
 }
 
 #' Configuration for parallel execution
@@ -386,14 +410,11 @@ config_db <- function(db_name = NULL,
 #' @return a list contain the parallel execution info
 config_parallel <- function() {
   cores <- parallel::detectCores()
-  return(list("cores" = cores))
+  return(paste0(" cores: ", cores, "\n"))
 }
 
-# TODO
-#' @title Setup a folder for analysis
-#' @description Provide a path, snt will setup a whole folder settings for you.
-#' @param path Path to where you want the folder will be
-#' @return NULL
-setup <- function(path) {
-
+#' Get db from config
+#'
+confgi_get_db <- function() {
+  return(config::get("db"))
 }

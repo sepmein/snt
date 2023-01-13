@@ -5,6 +5,28 @@ db_name <- "malaria"
 db_user <- "sepmein"
 db_pass <- "crimson"
 
+#' Get Db Connection from Configurations
+#' 
+#' @return db connection
+#' @export
+#' @importFrom config get
+get_db <- function() {
+  db_host <- get("db.host")
+  db_port <- get("db.port")
+  db_name <- get("db.name")
+  db_user <- get("db.user")
+  db_pass <- get("db.pass")
+  db <- DBI::dbConnect(
+    RPostgres::Postgres(),
+    dbname = db_name,
+    host = db_host,
+    port = db_port,
+    user = db_user,
+    password = db_pass
+  )
+  return(db)
+}
+
 # sql -----------
 #' @export
 sql_select_adm0_year <- "select * from adm0_year"

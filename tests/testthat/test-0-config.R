@@ -17,3 +17,11 @@ test_that("use_relative_or_absolute", {
     ), FALSE
   )
 })
+
+test_that("generate configuration", {
+  # generate configuration
+  generate_default_config(country = "nigeria")
+  expect_equal(config::get("country"), "nigeria")
+  # delete config.yml file
+  file.remove("config.yml")
+})
