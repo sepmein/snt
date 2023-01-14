@@ -11,7 +11,7 @@
 generate_default_config <- function(country = "Nigeria", db = "SQLite") {
   country <- paste0(" country: ", country, "\n")
   cores <- config_parallel()
-  db <- config_db(db)
+  db <- config_set_db(db)
 
   if (!file.exists("config.yml")) {
     cat(
@@ -204,7 +204,7 @@ config <- function(country,
     ),
     "parallel" = config_parallel(),
     "shapefile" = config_shapefile(root, path_shapefile),
-    "db" = config_db(
+    "db" = config_set_db(
       db_name = db_name,
       db_user = db_user,
       db_pass = db_pass
@@ -379,7 +379,7 @@ config_shapefile <- function(root, shapefile) {
 #' @param db_pass password of the database, for connection
 #'
 #' @return a list contain the db info
-config_db <- function(db = "SQLite",
+config_set_db <- function(db = "SQLite",
                       db_name = NULL,
                       db_user = NULL,
                       db_pass = NULL) {
@@ -388,9 +388,11 @@ config_db <- function(db = "SQLite",
       " db:\n",
       "   package: RPostgres\n",
       "   dbconnect: Postgres\n",
-      "   dbname: malaria\n",
-      "   dbhost: localhost\n",
-      "   dbport: 5432\n"
+      "   host: localhost\n",
+      "   port: 5432\n",
+      "   name: malaria\n",
+      "   user: postgres\n",
+      "   password: postgres\n"
     )
   } else if (db == "SQLite") {
     db <- paste0(
@@ -403,6 +405,26 @@ config_db <- function(db = "SQLite",
     stop("db must be either 'postgres' or 'SQLite'")
   }
   return(db)
+}
+
+#' Get Db Connection from Configurations
+#'
+#' @return db connection
+#' @export
+#' @importFrom config get
+config_get_db <- function() {
+  host <- get("db")$host
+  port <- get("db")$port
+  name <- get("db")$name
+  user <- get("db")$user
+  pass <- get("db")$pass
+  return(list(
+    host = host,
+    port = port,
+    name = name,
+    user = user,
+    pass = pass
+  ))
 }
 
 #' Configuration for parallel execution

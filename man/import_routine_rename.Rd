@@ -17,7 +17,8 @@ A tibble with BDI:
 import_routine_rename
 }
 \description{
-A dataset containing the country code, original column names and the formatted column names
+A dataset containing the country code
+original column names and the formatted column names
 import_routine_rename.
 }
 \keyword{datasets}

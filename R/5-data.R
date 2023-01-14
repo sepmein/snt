@@ -1,6 +1,7 @@
 #' Database for Rename column names in Routine Data
 #'
-#' A dataset containing the country code, original column names and the formatted column names
+#' A dataset containing the country code
+#' original column names and the formatted column names
 #' import_routine_rename.
 
 #' @format A tibble with BDI:
@@ -14,7 +15,8 @@
 
 #' Database for Replace column values in Routine Data
 #'
-#' A dataset containing the country code, original value, and the formatted value
+#' A dataset containing the country code
+#' original value, and the formatted value
 #' import_routine_replace.
 #'
 #' @format A tibble with BDI:
@@ -28,7 +30,8 @@
 
 #' Database for Replace health facilities in Routine Data
 #'
-#' A dataset containing the country code, district name, original health facilities name, and the formatted health facilities name
+#' A dataset containing the country code, district name
+#' original health facilities name, and the formatted health facilities name
 #' import_routine_replace_hfname.
 #'
 #' @format A tibble with BDI:

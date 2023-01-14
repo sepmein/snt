@@ -18,7 +18,8 @@ A tibble with BDI:
 import_routine_replace_hfname
 }
 \description{
-A dataset containing the country code, district name, original health facilities name, and the formatted health facilities name
+A dataset containing the country code, district name
+original health facilities name, and the formatted health facilities name
 import_routine_replace_hfname.
 }
 \keyword{datasets}

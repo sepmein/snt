@@ -17,7 +17,8 @@ A tibble with BDI:
 import_routine_replace
 }
 \description{
-A dataset containing the country code, original value, and the formatted value
+A dataset containing the country code
+original value, and the formatted value
 import_routine_replace.
 }
 \keyword{datasets}

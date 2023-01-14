@@ -1,3 +1,17 @@
+#' @title Smart file reader
+#'
+#' @description This function is a smart file reader,
+#' it will detect the file path and return the file list.
+#' @param smart_path A string, the path of the file.
+#' @return A list of file path.
+#' @export
+#' @importFrom stringr str_detect str_replace
+#' @examples
+#' \dontrun{
+#' # get file list by year
+#' smart_get_file_list_by_year(
+#' "C:/Users/username/Desktop/Bo District/Bo District *yyyy*.xlsx")
+#' }
 smart_get_file_list_by_year <- function(smart_path) {
   # detect country code
   # find special character in special path parameter
@@ -28,6 +42,20 @@ smart_get_file_list_by_year <- function(smart_path) {
   ))
 }
 
+#' Smart file reader by year and month
+#'
+#' This function is a smart file reader,
+#' it will detect the file path and return the file list.
+#' @param smart_path A string, the path of the file.
+#' @return A list of file path.
+#' @export
+#' @importFrom stringr str_detect str_replace
+#' @examples
+#' \dontrun{
+#' # get file list by year and month
+#' smart_get_file_list_by_year_and_month(
+#' "C:/Users/username/Desktop/Bo District/Bo District *yyyy* *mm*.xlsx")
+#' }
 smart_get_file_list_by_year_and_month <- function(smart_path) {
   # detect country code
   # find special character in special path parameter
@@ -67,11 +95,9 @@ smart_read_excel_by_year <-
   function(reader,
            smart_path,
            skip = 0,
-           clean = TRUE,
-           country = snt_country) {
-    if (is.null(snt_country)) {
-      warning("snt::set_country method has not run yet, this will cause problem.")
-    }
+           clean = TRUE
+          ) {
+    country <- config::get("country")
     file_list <-
       reader(smart_path)
     data_tables <-
@@ -87,9 +113,12 @@ smart_read_excel_by_year <-
     if (clean) {
       result <- result |>
         # rename using internal rename database
-        dplyr::mutate(data = purrr::map(data, ~ routine_rename(.x, country = country))) |>
+        dplyr::mutate(
+          data = purrr::map(data, ~ routine_rename(.x, country = country))) |>
         # replace using internal replace database
-        dplyr::mutate(data = purrr::map(data, ~ routine_replace(.x, country = country)))
+        dplyr::mutate(
+          data = purrr::map(data, ~ routine_replace(.x, country = country))
+        )
     }
     return(result)
   }
