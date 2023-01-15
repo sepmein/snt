@@ -46,6 +46,9 @@
     <loc>https://sepmein.github.io/snt/reference/config_dhs.html</loc>
   </url>
   <url>
+    <loc>https://sepmein.github.io/snt/reference/config_get_db.html</loc>
+  </url>
+  <url>
     <loc>https://sepmein.github.io/snt/reference/config_input.html</loc>
   </url>
   <url>
@@ -53,6 +56,9 @@
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/config_raster.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/config_set_db.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/faster_mean.html</loc>
@@ -101,6 +107,12 @@
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/setup.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/smart_get_file_list_by_year.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/smart_get_file_list_by_year_and_month.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/snt-package.html</loc>

@@ -5,10 +5,14 @@
 \title{Get Db Connection from Configurations}
 \usage{
 config_get_db()
+
+config_get_db()
 }
 \value{
 db connection
 }
 \description{
 Get Db Connection from Configurations
+
+Get db from config
 }

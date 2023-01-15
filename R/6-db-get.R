@@ -6,7 +6,6 @@ db_user <- "sepmein"
 db_pass <- "crimson"
 
 get_con <- function(
-  
 )
 
 # sql -----------

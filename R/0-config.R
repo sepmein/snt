@@ -71,7 +71,7 @@ generate_default_gitignore <- function() {
 #' @title Make Structure
 #' @description Make the structure of the project
 #' @export
-make_structure <- function() {
+setup <- function() {
   generate_default_config()
   generate_default_gitignore()
   mkdir()
@@ -437,6 +437,6 @@ config_parallel <- function() {
 
 #' Get db from config
 #'
-confgi_get_db <- function() {
+config_get_db <- function() {
   return(config::get("db"))
 }

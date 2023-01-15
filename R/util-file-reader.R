@@ -97,7 +97,6 @@ smart_read_excel_by_year <-
            skip = 0,
            clean = TRUE
           ) {
-    country <- config::get("country")
     file_list <-
       reader(smart_path)
     data_tables <-
@@ -111,6 +110,7 @@ smart_read_excel_by_year <-
       data = data_tables
     )
     if (clean) {
+      country <- config::get("country")
       result <- result |>
         # rename using internal rename database
         dplyr::mutate(
