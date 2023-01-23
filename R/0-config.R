@@ -77,6 +77,20 @@ setup <- function() {
   mkdir()
 }
 
+#' Get path
+#'
+#' Get path from config.yml and from user defined file
+#' @param type type of path, could be 'data',
+#' @param path path of the file
+#' @export
+#' @return return the path
+#' @examples get_path("data", "test.csv")
+get_path <- function(type, path) {
+  config <- config::get()
+  type <- config[["dirs"]][[type]]
+  return(file.path(type, path))
+}
+
 #' @title Check type of path
 #' @description check type of path. check the existence of the dir or file
 #' if they exist then return the type of the path

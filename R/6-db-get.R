@@ -6,7 +6,11 @@ db_user <- "sepmein"
 db_pass <- "crimson"
 
 get_con <- function(
-)
+) {
+ db_name <- config::get()
+ db_user <- "sepmein"
+ db_pass <- "crimson"
+}
 
 # sql -----------
 #' @export
