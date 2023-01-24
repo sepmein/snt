@@ -27,7 +27,7 @@ update_database <- function() {
     readr::read_csv("inst//extdata//routine//01_adm2_replace.csv")
   usethis::use_data(import_routine_adm2_replace, overwrite = TRUE)
 
-  import_routine_adm2_replace_by_adm1 <-
+  import_routine_adm2_replace_by_adm1 <- # nolint: object_length_linter.
     readr::read_csv("inst//extdata//routine//01_adm2_replace_by_adm1.csv")
   usethis::use_data(import_routine_adm2_replace_by_adm1, overwrite = TRUE)
 
@@ -43,6 +43,24 @@ update_database <- function() {
     readr::read_csv("inst//extdata//routine//04_cluster.csv")
   usethis::use_data(import_routine_set_cluster, overwrite = TRUE)
 
+  meta <- readr::read_csv("inst//extdata//meta.csv")
+  usethis::use_data(meta, overwrite = TRUE)
   devtools::document()
   devtools::load_all()
+}
+
+#' Devtools
+#'
+#' This command is a combination of several commands to update the package
+#' @export
+#' @rdname devtools
+#' @importFrom devtools document load_all test check build install
+#' @importFrom pkgdown build_site
+dev_update <- function() {
+  update_database()
+  devtools::document()
+  devtools::load_all()
+  devtools::test()
+  devtools::check()
+  pkgdown::build_site()
 }

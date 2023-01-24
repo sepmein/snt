@@ -61,6 +61,9 @@
     <loc>https://sepmein.github.io/snt/reference/config_set_db.html</loc>
   </url>
   <url>
+    <loc>https://sepmein.github.io/snt/reference/devtools.html</loc>
+  </url>
+  <url>
     <loc>https://sepmein.github.io/snt/reference/faster_mean.html</loc>
   </url>
   <url>
@@ -77,6 +80,9 @@
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/get_os.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/get_path.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/import_replace.html</loc>
@@ -124,7 +130,16 @@
     <loc>https://sepmein.github.io/snt/reference/str_trim_space.html</loc>
   </url>
   <url>
+    <loc>https://sepmein.github.io/snt/reference/sum_maltreat_ov5_by_sex.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/sum_maltreat_u5_by_sex.html</loc>
+  </url>
+  <url>
     <loc>https://sepmein.github.io/snt/reference/tidyeval.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/transmute_numeric.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/type_of_path.html</loc>
