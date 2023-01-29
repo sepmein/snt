@@ -52,10 +52,18 @@ update_database <- function() {
 #' Devtools
 #'
 #' This command is a combination of several commands to update the package
+#' It will run the following commands:
+#' * `update_database()`
+#' * `devtools::document()`
+#' * `devtools::load_all()`
+#' * `devtools::test()`
+#' * `devtools::check()`
+#' * `pkgdown::build_site()`
+#' @return NULL
 #' @export
-#' @rdname devtools
 #' @importFrom devtools document load_all test check build install
 #' @importFrom pkgdown build_site
+#' @seealso update_database
 dev_update <- function() {
   update_database()
   devtools::document()

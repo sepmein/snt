@@ -10,7 +10,8 @@
 #' \dontrun{
 #' # get file list by year
 #' smart_get_file_list_by_year(
-#' "C:/Users/username/Desktop/Bo District/Bo District *yyyy*.xlsx")
+#'   "C:/Users/username/Desktop/Bo District/Bo District *yyyy*.xlsx"
+#' )
 #' }
 smart_get_file_list_by_year <- function(smart_path) {
   # detect country code
@@ -54,7 +55,8 @@ smart_get_file_list_by_year <- function(smart_path) {
 #' \dontrun{
 #' # get file list by year and month
 #' smart_get_file_list_by_year_and_month(
-#' "C:/Users/username/Desktop/Bo District/Bo District *yyyy* *mm*.xlsx")
+#'   "C:/Users/username/Desktop/Bo District/Bo District *yyyy* *mm*.xlsx"
+#' )
 #' }
 smart_get_file_list_by_year_and_month <- function(smart_path) {
   # detect country code
@@ -91,34 +93,58 @@ smart_get_file_list_by_year_and_month <- function(smart_path) {
   return(result_file_list)
 }
 
+#' Read excel file by year
+#'
+#' The function will read all excel file follows the
+#' pattern of \\*yyyy\\* in the path.
+#' The function will return a nested tibble.
+#' @param smart_path A string, the path of the file. The path should
+#' contain the pattern of \*yyyy\*. Otherwise, the function will return
+#' an error.
+#' @param skip An integer, the number of rows to skip.
+#' @param clean A boolean, whether to clean the data.
+#'  * `TRUE`(the default) will clean the data. The cleaning process will use
+#' internal database, `snt::routine_rename` to rename and replace the data.
+#'  * `FALSE` will not clean the data.
+#' @export
+#' @importFrom readxl read_excel
+#' @importFrom purrr map
+#' @importFrom tibble tibble
+#' @importFrom dplyr mutate
+#' @rdname import
+#' @seealso routine_rename
+#' @examples \dontrun{
+#' # read excel file by year
+#' smart_read_excel_by_year(
+#'   "C:/Users/username/Desktop/Bo District/Bo District *yyyy*.xlsx"
+#' )
+#' }
 smart_read_excel_by_year <-
-  function(reader,
-           smart_path,
+  function(smart_path,
            skip = 0,
-           clean = TRUE
-          ) {
+           clean = TRUE) {
     file_list <-
-      reader(smart_path)
+      smart_get_file_list_by_year(smart_path)
     data_tables <-
-      purrr::map(
+      map(
         file_list$files,
-        ~ readxl::read_excel(.x, skip = skip)
+        ~ read_excel(.x, skip = skip)
       )
     # create a nested tibble
-    result <- tibble::tibble(
+    result <- tibble(
       year = file_list$years,
       data = data_tables
     )
     if (clean) {
-      country <- config::get("country")
       result <- result |>
         # rename using internal rename database
-        dplyr::mutate(
-          data = purrr::map(data, ~ routine_rename(.x, country = country))) |>
+        mutate(data = map(
+          data, routine_rename
+        )) |>
         # replace using internal replace database
-        dplyr::mutate(
-          data = purrr::map(data, ~ routine_replace(.x, country = country))
-        )
+        mutate(data = map(
+          data, routine_replace
+        ))
     }
     return(result)
   }
@@ -152,12 +178,9 @@ smart_get_all_files_in_dir <-
     if (clean) {
       result <- result %>%
         # rename using internal rename database
-        dplyr::mutate(
-          data = purrr::map(data, ~ routine_rename(.x, cty = country))) %>%
+        dplyr::mutate(data = purrr::map(data, ~ routine_rename(.x, cty = country))) %>%
         # replace using internal replace database
-        dplyr::mutate(
-          data = purrr::map(data, ~ routine_replace(.x, cty = country))
-        )
+        dplyr::mutate(data = purrr::map(data, ~ routine_replace(.x, cty = country)))
     }
     return(result)
   }

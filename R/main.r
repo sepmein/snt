@@ -586,7 +586,7 @@ RasterResource <- R6::R6Class(
       # merge shape file with data
       index <- self$index_name
       my_data <- self$data
-      tmap_options(check.and.fix = TRUE)
+      tmap::tmap_options(check.and.fix = TRUE)
 
       if (!is.null(self$adm1_shapefile)) {
         adm1_shapefile <- sf::st_read(self$adm1_shapefile)
