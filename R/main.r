@@ -499,6 +499,7 @@ RasterResource <- R6::R6Class(
       }
       # if local destination is a string
       # load country resource(shapefile)
+      browser()
       result <- NULL
       # Extract raster values to list object
       for (j in seq_along(raster_files)) {
