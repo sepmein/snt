@@ -48,4 +48,4 @@ vignettes/*.pdf
 config.yml
 
 # exclude mock file, it's too large for git
-tests/mock/*.*
+tests/mock/*
