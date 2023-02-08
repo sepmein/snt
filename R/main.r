@@ -312,7 +312,9 @@ RasterResource <- R6::R6Class(
       # test if GUID column exist
       # if not generate GUID column
       if (!("GUID" %in% names(shp))) {
-        shp <- shp |> dplyr::mutate(GUID = uuid::UUIDgenerate())
+        shp <- shp |>
+          dplyr::rowwise() |>
+          dplyr::mutate(GUID = uuid::UUIDgenerate())
       }
       return(shp)
     },
@@ -345,7 +347,6 @@ RasterResource <- R6::R6Class(
 
       # read shapefile
       loaded_shp <- self$load_shp(target_shapefile)
-
 
       if (typeof(self$local_destination) == "list") {
         # if local_destination is a list of folder
@@ -499,7 +500,6 @@ RasterResource <- R6::R6Class(
       }
       # if local destination is a string
       # load country resource(shapefile)
-      browser()
       result <- NULL
       # Extract raster values to list object
       for (j in seq_along(raster_files)) {
@@ -694,6 +694,7 @@ Rainfall <- R6::R6Class(
     }
   )
 )
+
 
 # Plasmodium Index --------------------------------------------------------
 
