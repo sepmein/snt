@@ -20,7 +20,7 @@ max_val <- 255
 pbo <- rgb(144, 164, 157, max = max_val)
 llins <- rgb(103, 172, 204, max = max_val)
 dual_ai <- rgb(251, 229, 132, max = max_val)
-urban_pbo <- complementary_color(pbo)
+urban_pbo <- rgb(255, 126, 39, max = max_val)
 urban_llins <- complementary_color(llins)
 urban_dual_ai <- complementary_color(dual_ai)
 ## smc ------
@@ -32,6 +32,15 @@ ipti <- rgb(255, 228, 126, max = max_val)
 ## no intervention ----
 no_intervention <- rgb(255, 255, 255, max = max_val)
 
+## vaccine ------
+vac1p <- rgb(46, 16, 71, max = max_val)
+vac1 <- rgb(133, 1, 125, max = max_val)
+vac2 <- rgb(255, 0, 129, max = max_val)
+vac3 <- rgb(255, 127, 192, max = max_val)
+vac4 <- rgb(0, 176, 36, max = max_val)
+vac5 <- rgb(118, 217, 133, max = max_val)
+no_vac <- rgb(191, 191, 191, max = max_val)
+
 ## combination ------
 cm_iptp_llins <- rgb(164, 203, 158, max = max_val)
 cm_iptp_llins_smc <- rgb(132, 1, 126, max = max_val)
@@ -39,7 +48,7 @@ cm_iptp_pbo <- rgb(255, 152, 67, max = max_val)
 cm_iptp_pbo_smc <- rgb(0, 162, 199, max = max_val)
 cm_iptp_dui_ai <- rgb(255, 228, 126, max = max_val)
 
-cm_iptp_pbo_itpi <- rgb(145, 209, 226, max = max_val)
+cm_iptp_pbo_ipti <- rgb(145, 209, 226, max = max_val)
 cm_iptp_pbo_smc <- rgb(0, 162, 199, max = max_val)
 cm_iptp_urban_pbo <- rgb(255, 0, 29, max = max_val)
 cm_iptp_urban_pbo_ipti <- rgb(255, 153, 155, max = max_val)
@@ -60,6 +69,15 @@ color <- list(
     ),
     smc = smc,
     ipti = ipti,
+    vaccine = list(
+        vac1p = vac1p,
+        vac1 = vac1,
+        vac2 = vac2,
+        vac3 = vac3,
+        vac4 = vac4,
+        vac5 = vac5,
+        no_vac = no_vac
+    ),
     no_intervention = no_intervention,
     strategy = list(
         cm_iptp_llins = cm_iptp_llins,
@@ -67,7 +85,7 @@ color <- list(
         cm_iptp_pbo = cm_iptp_pbo,
         cm_iptp_pbo_smc = cm_iptp_pbo_smc,
         cm_iptp_dui_ai = cm_iptp_dui_ai,
-        cm_iptp_pbo_itpi = cm_iptp_pbo_itpi,
+        cm_iptp_pbo_ipti = cm_iptp_pbo_ipti,
         cm_iptp_pbo_smc = cm_iptp_pbo_smc,
         cm_iptp_urban_pbo = cm_iptp_urban_pbo,
         cm_iptp_urban_pbo_ipti = cm_iptp_urban_pbo_ipti,
