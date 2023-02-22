@@ -450,39 +450,39 @@ RasterResource <- R6::R6Class(
       result <- dplyr::left_join(loaded_shp, result, by = c("GUID"))
 
       # set adm1, adm2, adm3 from shp
-      # if (target_adm_level == 0) {
-      #   result$adm0 <- loaded_shp[[adm0_name_in_shp]]
-      # } else if (target_adm_level == 1) {
-      #   if (!is.null(adm0_name_in_shp)) {
-      #     result$adm0 <-
-      #       loaded_shp[[adm0_name_in_shp]]
-      #   }
-      #   result$adm1 <- loaded_shp[[adm1_name_in_shp]]
-      # } else if (target_adm_level == 2) {
-      #   if (!is.null(adm0_name_in_shp)) {
-      #     result$adm0 <-
-      #       loaded_shp[[adm0_name_in_shp]]
-      #   }
-      #   if (!is.null(adm1_name_in_shp)) {
-      #     result$adm1 <-
-      #       loaded_shp[[adm1_name_in_shp]]
-      #   }
-      #   result$adm2 <- loaded_shp[[adm2_name_in_shp]]
-      # } else if (target_adm_level == 3) {
-      #   if (!is.null(adm0_name_in_shp)) {
-      #     result$adm0 <-
-      #       loaded_shp[[adm0_name_in_shp]]
-      #   }
-      #   if (!is.null(adm1_name_in_shp)) {
-      #     result$adm1 <-
-      #       loaded_shp[[adm1_name_in_shp]]
-      #   }
-      #   if (!is.null(adm2_name_in_shp)) {
-      #     result$adm2 <-
-      #       loaded_shp[[adm2_name_in_shp]]
-      #   }
-      #   result$adm3 <- loaded_shp[[adm3_name_in_shp]]
-      # }
+      if (target_adm_level == 0) {
+        result$adm0 <- loaded_shp[[adm0_name_in_shp]]
+      } else if (target_adm_level == 1) {
+        if (!is.null(adm0_name_in_shp)) {
+          result$adm0 <-
+            loaded_shp[[adm0_name_in_shp]]
+        }
+        result$adm1 <- loaded_shp[[adm1_name_in_shp]]
+      } else if (target_adm_level == 2) {
+        if (!is.null(adm0_name_in_shp)) {
+          result$adm0 <-
+            loaded_shp[[adm0_name_in_shp]]
+        }
+        if (!is.null(adm1_name_in_shp)) {
+          result$adm1 <-
+            loaded_shp[[adm1_name_in_shp]]
+        }
+        result$adm2 <- loaded_shp[[adm2_name_in_shp]]
+      } else if (target_adm_level == 3) {
+        if (!is.null(adm0_name_in_shp)) {
+          result$adm0 <-
+            loaded_shp[[adm0_name_in_shp]]
+        }
+        if (!is.null(adm1_name_in_shp)) {
+          result$adm1 <-
+            loaded_shp[[adm1_name_in_shp]]
+        }
+        if (!is.null(adm2_name_in_shp)) {
+          result$adm2 <-
+            loaded_shp[[adm2_name_in_shp]]
+        }
+        result$adm3 <- loaded_shp[[adm3_name_in_shp]]
+      }
 
       # return result
       return(result)

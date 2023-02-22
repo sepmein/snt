@@ -5,7 +5,7 @@
 \alias{color}
 \title{color palette}
 \format{
-An object of class \code{list} of length 5.
+An object of class \code{list} of length 6.
 }
 \usage{
 color

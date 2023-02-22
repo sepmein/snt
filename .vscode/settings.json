@@ -28,6 +28,7 @@
         "sysname",
         "tdir",
         "tibble",
+        "vacpri",
         "xyzzy"
     ],
     "r.bracketedPaste": true,
