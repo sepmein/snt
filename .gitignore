@@ -49,3 +49,9 @@ config.yml
 
 # exclude mock file, it's too large for git
 tests/mock/*.*
+tests/mock/raster/chirps-v2.0.2022.09.tif
+tests/mock/raster/chirps-v2.0.2022.10.tif
+tests/mock/shapefile/civ_adm2_shapefile.dbf
+tests/mock/shapefile/civ_adm2_shapefile.prj
+tests/mock/shapefile/civ_adm2_shapefile.shp
+tests/mock/shapefile/civ_adm2_shapefile.shx
