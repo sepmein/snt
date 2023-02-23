@@ -406,6 +406,11 @@ RasterResource <- R6::R6Class(
           FUN = snt::faster_mean,
           mc.cores = self$cores
         )
+      } else if (method == "sum") {
+        result <- parallel::mclapply(extracted_raster_data,
+          FUN = snt::sum_without_na,
+          mc.cores = self$cores
+        )
       }
       return(result)
     },
