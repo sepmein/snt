@@ -43,7 +43,7 @@ routine_rename <- function(df) {
     # filter tibble by country name
     df <- df |> to_lower()
     filtered_by_country <-
-        snt::import_routine_rename %>%
+        snt::import_routine_rename |>
         filter(.data[["country"]] == country)
     find_and_rename <- function(names) {
         from <- filtered_by_country$from
@@ -61,13 +61,13 @@ routine_rename <- function(df) {
         }
         return(formatted)
     }
-    df <- df %>%
+    df <- df |>
         dplyr::rename_with(find_and_rename)
     return(df)
 }
 
 #' rename the administrative zone names
-#' 
+#'
 #' Detect if adm0, adm1, adm2, adm3 are in the dataframe, if they are
 #' use the standard names in the snt internal database to rename them
 #' @param df dataframe to be renamed
@@ -78,7 +78,7 @@ adm_rename <- function(df) {
     country <- config_get_country()
     # filter tibble by country name
     filtered_by_country <-
-        snt::import_adm_rename %>%
+        snt::import_adm_rename |>
         filter(.data[["country"]] == country)
     find_and_rename <- function(names) {
         from <- filtered_by_country$from
@@ -96,7 +96,7 @@ adm_rename <- function(df) {
         }
         return(formatted)
     }
-    df <- df %>%
+    df <- df |>
         dplyr::rename_with(find_and_rename)
     return(df)
 }

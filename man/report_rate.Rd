@@ -9,7 +9,7 @@ report_rate(df, ...)
 \arguments{
 \item{df}{A data frame}
 
-\item{...}{Columns to calculate the reporting rate, exluding year and month}
+\item{...}{Columns to calculate the reporting rate, excluding year and month}
 }
 \value{
 Dataframe

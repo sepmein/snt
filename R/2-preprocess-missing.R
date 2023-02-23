@@ -3,7 +3,8 @@
 #' @param path Path to export missing data
 #' @param ... Column to check for missing data
 #' @return Dataframe
-#' @importFrom dplyr filter anti_join if_any write_csv
+#' @importFrom dplyr filter anti_join if_any
+#' @importFrom readr write_csv
 #' @importFrom rlang enquos
 #' @export
 remove_and_export_missing <- function(df, path, ...) {

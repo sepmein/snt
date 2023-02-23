@@ -1,6 +1,6 @@
 #' Calculate the reporting rate for each indicator
 #' @param df A data frame
-#' @param ... Columns to calculate the reporting rate, exluding year and month
+#' @param ... Columns to calculate the reporting rate, excluding year and month
 #' @return Dataframe
 #' @import dplyr
 #' @importFrom rlang enquos

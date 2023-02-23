@@ -1,11 +1,12 @@
-
-
+#' Replace routine database
+#'
+#' @param df Target dataframe to be replaced
 #' @export
 routine_replace <- function(df) {
   country <- config_get_country()
   # filter tibble by country name
   filtered_routine_rename_database <-
-    snt::import_routine_replace %>%
+    snt::import_routine_replace |>
     dplyr::filter(country == country)
   find_and_rename <- function(names) {
     from <- filtered_routine_rename_database$from
@@ -26,7 +27,7 @@ routine_replace <- function(df) {
     }
     return(formatted)
   }
-  df <- df %>%
+  df <- df |>
     dplyr::mutate_if(
       is.character,
       find_and_rename
@@ -80,6 +81,12 @@ import_replace <- function(df,
 
 dhs_api_endpoint <- "https://api.dhsprogram.com/rest/dhs/data/"
 
+#' Import DHS data from API
+#' @param year DHS year to be imported
+#' @return A tibble of DHS data
+#' @author Chunzhe ZHANG
+#' @importFrom RJSONIO fromJSON
+#' @importFrom tibble as_tibble
 #' @export
 import_dhs_data <- function(year = 2021) {
   json_file <- RJSONIO::fromJSON(

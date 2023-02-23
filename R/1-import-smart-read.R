@@ -176,9 +176,9 @@ smart_get_all_files_in_dir <-
       data = data_tables
     )
     if (clean) {
-      result <- result %>%
+      result <- result |>
         # rename using internal rename database
-        dplyr::mutate(data = purrr::map(data, ~ routine_rename(.x, cty = country))) %>%
+        dplyr::mutate(data = purrr::map(data, ~ routine_rename(.x, cty = country))) |>
         # replace using internal replace database
         dplyr::mutate(data = purrr::map(data, ~ routine_replace(.x, cty = country)))
     }
