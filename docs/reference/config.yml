@@ -1,0 +1,19 @@
+default:
+  country: nigeria
+  dirs:
+    data: _data
+    functions: _functions
+    handmade: handmade
+    database: database
+    reports: reports
+    logs: logs
+  clean_before_new_analysis:
+    - database
+    - reports
+    - logs
+  db:
+   package: RPostgres
+   dbconnect: Postgres
+   dbname: malaria
+   dbhost: localhost
+   dbport: 5432

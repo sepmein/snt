@@ -1,15 +1,14 @@
 Package: snt
-Title: Malaria country analysis
-Version: 0.0.0.9000
+Title: Malaria Subnational Tailoring
+Version: 0.0.2.0000
 Authors@R: 
     person("Chunzhe", "Zhang", , "zhangc@who.int", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: This package provides functions to download, process and visualize malaria data at subnational level.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Imports:
     R6,
     RCurl,
@@ -28,7 +27,20 @@ Imports:
     tidyr,
     gdalUtils,
     R.utils,
-    magrittr
+    magrittr,
+    tibble,
+    rlang (>= 0.4.11),
+    tmap,
+    config
 Depends: 
     R (>= 2.10)
 LazyData: true
+Suggests: 
+    roxygen2,
+    spelling,
+    testthat (>= 3.0.0)
+Language: en-US
+Config/testthat/edition: 3
+URL: https://github.com/sepmein/snt,
+    https://sepmein.github.io/snt/
+BugReports: https://github.com/sepmein/snt/issues

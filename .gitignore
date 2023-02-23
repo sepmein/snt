@@ -44,3 +44,8 @@ vignettes/*.pdf
 .Rproj.user
 .DS_Store
 .Rdata
+
+config.yml
+
+# exclude mock file, it's too large for git
+tests/mock/*

@@ -1,36 +1,12 @@
-#' @export
-routine_rename <- function(df, cty) {
-  # filter tibble by country name
-  filtered_routine_rename_database <-
-    snt::import_routine_rename %>%
-    dplyr::filter(country == cty)
-  find_and_rename <- function(names) {
-    from <- filtered_routine_rename_database$from
-    to <- filtered_routine_rename_database$to
-    formatted <- c()
-    for (name in names) {
-      result <- name
-      for (i in seq_along(from)) {
-        if (stringr::str_detect(name, from[i])) {
-          result <- stringr::str_replace(name, from[i], to[i])
-          break
-        }
-      }
-      formatted <- append(formatted, result)
-    }
-    return(formatted)
-  }
-  df <- df %>%
-    dplyr::rename_with(find_and_rename)
-  return(df)
-}
+
 
 #' @export
-routine_replace <- function(df, cty) {
+routine_replace <- function(df) {
+  country <- config_get_country()
   # filter tibble by country name
   filtered_routine_rename_database <-
     snt::import_routine_replace %>%
-    dplyr::filter(country == cty)
+    dplyr::filter(country == country)
   find_and_rename <- function(names) {
     from <- filtered_routine_rename_database$from
     to <- filtered_routine_rename_database$to
@@ -84,11 +60,11 @@ import_replace <- function(df,
   if (isFALSE(by)) {
     df <- df |>
       dplyr::left_join(filtered_replace_database)
-  } else if (is.vector(by)){
-    by[column] = column
+  } else if (is.vector(by)) {
+    by[column] <- column
     df <- df |>
       dplyr::left_join(filtered_replace_database,
-                       by = by
+        by = by
       )
   }
   df <- df |>

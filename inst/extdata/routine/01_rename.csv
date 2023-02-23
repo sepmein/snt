@@ -1,105 +1,110 @@
 country ,from                                                            ,to
-BDI     ,Janvier                                                         ,1
-BDI     ,Février                                                         ,2
-BDI     ,Mars                                                            ,3
-BDI     ,Avril                                                           ,4
-BDI     ,Mai                                                             ,5
-BDI     ,Juin                                                            ,6
-BDI     ,Juillet                                                         ,7
-BDI     ,Août                                                            ,8
-BDI     ,Septembre                                                       ,9
-BDI     ,Octobre                                                         ,10
-BDI     ,Novembre                                                        ,11
-BDI     ,Décembre                                                        ,12
-BDI     ,Airesderesponsailité                                            ,hfca
-BDI     ,Airesderesponsabilité                                           ,hfca
-BDI     ,orgunitlevel1                                                   ,Pays
-BDI     ,orgunitlevel2                                                   ,adm1
-BDI     ,orgunitlevel3                                                   ,adm2_ds
-BDI     ,orgunitlevel4                                                   ,adm3
-BDI     ,orgunitlevel5                                                   ,hfca
-BDI     ,orgunitlevel6                                                   ,Centre
-BDI     ,organisationunitname                                            ,hfname
-BDI     ,Provinces                                                       ,adm1
-BDI     ,Districts                                                       ,adm2_ds
-BDI     ,Centresdesanté                                                  ,hfname
-BDI     ,Village                                                         ,adm3
-BDI     ,Aires de responsailité                                          ,hfca
-BDI     ,Aires de responsabilité                                         ,hfca
-BDI     ,Centres de santé                                                ,hfname
-SLE     ,"LLITN given at Pentavalent 3rd dose In_Facility_X, 0-11m_X"    ,llins_epi_1
-SLE     ,"LLITN given at Pentavalent 3rd dose Outreach_X, 0-11m_X"       ,llins_epi_2
-SLE     ,Antenatal client given LLITN In_Facility_X                      ,llins_anc_1
-SLE     ,Antenatal client given LLITN Outreach_X                         ,llins_anc_2
-SLE     ,Month                                                           ,month
-SLE     ,Year                                                            ,year
-SLE     ,District                                                        ,adm2
-SLE     ,Districy                                                        ,adm2
-SLE     ,Chiefdom                                                        ,adm3
-SLE     ,chiefdom                                                        ,adm3
-SLE     ,periodname                                                      ,month
-SLE     ,OPD \(New and follow-up curative\) 0-59m_X                      ,allout_u5
-SLE     ,OPD \(New and follow-up curative\) 5\+y_X                       ,allout_ov5
-SLE     ,Admission - Child 1-59 months_X                                 ,alladm_u5
-SLE     ,Admission - Maternity_X                                         ,alladm_ov5_1
-SLE     ,Admission - Paediatric_X                                        ,alladm_ov5_2
-SLE     ,Admission - Surgical_X                                          ,alladm_ov5_3
-SLE     ,Admission - Medical_X                                           ,alladm_ov5_4
-SLE     ,Admission - Antental client with malaria_X                      ,alladm_ov5_5
-SLE     ,Admission - Child with malaria 5-14 years_X                     ,maladm_ov5_1
-SLE     ,Admission - Ebola survivor_X                                    ,alladm_ov5_7
-SLE     ,Admission - Malaria 15\+ years_X                                ,maladm_ov5_2
-SLE     ,Admission - Psychiatric_X                                       ,alladm_ov5_9
-SLE     ,Admission - Intensive Care_X                                    ,alladm_ov5_10
-SLE     ,Admission - Stabilisation Centre_X                              ,alladm_ov5_11
-SLE     ,Admission - TB_X                                                ,alladm_ov5_12
-SLE     ,Admission - Child with pneumonia_X                              ,alladm_ov5_13
-SLE     ,Admission - Special care baby unit_X                            ,alladm_ov5_14
-SLE     ,Admission - Child with malaria 0-59 months_X                    ,maladm_u5
-SLE     ,Separation - Child 1-59 months_X Death                          ,alldth_u5
-SLE     ,Separation - Child with malaria 5-14 years_X Death              ,maldth_ov5_1
-SLE     ,Separation - Malaria 15\+ years_X Death                         ,maldth_ov5_2
-SLE     ,Separation - Maternity_X Death                                  ,alldth_ov5_3
-SLE     ,Separation - Ebola survivor_X Death                             ,alldth_ov5_4
-SLE     ,Separation - Intensive Care_X Death                             ,alldth_ov5_5
-SLE     ,Separation - Medical_X Death                                    ,alldth_ov5_6
-SLE     ,Separation - Paediatric_X Death                                 ,alldth_ov5_7
-SLE     ,Separation - Psychiatric_X Death                                ,alldth_ov5_8
-SLE     ,Separation - Surgical_X Death                                   ,alldth_ov5_9
-SLE     ,Separation - TB_X Death                                         ,alldth_ov5_10
-SLE     ,Separation - Stabilisation Centre_X Death                       ,alldth_ov5_11
-SLE     ,Separation - Antenatal client with malaria_X Death              ,alldth_ov5_12
-SLE     ,Separation - Child with pneumonia_X Death                       ,alldth_ov5_13
-SLE     ,Fever case - suspected Malaria 0-59m_X                          ,susp_u5
-SLE     ,Fever case - suspected Malaria 15\+y_X                          ,susp_ov5_1
-SLE     ,Fever case - suspected Malaria 5-14y_X                          ,susp_ov5_2
-SLE     ,Fever case tested for Malaria \(Microscopy\) - Negative 0-59m_X ,test_mic_u5_n
-SLE     ,Fever case tested for Malaria \(Microscopy\) - Positive 0-59m_X ,test_mic_u5_p
-SLE     ,Fever case tested for Malaria \(Microscopy\) - Negative 5-14y_X ,test_mic_ov5_1_n
-SLE     ,Fever case tested for Malaria \(Microscopy\) - Positive 5-14y_X ,test_mic_ov5_1_p
-SLE     ,Fever case tested for Malaria \(Microscopy\) - Negative 15\+y_X ,test_mic_ov5_2_n
-SLE     ,Fever case tested for Malaria \(Microscopy\) - Positive 15\+y_X ,test_mic_ov5_2_p
-SLE     ,Fever case tested for Malaria \(RDT\) - Negative 0-59m_X        ,test_rdt_u5_n
-SLE     ,Fever case tested for Malaria \(RDT\) - Positive 0-59m_X        ,test_rdt_u5_p
-SLE     ,Fever case tested for Malaria \(RDT\) - Negative 5-14y_X        ,test_rdt_ov5_1_n
-SLE     ,Fever case tested for Malaria \(RDT\) - Positive 5-14y_X        ,test_rdt_ov5_1_p
-SLE     ,Fever case tested for Malaria \(RDT\) - Negative 15\+y_X        ,test_rdt_ov5_2_n
-SLE     ,Fever case tested for Malaria \(RDT\) - Positive 15\+y_X        ,test_rdt_ov5_2_p
-SLE     ,Malaria treated with ACT <24 hours 0-59m_X                      ,maltreat_u5_1
-SLE     ,Malaria treated with ACT >24 hours 0-59m_X                      ,maltreat_u5_2
-SLE     ,Malaria treated with ACT <24 hours 15\+y_X                      ,maltreat_ov5_1
-SLE     ,Malaria treated with ACT >24 hours 15\+y_X                      ,maltreat_ov5_2
-SLE     ,Malaria treated with ACT <24 hours 5-14y_X                      ,maltreat_ov5_3
-SLE     ,Malaria treated with ACT >24 hours 5-14y_X                      ,maltreat_ov5_4
-SLE     ,Separation - Child with malaria 0-59 months_X Death             ,maldth_u5
-SLE     ,"Pentavalent 3rd dose In_Facility_X, 0-11m_X"                   ,penta3_tot_1
-SLE     ,"Pentavalent 3rd dose In_Facility_X, 12-59m_X"                  ,penta3_tot_3
-SLE     ,"Pentavalent 3rd dose Outreach_X, 0-11m_X"                      ,penta3_tot_2
-SLE     ,"Measles 1st dose In_Facility_X, 0-11m_X"                       ,mr1_tot_1
-SLE     ,"Measles 1st dose Outreach_X, 0-11m_X"                          ,mr1_tot_2
-SLE     ,Zone                                                            ,adm3
-SLE     ,Health Facility                                                 ,hf_name
-SLE     ,Health facility                                                 ,hf_name
-SLE     ,< 5 years presumed malaria cases                                ,pres_u5
-SLE     ,> 5 years presumed malaria cases                                ,pres_ov5
-SLE     ,Total presumed malaria cases                                    ,pres
+BDI,Janvier                                                         ,1
+BDI,Février                                                         ,2
+BDI,Mars                                                            ,3
+BDI,Avril                                                           ,4
+BDI,Mai                                                             ,5
+BDI,Juin                                                            ,6
+BDI,Juillet                                                         ,7
+BDI,Août                                                            ,8
+BDI,Septembre                                                       ,9
+BDI,Octobre                                                         ,10
+BDI,Novembre                                                        ,11
+BDI,Décembre                                                        ,12
+BDI,Airesderesponsailité                                            ,hfca
+BDI,Airesderesponsabilité                                           ,hfca
+BDI,orgunitlevel1                                                   ,Pays
+BDI,orgunitlevel2                                                   ,adm1
+BDI,orgunitlevel3                                                   ,adm2_ds
+BDI,orgunitlevel4                                                   ,adm3
+BDI,orgunitlevel5                                                   ,hfca
+BDI,orgunitlevel6                                                   ,Centre
+BDI,organisationunitname                                            ,hfname
+BDI,Provinces                                                       ,adm1
+BDI,Districts                                                       ,adm2_ds
+BDI,Centresdesanté                                                  ,hfname
+BDI,Village                                                         ,adm3
+BDI,Aires de responsailité                                          ,hfca
+BDI,Aires de responsabilité                                         ,hfca
+BDI,Centres de santé                                                ,hfname
+SLE ,"LLITN given at Pentavalent 3rd dose In_Facility_X, 0-11m_X    ",llins_epi_1
+SLE ,"LLITN given at Pentavalent 3rd dose Outreach_X, 0-11m_X       ",llins_epi_2
+SLE ,Antenatal client given LLITN In_Facility_X                      ,llins_anc_1
+SLE ,Antenatal client given LLITN Outreach_X                         ,llins_anc_2
+SLE ,Month                                                           ,month
+SLE ,Year                                                            ,year
+SLE ,District                                                        ,adm2
+SLE ,Districy                                                        ,adm2
+SLE ,Chiefdom                                                        ,adm3
+SLE ,chiefdom                                                        ,adm3
+SLE ,periodname                                                      ,month
+SLE ,OPD \(New and follow-up curative\) 0-59m_X                      ,allout_u5
+SLE ,OPD \(New and follow-up curative\) 5\+y_X                       ,allout_ov5
+SLE ,Admission - Child 1-59 months_X                                 ,alladm_u5
+SLE ,Admission - Maternity_X                                         ,alladm_ov5_1
+SLE ,Admission - Paediatric_X                                        ,alladm_ov5_2
+SLE ,Admission - Surgical_X                                          ,alladm_ov5_3
+SLE ,Admission - Medical_X                                           ,alladm_ov5_4
+SLE ,Admission - Antental client with malaria_X                      ,alladm_ov5_5
+SLE ,Admission - Child with malaria 5-14 years_X                     ,maladm_ov5_1
+SLE ,Admission - Ebola survivor_X                                    ,alladm_ov5_7
+SLE ,Admission - Malaria 15\+ years_X                                ,maladm_ov5_2
+SLE ,Admission - Psychiatric_X                                       ,alladm_ov5_9
+SLE ,Admission - Intensive Care_X                                    ,alladm_ov5_10
+SLE ,Admission - Stabilisation Centre_X                              ,alladm_ov5_11
+SLE ,Admission - TB_X                                                ,alladm_ov5_12
+SLE ,Admission - Child with pneumonia_X                              ,alladm_ov5_13
+SLE ,Admission - Special care baby unit_X                            ,alladm_ov5_14
+SLE ,Admission - Child with malaria 0-59 months_X                    ,maladm_u5
+SLE ,Separation - Child 1-59 months_X Death                          ,alldth_u5
+SLE ,Separation - Child with malaria 5-14 years_X Death              ,maldth_ov5_1
+SLE ,Separation - Malaria 15\+ years_X Death                         ,maldth_ov5_2
+SLE ,Separation - Maternity_X Death                                  ,alldth_ov5_3
+SLE ,Separation - Ebola survivor_X Death                             ,alldth_ov5_4
+SLE ,Separation - Intensive Care_X Death                             ,alldth_ov5_5
+SLE ,Separation - Medical_X Death                                    ,alldth_ov5_6
+SLE ,Separation - Paediatric_X Death                                 ,alldth_ov5_7
+SLE ,Separation - Psychiatric_X Death                                ,alldth_ov5_8
+SLE ,Separation - Surgical_X Death                                   ,alldth_ov5_9
+SLE ,Separation - TB_X Death                                         ,alldth_ov5_10
+SLE ,Separation - Stabilisation Centre_X Death                       ,alldth_ov5_11
+SLE ,Separation - Antenatal client with malaria_X Death              ,alldth_ov5_12
+SLE ,Separation - Child with pneumonia_X Death                       ,alldth_ov5_13
+SLE ,Fever case - suspected Malaria 0-59m_X                          ,susp_u5
+SLE ,Fever case - suspected Malaria 15\+y_X                          ,susp_ov5_1
+SLE ,Fever case - suspected Malaria 5-14y_X                          ,susp_ov5_2
+SLE ,Fever case tested for Malaria \(Microscopy\) - Negative 0-59m_X ,test_mic_u5_n
+SLE ,Fever case tested for Malaria \(Microscopy\) - Positive 0-59m_X ,test_mic_u5_p
+SLE ,Fever case tested for Malaria \(Microscopy\) - Negative 5-14y_X ,test_mic_ov5_1_n
+SLE ,Fever case tested for Malaria \(Microscopy\) - Positive 5-14y_X ,test_mic_ov5_1_p
+SLE ,Fever case tested for Malaria \(Microscopy\) - Negative 15\+y_X ,test_mic_ov5_2_n
+SLE ,Fever case tested for Malaria \(Microscopy\) - Positive 15\+y_X ,test_mic_ov5_2_p
+SLE ,Fever case tested for Malaria \(RDT\) - Negative 0-59m_X        ,test_rdt_u5_n
+SLE ,Fever case tested for Malaria \(RDT\) - Positive 0-59m_X        ,test_rdt_u5_p
+SLE ,Fever case tested for Malaria \(RDT\) - Negative 5-14y_X        ,test_rdt_ov5_1_n
+SLE ,Fever case tested for Malaria \(RDT\) - Positive 5-14y_X        ,test_rdt_ov5_1_p
+SLE ,Fever case tested for Malaria \(RDT\) - Negative 15\+y_X        ,test_rdt_ov5_2_n
+SLE ,Fever case tested for Malaria \(RDT\) - Positive 15\+y_X        ,test_rdt_ov5_2_p
+SLE ,Malaria treated with ACT <24 hours 0-59m_X                      ,maltreat_u5_1
+SLE ,Malaria treated with ACT >24 hours 0-59m_X                      ,maltreat_u5_2
+SLE ,Malaria treated with ACT <24 hours 15\+y_X                      ,maltreat_ov5_1
+SLE ,Malaria treated with ACT >24 hours 15\+y_X                      ,maltreat_ov5_2
+SLE ,Malaria treated with ACT <24 hours 5-14y_X                      ,maltreat_ov5_3
+SLE ,Malaria treated with ACT >24 hours 5-14y_X                      ,maltreat_ov5_4
+SLE ,Separation - Child with malaria 0-59 months_X Death             ,maldth_u5
+SLE ,"Pentavalent 3rd dose In_Facility_X, 0-11m_X                   ",penta3_tot_1
+SLE ,"Pentavalent 3rd dose In_Facility_X, 12-59m_X                  ",penta3_tot_3
+SLE ,"Pentavalent 3rd dose Outreach_X, 0-11m_X                      ",penta3_tot_2
+SLE ,"Measles 1st dose In_Facility_X, 0-11m_X                       ",mr1_tot_1
+SLE ,"Measles 1st dose Outreach_X, 0-11m_X                          ",mr1_tot_2
+SLE ,Zone                                                            ,adm3
+SLE ,Health Facility                                                 ,hf_name
+SLE ,Health facility                                                 ,hf_name
+SLE ,< 5 years presumed malaria cases                                ,pres_u5
+SLE ,> 5 years presumed malaria cases                                ,pres_ov5
+SLE ,Total presumed malaria cases                                    ,pres
+SOM,Org unit level 1,adm0
+SOM,Org unit level 2,adm1
+SOM,Org unit level 3,adm2
+SOM,Org unit level 4,adm3
+SOM,Organisation unit,hf_name
