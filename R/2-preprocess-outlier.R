@@ -10,62 +10,51 @@
 #' @export
 #' @import dplyr
 #' @importFrom tibble tibble
-find_outlier <-
+#' @importFrom rlang enquos
+find_outliers <-
   function(df,
-           columns = c(
-             "susp",
-             "test_rdt",
-             "test_mic",
-             "test_rdt_lab",
-             "test",
-             "abn_mic",
-             "abn_rdt",
-             "conf_rdt",
-             "maltreat_u5",
-             "maltreat_ov5",
-             "maltreat",
-             "maldth"
-           ),
-           alpha = 0.999,
+           alpha = 0.99999,
            both_sides = FALSE,
-           select_rows = c(
-             "id",
-             "adm1",
-             "adm2",
-             "adm3",
-             "hfca",
-             "hfname",
-             "hf",
-             "year",
-             "month",
-             "yearmon"
-           )) {
+           ...) {
+
+    # 1. Extract the columns we want to analyze from the dataframe.
+    args <- rlang::enquos(...)
+    df <- df |> gen_id_if_not_exist()
+
+    # get numeric columns names from the dataframe
+    columns <- colnames(df |> select(where(is.numeric)))
+    if (length(columns) == 0) {
+      stop("No numeric columns in the dataframe")
+    }
+
+    # 2. Initialize an empty tibble to store the outliers.
     result <- tibble::tibble(
       id = character(),
       value = numeric(),
       index = character()
     )
-    # add two columns to be added
-    select_rows <- c(
-      select_rows, "index",
-      "value"
-    )
 
-    df <- df |> gen_id_if_not_exist()
+    # 3. Loop over the columns that we want to analyze.
     for (column in columns) {
-      ### algorithm upper bound
+# 4. Extract the upper bound for this column.
       upper_bound <- quantile(df[[column]], alpha, na.rm = TRUE)
+# 5. Extract the indices of the outliers.
       outlier_index <-
         which(df[[column]] > upper_bound)
+# 6. Extract the outliers as a tibble.
       df_outlier_list <- df[outlier_index, ] |>
         # select id and target column
-        dplyr::select(dplyr::one_of(c("id", column))) |>
-        dplyr::mutate(index = !!column) |>
-        dplyr::rename(value = !!column)
-      result <- result |> dplyr::full_join(df_outlier_list)
+        select("id", !!!args, {{ column }}) |>
+          mutate(index = !!column) |>
+          rename(value = !!column)
+
+        # 7. Add the outliers to the result tibble.
+        result <- result |> bind_rows(df_outlier_list)
     }
+# 8. Add the original data to the result tibble.
     result <- result |>
-      dplyr::left_join(df) |>
-      dplyr::select(!!select_rows)
+      left_join(df)
+
+      # 9. Return the result tibble.
     return(result)
   }
