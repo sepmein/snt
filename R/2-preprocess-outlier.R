@@ -1,4 +1,15 @@
-
+#' @title Find outlier
+#' @description Find outlier in the dataset
+#' @param df dataframe
+#' @param columns columns to be checked
+#' @param alpha alpha value for quantile
+#' @param both_sides whether to check both sides of the distribution
+#' @param select_rows columns to be selected
+#' @return dataframe
+#' @author Chunzhe ZHANG
+#' @export
+#' @import dplyr
+#' @importFrom tibble tibble
 find_outlier <-
   function(df,
            columns = c(
@@ -18,7 +29,7 @@ find_outlier <-
            alpha = 0.999,
            both_sides = FALSE,
            select_rows = c(
-             "ID",
+             "id",
              "adm1",
              "adm2",
              "adm3",
@@ -30,7 +41,7 @@ find_outlier <-
              "yearmon"
            )) {
     result <- tibble::tibble(
-      ID = character(),
+      id = character(),
       value = numeric(),
       index = character()
     )
@@ -48,7 +59,7 @@ find_outlier <-
         which(df[[column]] > upper_bound)
       df_outlier_list <- df[outlier_index, ] |>
         # select id and target column
-        dplyr::select(dplyr::one_of(c("ID", column))) |>
+        dplyr::select(dplyr::one_of(c("id", column))) |>
         dplyr::mutate(index = !!column) |>
         dplyr::rename(value = !!column)
       result <- result |> dplyr::full_join(df_outlier_list)
