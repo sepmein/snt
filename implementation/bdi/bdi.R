@@ -232,7 +232,7 @@ report_status_by_hf_and_date |>
   ggplot(aes(x = yearmon, y = hf, fill = reported)) +
   geom_tile() +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
-  labs(title = "Report Status By Health Facilitis and Date",
+  labs(title = "Report Status By Health Facilities and Date",
        y = "Health Facilities",
        x = "Date") +
   theme(axis.text.y = element_blank()) +

@@ -53,3 +53,75 @@ report_rate <- function(df, ...) {
             reprate = rep / exp
         )
 }
+
+#' Calculate the report status
+#'
+#' If any indicator is reported, the report status is "Y", otherwise "N"
+#' grouped by the provided columns
+#' @param df A data frame
+#' @param ... Columns to group by
+#' @return Dataframe
+#' @import dplyr
+#' @importFrom rlang enquos
+#' @export
+report_status <- function(df, ...) {
+    # create a list of arguments
+    args <- enquos(...)
+    # group data frame by arguments
+    df <- df |>
+        group_by(!!!args) |>
+        # calculate sum for each group for all numeric columns
+        summarise(
+            across(
+                !any_of(c("year", "month")) &
+                    where(is.numeric),
+                ~ sum(.x, na.rm = TRUE)
+            )
+        )
+    # test year or month is included in args or not
+    if (!("year" %in% args)) {
+        # create reported column
+        df <- df |>
+            mutate(
+                reported = if_else(rowSums(
+                    across(
+                        !any_of(c("year", "month")) & where(is.numeric)
+                    ),
+                    na.rm = TRUE
+                ) == 0, 0, 1)
+            )
+    } else {
+        if (!("month" %in% args)) {
+            # create reported column
+            df <- df |>
+                mutate(
+                    reported = if_else(rowSums(
+                        across(
+                            !c("month") & where(is.numeric)
+                        ),
+                        na.rm = TRUE
+                    ) == 0, 0, 1)
+                )
+        } else {
+            # create reported column
+            df <- df |>
+                mutate(
+                    reported = if_else(rowSums(
+                        across(
+                            where(is.numeric)
+                        ),
+                        na.rm = TRUE
+                    ) == 0, 0, 1)
+                )
+        }
+    }
+    # select only arguments and reported column
+    df |>
+        select(
+            !!!args, "reported"
+        ) |>
+        # convert reported to character
+        mutate(
+            reported = if_else(reported > 0, "Y", "N")
+        )
+}
