@@ -6,6 +6,7 @@
 #' @importFrom rlang enquos
 #' @import ggplot2
 #' @importFrom lubridate make_date
+#' @export
 plot_hf_report_status <- function(df, ...) {
     # TODO how to solve the problem of month is not included in args
     # TODO how to solve the problem of hf not included in args
@@ -39,4 +40,41 @@ plot_hf_report_status <- function(df, ...) {
         ) +
         theme(axis.text.y = element_blank()) +
         scale_fill_manual(values = c("N" = "white", "Y" = "blue"))
+}
+#' Plot Report Status by indicators
+#' @param df A data frame
+#' @param ... indicator columns
+#' @return Dataframe
+#' @import dplyr
+#' @importFrom rlang enquos .data
+#' @import ggplot2
+#' @importFrom lubridate make_date
+#' @importFrom tidyr pivot_longer
+#' @export
+#' @author Chunzhe ZHANG
+plot_indicator_report_status <- function(df, ...) {
+    args <- enquos(...)
+
+    report_status <- df |>
+        pivot_longer(
+            cols = c(!!!args),
+            names_to = "index",
+            values_to = "value"
+        ) |>
+        mutate(reported = if_else(.data$value > 0, 1, 0)) |>
+        group_by(.data$index, .data$year) |>
+        summarise(
+            reports = sum(.data$reported, na.rm = TRUE),
+            n = n()
+        ) |>
+        mutate(report_rate = .data$reports / n)
+
+    report_status |> View()
+    ggplot(report_status) +
+        geom_tile(aes(
+            x = .data$year,
+            y = .data$index,
+            fill = .data$report_rate
+        )) +
+        scale_fill_viridis_c()
 }
