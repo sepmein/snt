@@ -41,6 +41,7 @@ plot_hf_report_status <- function(df, ...) {
         theme(axis.text.y = element_blank()) +
         scale_fill_manual(values = c("N" = "white", "Y" = "blue"))
 }
+
 #' Plot Report Status by indicators
 #' @param df A data frame
 #' @param ... indicator columns
@@ -77,4 +78,49 @@ plot_indicator_report_status <- function(df, ...) {
             fill = .data$report_rate
         )) +
         scale_fill_viridis_c()
+}
+
+#' Plot Report Status by district month
+#' @param df A data frame
+#' @param ... Group by columns
+#' @param index Index columns
+#' @return Dataframe
+#' @import dplyr
+#' @importFrom rlang enquos .data
+#' @import ggplot2
+#' @importFrom lubridate make_date
+#' @importFrom tidyr pivot_longer
+#' @export
+plot_adm_report_status <- function(
+    df, ...,
+    index = c("conf", "test", "susp")) {
+    args <- enquos(...)
+
+    report_status <- df |>
+        pivot_longer(
+            cols = index,
+            names_to = "index",
+            values_to = "value"
+        ) |>
+        mutate(reported = if_else(.data$value > 0, 1, 0)) |>
+        group_by(!!!args, .data$year, .data$month) |>
+        summarise(reports = sum(.data$reported, na.rm = TRUE), n = n()) |>
+        mutate(report_rate = .data$reports / n) |>
+        mutate(date = make_date(.data$year, .data$month, 1))
+
+    ggplot(report_status) +
+        geom_tile(aes(
+            x = .data$date,
+            # todo change this to more flexible argument
+            y = .data$adm1,
+            fill = .data$report_rate
+        )) +
+        scale_fill_viridis_c() +
+        scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+        scale_x_date(date_labels = "%Y-%m") +
+        labs(
+            title = "Report Status By Adm1 and Date",
+            y = "Districts",
+            x = "Date"
+        )
 }
