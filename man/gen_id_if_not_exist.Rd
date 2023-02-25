@@ -4,7 +4,7 @@
 \alias{gen_id_if_not_exist}
 \title{Generate ID if not exist}
 \usage{
-gen_id_if_not_exist(df, id_column = "ID")
+gen_id_if_not_exist(df, id_column = "id")
 }
 \arguments{
 \item{df}{data frame}
