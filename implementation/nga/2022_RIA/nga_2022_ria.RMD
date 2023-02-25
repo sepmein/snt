@@ -10,14 +10,824 @@ output:
 ---
 
 ```{r}
-library(snt)
+devtools::load_all()
+library(haven)
+library(readxl)
+library(dplyr)
 ```
 
 ```{r}
-config(
+windows_path <- "D:\\World Health Organization\\GMP-SIR - Country_Analytical_Support\\Countries\\NGA\\2022_SNT"
+windows_config <- config(
     country = "NGA",
-    root = "/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR - Country_Analytical_Support/Countries/SOM/WHO_SOM/SOM_2022_SNT/SNT_Spencer",
-    
-
+    root = windows_path,
+    root_input  = "input",
+    root_output = "output",
+    path_raster = "raster",
+    path_raster_map = "map",
+    path_raster_rainfall = "rainfall",
+    path_country = "country",
+    path_routine = "routine",
+    path_dhs = "dhs",
+    db_name = "malaria",
+    db_user = "sepmein"
 )
+windows_config
+```
+
+```{r warning=FALSE}
+ria_2019 <-
+  "D:/World Health Organization/GMP-SIR - Country_Analytical_Support/Countries/NGA/2019_RIA/BEA-Analysis/NGA_RIA_final"
+ria_2022 <-
+  "D:/World Health Organization/GMP-SIR - Country_Analytical_Support/Countries/NGA/2022_RIA/"
+
+# 2019
+expected_month_year <- read_dta(file.path(ria_2019, "dta/pri/expected_monthyear.dta"))
+expected_year <- read_dta(file.path(ria_2019, "dta/pri/expected_year.dta"))
+health_facilities_2019 <-
+  read_dta(file.path(ria_2019, "dta/pri/health_facilities.dta"))
+service_2019 <- read_dta(file.path(ria_2019, "dta/pri/Service_Data.dta"))
+lab_2019 <- read_dta(file.path(ria_2019, "dta/pri/lab_Data.dta"))
+pharmacy_2019 <-
+  read_dta(file.path(ria_2019, "dta/pri/pharmacy_Data.dta"))
+
+# 2022
+health_facilities_2022_in_service <- read_excel(
+  file.path(
+    ria_2022,
+    "input/RAPID_IMPACT_ASSESSMENT_2022_ServiceDeliveryData_-_all_versions_-_English_-_2022-11-16-15-51-16.xlsx"
+  ),
+  sheet = "RAPID IMPACT ASSESSMENT 2022..."
+)
+
+health_facilities_2022_in_lab <- read_excel(
+  file.path(
+    ria_2022,
+    "input/RAPID_IMPACT_ASSESSMENT_2022_Lab_Pharmacy_Data_-_all_versions_-_English_-_2022-12-16-09-33-35.xlsx"
+  ),
+  sheet = "RAPID IMPACT ASSESSMENT 2022..."
+)
+
+service_2022 <- read_excel(
+  file.path(
+    ria_2022,
+    "input/RAPID_IMPACT_ASSESSMENT_2022_ServiceDeliveryData_-_all_versions_-_English_-_2022-11-16-15-51-16.xlsx"
+  ),
+  sheet = "ServiceData"
+)
+
+lab_2022 <- read_excel(
+  file.path(
+    ria_2022,
+    "input/RAPID_IMPACT_ASSESSMENT_2022_Lab_Pharmacy_Data_-_all_versions_-_English_-_2022-12-16-09-33-35.xlsx"
+  ),
+  sheet = "LaboratoryData"
+)
+
+pharmacy_2022 <- read_excel(
+  file.path(
+    ria_2022,
+    "input/RAPID_IMPACT_ASSESSMENT_2022_Lab_Pharmacy_Data_-_all_versions_-_English_-_2022-12-16-09-33-35.xlsx"
+  ),
+  sheet = "CommodityLogistics"
+)
+
+p_health_facilities <- file.path(ria_2022, "output/health_facilities.csv")
+p_service <- file.path(ria_2022, "output/service.csv")
+p_service_dta <- file.path(ria_2022, "output/service.dta")
+p_lab <- file.path(ria_2022, "output/lab.csv")
+p_lab_dta <- file.path(ria_2022, "output/lab.dta")
+p_pharmacy <- file.path(ria_2022, "output/pharmacy.csv")
+p_service_duplicate <- file.path(ria_2022, "output/service_duplicate.csv")
+```
+
+# 01 data importation
+
+
+## Service Data
+
+Show 2019 data columns
+
+```{r}
+colnames(service_2019)
+```
+
+Show 2022 data columns
+
+```{r}
+colnames(service_2022)
+```
+
+Remove unnecessary names in 2019
+
+```{r}
+service_2019 <- service_2019 |>
+  select(
+    -deviceid,
+    -Reason,
+    -Remark,
+    -num,
+    -state
+  )
+```
+
+Select columns names in 2022 and rename
+
+```{r}
+service_2022 <- service_2022 |>
+  rename(
+    #deviceid,
+    #ChooseZone,
+    ChooseState = "State",
+    ChooseLGA = "LGA",
+    ChooseHealthFacility = "Health Facility",
+    #DataCollectorname
+    #DataCollectorphonenumber
+    #RecordOfficerEmail
+    #StateCoordinatorname
+    #StateCoordinatorphonenumber
+    "_GeoLocation_latitude" = "_ad: Collect GPS_latitude",
+    "_GeoLocation_longitude" = "_ad: Collect GPS_longitude",
+    "_GeoLocation_altitude" = "_ad: Collect GPS_altitude",
+    "_GeoLocation_precision" = "_ad: Collect GPS_precision",
+    #_parent_table_name
+    Selectmonthandyear = "Year-Month",
+    "AllagesOutpatient" = "Outpatient All-Cause Cases_All ages",
+    "Under5Outpatient" = "Outpatient All-Cause Cases_Under 5",
+    "AllagesOutpatientMalariaC" = "Outpatient Malaria Cases_All ages",
+    "Under5OutpatientMalaria" = "Outpatient Malaria Cases_Under 5",
+    "AllagesInpatientAllCause" = "Inpatient All-Cause_All ages",
+    "Under5Inpatientallcause" = "Inpatient All-Cause_Under 5",
+    "AllagesInpatientAllDeath" = "Inpatient All-Cause Deaths_All ages",
+    "Under5Inpatientalldeaths" = "Inpatient All-Cause Deaths_Under 5",
+    "AllAgesInpatientAllMalari" = "Inpatient Malaria Cases_All Ages",
+    "Under5InpatientMalaria" = "Inpatient Malaria Cases_Under 5",
+    "AllAgesInpatientMalariaDe"  = "Inpatient Malaria Deaths_All Ages",
+    "Under5InpatientMalariadeaths" = "Inpatient Malaria Deaths_Under 5",
+    "AllagesInpatientAnaemiaCa"  = "Inpatient Anaemia Cases_All ages",
+    "Under5InpatientAnemia" = "Inpatient Anaemia Cases_Under 5",
+    "AllagesInpatientAnaemiaDe"  = "Inpatient Anaemia Deaths_All ages",
+    "Under5InpatientAnemiadeaths" = "Inpatient Anaemia Deaths_Under 5",
+    #reason,
+    #remark,
+    #num,
+  )
+```
+
+Merge 2019 and 2022 data
+
+```{r}
+service <- bind_rows(service_2019, service_2022) |>
+  distinct()
+```
+
+Identify duplicate service records if each health facility reported more than once in each month
+
+```{r}
+service_duplicate <- service |>
+  group_by(ChooseHealthFacility, Selectmonthandyear) |>
+  filter(n() > 1) |>
+  ungroup() |>
+  arrange(ChooseHealthFacility, Selectmonthandyear)
+```
+
+Added Choose Zone data
+
+```{r}
+service <- service |>
+  select(
+    -ChooseZone
+  ) |> left_join(
+    state_zone
+  )
+```
+
+for each columns starts with All or Under5 replace value > 9999 as na
+
+```{r}
+service <- service |>
+  mutate(across(starts_with(c('All','Under')),
+         ~ ifelse(.x > 9998, NA, .x)
+         )) 
+  # mutate(across(starts_with('Under5')),  ~if_else(. > 9998, NA, .))
+
+ # mutate(across(starts_with(c('All', 'Under5'))), ~ na.if(., . > 9998))
+```
+
+Check date missing
+```{r}
+service |>
+  distinct(Selectmonthandyear)
+```
+
+Export duplicate service records to csv
+
+```{r}
+write_csv(service_duplicate, p_service_duplicate)
+```
+
+## Lab Data
+
+Show 2019 lab data columns
+
+```{r}
+colnames(lab_2019)
+```
+
+Unselect unnecessary columns in 2019 lab data
+
+```{r}
+lab_2019 <- lab_2019 |>
+  select(
+    -"deviceid" ,
+    -"ChooseZone" ,
+    -"DataCollectorname" ,
+    -"DataCollectorphonenumber" ,
+    -"RecordOfficername" ,
+    -"RecordOfficerphonenumber" ,
+    -"RecordOfficerEmail" ,
+    -"StateCoordinatorname" ,
+    -"StateCoordinatorphonenumber" ,
+    -"_GeoLocation_latitude" ,
+    -"_GeoLocation_longitude" ,
+    -"_GeoLocation_altitude" ,
+    -"_GeoLocation_precision" ,
+    -"Decision" ,
+    -"Reason" ,
+    -"N" ,
+    -"mergedel" ,
+    -"mergekept" ,
+    -"dup" ,
+    -"num" ,
+    -"_index"
+  )
+```
+
+Show 2022 lab data columns
+
+```{r}
+colnames(lab_2022)
+```
+
+Rename 2022 lab data columns
+
+```{r}
+lab_2022 <- lab_2022 |> rename(
+  # "deviceid"
+  # "ChooseZone"
+  "ChooseState" = "state",
+  "ChooseLGA" = "LGA",
+  "ChooseHealthFacility" = "Health facility",
+  #"DataCollectorname"
+  #"DataCollectorphonenumber"
+  #"RecordOfficername"
+  #"RecordOfficerphonenumber"
+  #"RecordOfficerEmail"
+  #"StateCoordinatorname"
+  #"StateCoordinatorphonenumber"
+  #"_GeoLocation_latitude"
+  #"_GeoLocation_longitude"
+  #"_GeoLocation_altitude"
+  #"_GeoLocation_precision"
+  #"_index"
+  "_parent_table_name" = "_parent_table_name",
+  "Selectmonthandyear" = "Year-Month",
+  "NoTestedMicroscopyorRDT" =  "Number Tested by Microscopy or RDT",
+  "NoTestedPositive" = "Number Tested Positive",
+  "NoTestedMicroscopyOnly" = "Number Tested by Microscopy Only"  ,
+  "NoPositiveMicroscopyOnly" = "Number of Positive Microscopy Only"
+  # "Decision"
+  # "Reason"
+  # "N" # "mergedel" # "mergekept" # "dup" # "num"
+  # "_index"
+  # "_parent_index"
+  # "_submission__id"
+  # "_submission__uuid"
+  # "_submission__submission_time"
+  # "_submission__validation_status"
+  # "_submission__notes"
+  # "_submission__status"
+  # "_submission__submitted_by"
+  # "HF Type"
+  # "HF Level"
+) |>
+  select(
+ -"_index",
+ -"_parent_index",
+ -"_submission__id",
+ -"_submission__uuid",
+ -"_submission__submission_time",
+ -"_submission__validation_status",
+ -"_submission__notes",
+ -"_submission__status",
+ -"_submission__submitted_by",
+ -"HF Type",
+ -"HF Level",
+  )
+```
+
+Merge 2019 and 2022 lab data
+
+```{r}
+lab <- bind_rows(lab_2019, lab_2022) |>
+  distinct()
+```
+
+Added Choose Zone data
+
+```{r}
+lab <- lab |>
+  left_join(state_zone)
+```
+for each columns starts with All or Under5 replace value > 9999 as na
+
+```{r}
+lab <- lab |>
+  mutate(across(starts_with('No'),
+         ~ ifelse(.x > 9998, NA, .x)
+         )) 
+  # mutate(across(starts_with('Under5')),  ~if_else(. > 9998, NA, .))
+
+ # mutate(across(starts_with(c('All', 'Under5'))), ~ na.if(., . > 9998))
+```
+
+Check date missing
+```{r}
+lab |>
+  distinct(Selectmonthandyear)
+```
+```{r}
+lab |>
+  skimr::skim(Selectmonthandyear)
+```
+
+## Pharmacy Data
+
+## Health Facilities
+## Import Heath Facility Data
+
+Show 2019 data columns
+
+```{r}
+colnames(health_facilities_2019)
+```
+
+Show 2022 data columns
+
+```{r}
+colnames(health_facilities_2022_in_service)
+colnames(health_facilities_2022_in_lab)
+```
+
+Select columns names in 2022 and rename
+
+```{r}
+health_facilities_2022_in_service <- health_facilities_2022_in_service |>
+  rename(
+    ChooseState = "Choose State",
+    ChooseLGA = "Choose LGA",
+    ChooseHealthFacility = "Choose Health Facility",
+    "_GeoLocation_latitude" = "_ad: Collect GPS_latitude",
+    "_GeoLocation_longitude" = "_ad: Collect GPS_longitude",
+    "_GeoLocation_altitude" = "_ad: Collect GPS_altitude",
+    "_GeoLocation_precision" = "_ad: Collect GPS_precision"
+  ) |>
+  select(
+    ChooseState,
+    ChooseLGA,
+    ChooseHealthFacility,
+    "_GeoLocation_latitude",
+    "_GeoLocation_longitude",
+    "_GeoLocation_altitude",
+    "_GeoLocation_precision"
+  )
+
+
+health_facilities_2022_in_lab<- health_facilities_2022_in_lab|>
+  rename(
+    ChooseState = "Choose State",
+    ChooseLGA = "Choose LGA",
+    ChooseHealthFacility = "Choose Health Facility",
+    "_GeoLocation_latitude" = "_ad: Collect GPS_latitude",
+    "_GeoLocation_longitude" = "_ad: Collect GPS_longitude",
+    "_GeoLocation_altitude" = "_ad: Collect GPS_altitude",
+    "_GeoLocation_precision" = "_ad: Collect GPS_precision"
+  ) |>
+  select(
+    ChooseState,
+    ChooseLGA,
+    ChooseHealthFacility,
+    "_GeoLocation_latitude",
+    "_GeoLocation_longitude",
+    "_GeoLocation_altitude",
+    "_GeoLocation_precision"
+  )
+```
+
+2022 data missing chooseZone column, merge with 2019 data
+
+```{r}
+state_zone <- health_facilities_2019 |>
+  select(ChooseState, ChooseZone) |>
+  distinct()
+
+health_facilities_2022_in_service <- health_facilities_2022_in_service |>
+  left_join(state_zone, by = "ChooseState")
+
+health_facilities_2022_in_lab <- health_facilities_2022_in_lab |>
+  left_join(state_zone, by = "ChooseState")
+
+```
+
+Convert char column types in 2019 to double
+
+```{r}
+health_facilities_2019 <- health_facilities_2019 |>
+  mutate(
+    "_GeoLocation_latitude" = as.numeric(`_GeoLocation_latitude`),
+    "_GeoLocation_longitude" = as.numeric(`_GeoLocation_longitude`),
+    "_GeoLocation_altitude"= as.numeric(`_GeoLocation_altitude`),
+    "_GeoLocation_precision"= as.numeric(`_GeoLocation_precision`)
+  )
+```
+
+Collect HF in service table and lab table |>
+```{r}
+colnames(health_facilities)
+hf_in_service <- service |> select(colnames(health_facilities)) 
+hf_in_service |> skimr::skim()
+
+hf_in_lab <- lab |> select("ChooseState",
+              "ChooseLGA",
+              "ChooseHealthFacility",
+              "ChooseZone")
+hf_in_lab |> skimr::skim()
+```
+
+
+Use dplyr bindrow to combine 2019 and 2022 data
+
+```{r}
+health_facilities_2019 |> skimr::skim()
+health_facilities_2022_in_service |> skimr::skim()
+health_facilities_2022_in_lab |> skimr::skim()
+health_facilities <- bind_rows(
+  health_facilities_2019,
+  health_facilities_2022_in_service,
+  health_facilities_2022_in_lab,
+  hf_in_service,
+  hf_in_lab
+) |>
+  distinct()
+health_facilities_names <- health_facilities |>
+  distinct(ChooseState,
+           ChooseLGA,
+           ChooseHealthFacility,
+           ChooseZone) |>
+  filter(across(starts_with("Choose"), ~!is.na(.)))
+health_facilities_names |> skimr::skim()
+health_facilities <- health_facilities_names |> left_join(
+  health_facilities,
+  by = c(
+    "ChooseState",
+    "ChooseLGA",
+    "ChooseHealthFacility",
+    "ChooseZone"
+  )
+)
+health_facilities_without_geolocation <- 
+  health_facilities |> filter(is.na(`_GeoLocation_precision`))
+
+# remove hf without geo
+health_facilities <- 
+  health_facilities |>
+  anti_join( health_facilities_without_geolocation, by=c(
+    "ChooseState",
+    "ChooseLGA",
+    "ChooseHealthFacility",
+    "ChooseZone"
+  ))
+```
+
+Select Health Facilities with the same name appearing more than once
+
+```{r}
+health_facilities_duplicate <- health_facilities |>
+  group_by(ChooseHealthFacility) |>
+  filter(n() > 1) |>
+  ungroup()
+```
+
+For each duplicate, select the one with the the lowest precision
+
+```{r}
+health_facilities_duplicate <- health_facilities_duplicate |>
+  group_by(ChooseHealthFacility) |>
+  arrange(`_GeoLocation_precision`) |>
+  slice(1) |>
+  ungroup()
+```
+
+Remove duplicates from health_facilities
+
+```{r}
+health_facilities <- health_facilities |>
+  anti_join(health_facilities_duplicate, by = "ChooseHealthFacility")
+
+health_facilities <- bind_rows(health_facilities, health_facilities_duplicate)
+```
+
+Check for NAs in Geolocation
+
+```{r}
+health_facilities |> summarise_all(
+  funs(sum(is.na(.)))
+)
+```
+
+```{r}
+health_facilities |> filter(is.na(ChooseLGA))
+```
+
+Remove the HF with blank record
+
+```{r}
+health_facilities <- health_facilities |>
+  filter(!is.na(ChooseLGA))
+```
+
+Check for hf name duplicates
+
+```{r}
+health_facilities |> 
+  group_by(ChooseHealthFacility) |>
+  summarise(n = n()) |>
+  filter(n > 1)
+```
+
+Export HF table
+
+```{r}
+write_csv(health_facilities, p_health_facilities)
+```
+# Consistency Check
+
+## Service Data
+
+Check if AllagesOutpatient < Under5Outpatient in service data if yes, then assign 1 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(AllagesOutpatient < Under5Outpatient, 1, 0)
+  )
+```
+
+Check if AllagesOutpatient< AllagesOutpatientMalariaC in service data if yes, then assign 2 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(AllagesOutpatient < AllagesOutpatientMalariaC, 2, error)
+  )
+```
+
+Check if Under5Outpatient < Under5OutpatientMalaria in service data if yes, then assign 3 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(Under5Outpatient < Under5OutpatientMalaria, 3, error)
+  )
+```
+
+Check if AllagesInpatientAllCause < Under5Inpatientallcause in service data if yes, then assign 4 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(AllagesInpatientAllCause < Under5Inpatientallcause, 4, error)
+  )
+```
+
+Check if AllagesInpatientAllCause < AllAgesInpatientAllMalari in service data if yes, then assign 5 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(AllagesInpatientAllCause < AllAgesInpatientAllMalari, 5, error)
+  )
+```
+
+Check if AllagesInpatientAllCause < AllagesInpatientAllDeath in service data if yes, then assign 6 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(AllagesInpatientAllCause < AllagesInpatientAllDeath, 6, error)
+  )
+```
+
+Check if AllagesInpatientAllDeath < AllAgesInpatientMalariaDe in service data if yes, then assign 7 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(AllagesInpatientAllDeath < AllAgesInpatientMalariaDe, 7, error)
+  )
+```
+
+Check if Under5Inpatientalldeaths < Under5InpatientMalariadeaths in service data if yes, then assign 8 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(Under5Inpatientalldeaths < Under5InpatientMalariadeaths, 8, error)
+  )
+```
+
+Check if AllAgesInpatientAllMalari < AllAgesInpatientMalariaDe in service data if yes, then assign 9 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(AllAgesInpatientAllMalari < AllAgesInpatientMalariaDe, 9, error)
+  )
+```
+
+Check if Under5InpatientMalaria < Under5InpatientMalariadeaths in service data if yes, then assign 10 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(Under5InpatientMalaria < Under5InpatientMalariadeaths, 10, error)
+  )
+```
+
+Check if AllagesInpatientAnaemiaCa < Under5InpatientAnemia in service data if yes, then assign 11 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(AllagesInpatientAnaemiaCa < Under5InpatientAnemia, 11, error)
+  )
+```
+
+Check if AllagesInpatientAnaemiaCa < AllagesInpatientAnaemiaDe in service data if yes, then assign 12 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(AllagesInpatientAnaemiaCa < AllagesInpatientAnaemiaDe, 12, error)
+  )
+```
+
+Check if AllagesInpatientAnaemiaCa < AllagesInpatientAnaemiaDe in service data if yes, then assign 13 to the error column
+
+```{r}
+service <- service |>
+  mutate(
+    error = ifelse(AllagesInpatientAnaemiaCa < AllagesInpatientAnaemiaDe, 13, error)
+  )
+```
+
+if error equal to 1, then replace Under5Outpatient as NA
+
+```{r}
+service <- service |>
+  mutate(
+    Under5Outpatient = ifelse(error == 1, NA, Under5Outpatient)
+  )
+```
+
+if error equal to 2, then replace AllagesOutpatient and AllagesOutpatientMalariaC as NA
+
+```{r}
+service <- service |>
+  mutate(
+    AllagesOutpatient = ifelse(error == 2, NA, AllagesOutpatient),
+    AllagesOutpatientMalariaC = ifelse(error == 2, NA, AllagesOutpatientMalariaC)
+  )
+```
+
+if error equal to 3, then replace Under5Outpatient as NA
+
+```{r}
+service <- service |>
+  mutate(
+    Under5Outpatient = ifelse(error == 3, NA, Under5Outpatient)
+  )
+```
+
+if error equals to 4, then replace Under5Inpatientallcause as NA
+
+```{r}
+service <- service |>
+  mutate(
+    Under5Inpatientallcause = ifelse(error == 4, NA, Under5Inpatientallcause)
+  )
+```
+
+if error equals to 11, then replace Under5InpatientAnemia as NA
+
+```{r}
+service <- service |>
+  mutate(
+    Under5InpatientAnemia = ifelse(error == 11, NA, Under5InpatientAnemia)
+  )
+```
+
+Save the service data
+
+```{r}
+write.csv(service, p_service) 
+# write_dta(service, p_service_dta)
+```
+
+## Lab Data
+
+Check if NoTestedMicroscopyorRDT < NoTestedPositive in lab data if yes, then assign 1 to the error column
+
+```{r}
+lab <- lab |>
+  mutate(
+    error = ifelse(NoTestedMicroscopyorRDT < NoTestedPositive, 1, 0)
+  )
+```
+
+Check if NoTestedMicroscopyorRDT < NoTestedMicroscopyOnly in lab data if yes, then assign 2 to the error column
+
+```{r}
+lab <- lab |>
+  mutate(
+    error = ifelse(NoTestedMicroscopyorRDT < NoTestedMicroscopyOnly, 2, error)
+  )
+```
+
+Check if NoTestedPositive < NoPositiveMicroscopyOnly in lab data if yes, then assign 3 to the error column
+
+```{r}
+lab <- lab |>
+  mutate(
+    error = ifelse(NoTestedPositive < NoPositiveMicroscopyOnly, 3, error)
+  )
+```
+
+Check if NoTestedMicroscopyOnly < NoPositiveMicroscopyOnly in lab data if yes, then assign 4 to the error column
+
+```{r}
+lab <- lab |>
+  mutate(
+    error = ifelse(NoTestedMicroscopyOnly < NoPositiveMicroscopyOnly, 4, error)
+  )
+```
+
+Replace NoTestedMicroscopyorRDT with NA if error equals to 1
+
+```{r}
+lab <- lab |>
+  mutate(
+    NoTestedMicroscopyorRDT = ifelse(error == 1, NA, NoTestedMicroscopyorRDT)
+  )
+```
+
+Replace NoTestedPositive with NA if error equals to 1
+
+```{r}
+lab <- lab |>
+  mutate(
+    NoTestedPositive = ifelse(error == 1, NA, NoTestedPositive)
+  )
+```
+
+Replace NoTestedMicroscopyOnly with NA if error equals to 4
+
+```{r}
+lab <- lab |>
+  mutate(
+    NoTestedMicroscopyOnly = ifelse(error == 4, NA, NoTestedMicroscopyOnly)
+  )
+```
+
+Replace NoPositiveMicroscopyOnly with NA if error equals to 4
+
+```{r}
+lab <- lab |>
+  mutate(
+    NoPositiveMicroscopyOnly = ifelse(error == 4, NA, NoPositiveMicroscopyOnly)
+  )
+```
+
+Save the lab Data to csv file
+
+```{r}
+write.csv(lab, p_lab)
+# write_dta(lab, p_lab_dta)
+```
+
+check na in health facilities
+
+```{r}
+health_facilities %>% 
+  summarise_all(funs(sum(is.na(.))))
 ```

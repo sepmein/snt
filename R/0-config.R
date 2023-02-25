@@ -86,7 +86,7 @@ use_relative_or_absolute <- function(root, relative) {
 #'  | --- graph the type of output
 #'  | --- report
 #'  | --- raster
-#' 3. postgresql db connection
+#' 3. PostgreSQL db connection
 config <- function(country,
                    root = NULL,
                    root_input = NULL,
@@ -327,20 +327,3 @@ setup <- function(path) {
 
 }
 
-config(
-    country = "NGA",
-    root = "/Users/sepmein/Library/CloudStorage/OneDrive-SharedLibraries-WorldHealthOrganization/GMP-SIR - Country_Analytical_Support/Countries/NGA/2022_RIA",
-    root_input = "input",
-    root_output = "output",
-    path_raster = "raster",
-    path_raster_map = "map",
-    path_raster_ihme = "ihme",
-    path_raster_rainfall = "rainfall",
-    path_country = "country",
-    path_routine = "routine",
-    path_intervention = "intervention",
-    path_dhs = "dhs",
-    db_name = "malaria",
-    db_user = "sepmein",
-    path_shapefile = "shapefile"
-)

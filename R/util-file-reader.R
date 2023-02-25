@@ -75,9 +75,15 @@ smart_read_excel_by_year <-
     if (clean) {
       result <- result |>
         # rename using internal rename database
-        dplyr::mutate(data = purrr::map(data, ~ routine_rename(.x, country = country))) |>
+        dplyr::mutate(
+          data = purrr::map(
+            data, ~ routine_rename(.x, country = country))) |>
         # replace using internal replace database
-        dplyr::mutate(data = purrr::map(data, ~ routine_replace(.x, country = country)))
+        dplyr::mutate(
+          data = purrr::map(
+            data, ~ routine_replace(.x, country = country)
+          )
+        )
     }
     return(result)
   }
