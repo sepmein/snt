@@ -16,7 +16,6 @@ find_outliers <-
            alpha = 0.99999,
            both_sides = FALSE,
            ...) {
-
     # 1. Extract the columns we want to analyze from the dataframe.
     args <- rlang::enquos(...)
     df <- df |> gen_id_if_not_exist()
@@ -36,122 +35,65 @@ find_outliers <-
 
     # 3. Loop over the columns that we want to analyze.
     for (column in columns) {
-# 4. Extract the upper bound for this column.
+      # 4. Extract the upper bound for this column.
       upper_bound <- quantile(df[[column]], alpha, na.rm = TRUE)
-# 5. Extract the indices of the outliers.
+      # 5. Extract the indices of the outliers.
       outlier_index <-
         which(df[[column]] > upper_bound)
-# 6. Extract the outliers as a tibble.
+      # 6. Extract the outliers as a tibble.
       df_outlier_list <- df[outlier_index, ] |>
         # select id and target column
         select("id", !!!args, {{ column }}) |>
-          mutate(index = !!column) |>
-          rename(value = !!column)
+        mutate(index = !!column) |>
+        rename(value = !!column)
 
-        # 7. Add the outliers to the result tibble.
-        result <- result |> bind_rows(df_outlier_list)
+      # 7. Add the outliers to the result tibble.
+      result <- result |> bind_rows(df_outlier_list)
     }
-# 8. Add the original data to the result tibble.
+    # 8. Add the original data to the result tibble.
     result <- result |>
       left_join(df)
 
-      # 9. Return the result tibble.
+    # 9. Return the result tibble.
     return(result)
   }
 
 #' @title Plot outliers
 #' @description Plot outliers
 #' @param df dataframe
+#' @param save_to path to save the plot
+#' @param ... columns to be plotted
+#' @return plot
+#' @author Chunzhe ZHANG
+#' @import dplyr
+#' @importFrom rlang enquos
+#' @importFrom ggplot2 ggplot aes geom_point ggsave
 #' @export
-plot_outliers <- function(df) {
-  df |>
+plot_outliers <- function(df, ..., save_to = NULL) {
+  args <- rlang::enquos(...)
+  plot <- df |>
     select(
-      year,
-      allout_ov5,
-      allout_u5,
-      allout
+      .data$year,
+      !!!args
     ) |>
     pivot_longer(
-      cols = 2:4,
+      cols = c(!!!args),
       names_to = "index",
       values_to = "value"
     ) |>
     mutate(year = factor(year)) |>
-    ggplot(aes(x = value, y = index)) +
+    ggplot(aes(x = .data$value, y = .data$index)) +
     # geom_boxplot() +
-    geom_point(aes(color = year), alpha = 0.5)
+    geom_point(aes(color = .data$year), alpha = 0.5)
 
-  # ggsave(
-  #   "SLE_outliers_1.eps",
-  #   width = 5,
-  #   height = 4,
-  #   dpi = 300
-  # )
+  if (!is.null(save_to)) {
+    plot |> ggsave(
+      save_to,
+      width = 5,
+      height = 4,
+      dpi = 300
+    )
+  }
 
-  df |>
-    select(
-      year,
-      maldth_ov5,
-      maldth_u5,
-      maldth,
-      maltreat_ov5,
-      maltreat_u5,
-      maltreat,
-      conf,
-      test
-    ) |>
-    pivot_longer(
-      cols = 2:9,
-      names_to = "index",
-      values_to = "value"
-    ) |>
-    mutate(year = factor(year)) |>
-    ggplot(aes(x = value, y = index)) +
-    geom_point(aes(color = year), alpha = 0.5)
-  # mutate(year= factor(year)) |>
-  # ggplot(aes(x = value, y = index)) +
-  # geom_boxplot() +
-  # # geom_point(aes(shape = year),alpha = 0.01)
-  # ggstatsplot::ggbetweenstats(x = index,
-  #                             y = value,
-  #                             pairwise.comparisons = FALSE)
-  # ggsave(
-  #   "SLE_outliers_2.eps",
-  #   width = 5,
-  #   height = 4,
-  #   dpi = 300
-  # )
-
-  df |>
-    select(
-      year,
-      maladm,
-      maladm_ov5,
-      maladm_u5,
-      alladm,
-      alladm_ov5,
-      alladm_u5,
-    ) |>
-    pivot_longer(
-      cols = 2:7,
-      names_to = "index",
-      values_to = "value"
-    ) |>
-    # mutate(year= factor(year)) |>
-    # ggplot(aes(x = value, y = index)) +
-    # geom_boxplot() +
-    # geom_point(aes(shape = year),alpha = 0.01)
-    mutate(year = factor(year)) |>
-    ggplot(aes(x = value, y = index)) +
-    # geom_boxplot() +
-    geom_point(aes(color = year), alpha = 0.5)
-  # ggstatsplot::ggbetweenstats(x = index,
-  #                             y = value,
-  #                             pairwise.comparisons = FALSE)
-  # ggsave(
-  #   "SLE_outliers_3.eps",
-  #   width = 5,
-  #   height = 4,
-  #   dpi = 300
-  # )
+  print(plot)
 }

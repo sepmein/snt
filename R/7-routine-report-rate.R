@@ -50,7 +50,7 @@ report_rate <- function(df, ...) {
             rep = sum(rep)
         ) |>
         mutate(
-            reprate = rep / exp
+            reprat <- rep / exp
         )
 }
 
