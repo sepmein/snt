@@ -3,7 +3,7 @@
 #' @param ... Columns to group by
 #' @return Dataframe
 #' @import dplyr
-#' @importFrom rlang enquos
+#' @importFrom rlang enquos .data
 #' @import ggplot2
 #' @importFrom lubridate make_date
 #' @export
@@ -27,9 +27,9 @@ plot_hf_report_status <- function(df, ...) {
 
     report_status |>
         mutate(
-            date = make_date(year, month, 1)
+            date <- make_date(.data$year, .data$month, 1)
         ) |>
-        ggplot(aes(x = date, y = hfname, fill = reported)) +
+        ggplot(aes(x = date, y = .data$hfname, fill = .data$reported)) +
         geom_tile() +
         scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
         scale_x_date(date_labels = "%Y-%m") +

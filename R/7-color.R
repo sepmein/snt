@@ -23,11 +23,15 @@ dual_ai <- rgb(251, 229, 132, max = max_val)
 urban_pbo <- rgb(255, 126, 39, max = max_val)
 urban_llins <- complementary_color(llins)
 urban_dual_ai <- complementary_color(dual_ai)
+
+## irs ------
+irs <- "#528552"
+
 ## smc ------
 smc <- rgb(239, 134, 50, max = max_val)
 
-## ipti ------
-ipti <- rgb(255, 228, 126, max = max_val)
+## pmc ------
+pmc <- rgb(255, 228, 126, max = max_val)
 
 ## no intervention ----
 no_intervention <- rgb(255, 255, 255, max = max_val)
@@ -47,24 +51,19 @@ cm_iptp_llins_smc <- rgb(132, 1, 126, max = max_val)
 cm_iptp_pbo <- rgb(255, 152, 67, max = max_val)
 cm_iptp_pbo_smc <- rgb(0, 162, 199, max = max_val)
 cm_iptp_dui_ai <- rgb(255, 228, 126, max = max_val)
-
-cm_iptp_pbo_ipti <- rgb(145, 209, 226, max = max_val)
-#
-
+cm_iptp_pbo_pmc <- rgb(145, 209, 226, max = max_val)
 cm_iptp_pbo_smc <- rgb(0, 162, 199, max = max_val)
-
 cm_iptp_urban_pbo <- rgb(255, 0, 29, max = max_val)
-
-cm_iptp_urban_pbo_ipti <- rgb(255, 153, 155, max = max_val)
+cm_iptp_urban_pbo_pmc <- rgb(255, 153, 155, max = max_val)
 cm_iptp_urban_pbo_smc <- rgb(28, 153, 60, max = max_val)
 
 vac_palette_7 <- RColorBrewer::brewer.pal(7, "Paired")
-cm_iptp_pbo_ipti_vac <- vac_palette_7[1]
-cm_iptp_pbo_ipti_vacpri <- vac_palette_7[3]
+cm_iptp_pbo_pmc_vac <- vac_palette_7[1]
+cm_iptp_pbo_pmc_vacpri <- vac_palette_7[3]
 cm_iptp_pbo_smc_vac <- vac_palette_7[2]
 cm_iptp_pbo_smc_vacpri <- vac_palette_7[4]
 cm_iptp_urban_pbo_vac <- vac_palette_7[5]
-cm_iptp_urban_pbo_ipti_vac <- vac_palette_7[6]
+cm_iptp_urban_pbo_pmc_vac <- vac_palette_7[6]
 cm_iptp_urban_pbo_smc_vac <- vac_palette_7[7]
 
 #' @title color palette
@@ -81,7 +80,8 @@ color <- list(
         urban_dual_ai = urban_dual_ai
     ),
     smc = smc,
-    ipti = ipti,
+    pmc = pmc,
+    irs = irs,
     vaccine = list(
         vac1p = vac1p,
         vac1 = vac1,
@@ -98,17 +98,17 @@ color <- list(
         cm_iptp_pbo = cm_iptp_pbo,
         cm_iptp_pbo_smc = cm_iptp_pbo_smc,
         cm_iptp_dui_ai = cm_iptp_dui_ai,
-        cm_iptp_pbo_ipti = cm_iptp_pbo_ipti,
+        cm_iptp_pbo_pmc = cm_iptp_pbo_pmc,
         cm_iptp_pbo_smc = cm_iptp_pbo_smc,
         cm_iptp_urban_pbo = cm_iptp_urban_pbo,
-        cm_iptp_urban_pbo_ipti = cm_iptp_urban_pbo_ipti,
+        cm_iptp_urban_pbo_pmc = cm_iptp_urban_pbo_pmc,
         cm_iptp_urban_pbo_smc = cm_iptp_urban_pbo_smc,
-        cm_iptp_pbo_ipti_vac = cm_iptp_pbo_ipti_vac,
-        cm_iptp_pbo_ipti_vacpri = cm_iptp_pbo_ipti_vacpri,
+        cm_iptp_pbo_pmc_vac = cm_iptp_pbo_pmc_vac,
+        cm_iptp_pbo_pmc_vacpri = cm_iptp_pbo_pmc_vacpri,
         cm_iptp_pbo_smc_vac = cm_iptp_pbo_smc_vac,
         cm_iptp_pbo_smc_vacpri = cm_iptp_pbo_smc_vacpri,
         cm_iptp_urban_pbo_vac = cm_iptp_urban_pbo_vac,
-        cm_iptp_urban_pbo_ipti_vac = cm_iptp_urban_pbo_ipti_vac,
+        cm_iptp_urban_pbo_pmc_vac = cm_iptp_urban_pbo_pmc_vac,
         cm_iptp_urban_pbo_smc_vac = cm_iptp_urban_pbo_smc_vac
     )
 )

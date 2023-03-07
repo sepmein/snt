@@ -30,5 +30,5 @@ fuzzy_match(df, col, match_col)
 fuzzy_match(df, col, match_col, threshold = 1)
 }
 \author{
-\link[=emailÂ protected]{email protected}
+\link{email protected}
 }
