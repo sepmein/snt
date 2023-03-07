@@ -39,7 +39,8 @@ Imports:
     stringr,
     usethis (>= 2.1.6),
     devtools (>= 2.4.5),
-    RJSONIO
+    RJSONIO,
+    qs
 Depends: 
     R (>= 2.10)
 LazyData: true

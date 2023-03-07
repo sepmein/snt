@@ -1,0 +1,28 @@
+---
+title: "Preface"
+subtitle: "Malaria Subnational Tailoring Analysis"
+date: 2023-03-07
+date-modified: 2023-03-07
+editor: visual
+author: "Chunzhe ZHANG(Spencer)"
+toc: true
+number-sections: true
+highlight-style: pygments
+---
+# Preface
+
+This work is intended to work on the malaria sub-national analysis for [[Country]].
+
+## Workflow
+
+```{mermaid}
+%%| fig-width: 5
+flowchart LR
+R[R Workflow] --> DI[Data import]
+R --> Do[Data overview]
+R --> P[Data processing]
+R --> Des[Descriptive statistics<br>Univariate or simple<br>stratification]
+R --> An[Analysis<br>Stay close to data] 
+```
+
+## Acknowledgement

@@ -1,0 +1,37 @@
+project:
+  type: book
+
+book:
+  title: "SNT - Country - Year"
+  author: "Chunzhe, Spencer, ZHANG"
+  date: "3/7/2023"
+  chapters:
+    - index.qmd
+    - part: "Data Management"
+      chapters:
+        - load_data.qmd
+    - intro.qmd
+    - summary.qmd
+  appendices:
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      light: Simplex
+      dark: Cyborg
+    html-math-method: katex
+    code-fold: true
+    code-tools: true
+    code-link: true
+    highlight-style: gruvbox
+    anchor-sections: true
+    smooth-scroll: true
+    link-external-icon: true
+
+editor: visual
+toc: true
+number-sections: true
+highlight-style: pygments
