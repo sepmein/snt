@@ -1,0 +1,41 @@
+---
+title: "SNT - Somalia - 2022"
+subtitle: "Malaria Subnational Tailoring Analysis"
+date: 2023-03-07
+date-modified: 2023-03-07
+order: 1
+editor: visual
+author: "Chunzhe ZHANG(Spencer)"
+toc: true
+number-sections: true
+highlight-style: pygments
+format:
+  html:
+    theme: 
+      light: Simplex
+      dark: Cyborg
+    html-math-method: katex
+    code-fold: true
+    code-tools: true
+    code-link: true
+    highlight-style: gruvbox
+    anchor-sections: true
+    smooth-scroll: true
+    link-external-icon: true
+---
+
+# Workflow
+
+```{mermaid}
+%%| fig-width: 5
+flowchart LR
+R[R Workflow] --> DI[Data import]
+R --> Do[Data overview]
+R --> P[Data processing]
+R --> Des[Descriptive statistics<br>Univariate or simple<br>stratification]
+R --> An[Analysis<br>Stay close to data] 
+```
+
+# Preface
+
+This work is intended to

@@ -2,7 +2,7 @@ project:
   type: book
 
 book:
-  title: "SNT - Country - Year"
+  title: "SNT - Somalia - 2023"
   author: "Chunzhe, Spencer, ZHANG"
   date: "3/7/2023"
   chapters:
@@ -10,6 +10,14 @@ book:
     - part: "Data Management"
       chapters:
         - load_data.qmd
+        - missing_data.qmd
+        - data_checking.qmd
+    - part: "Analysis"
+      chapters:
+        - adjusted_incidence.qmd
+        - care_seeking.qmd
+        - llins.qmd
+        - epi.qmd
     - intro.qmd
     - summary.qmd
   appendices:

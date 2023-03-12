@@ -67,7 +67,11 @@ inst/report/*.html
 inst/report/*/*.html
 inst/report/*/*.pdf
 inst/report/_book/
-
+inst/report/**/*.png
+inst/report/**/*.css
+inst/report/**/*.woff
+inst/report/**/*.js
+inst/report/**/*.qs
 
 ### R.Bookdown Stack ###
 # R package: bookdown caching files

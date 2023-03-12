@@ -1,0 +1,83 @@
+---
+title: "Adjusted Incidences"
+subtitle: "Adjusted Incidences WHO methods"
+date: 2023-03-09
+date-modified: 2023-03-09
+order: 5
+editor: visual
+author: "Chunzhe ZHANG(Spencer)"
+toc: true
+number-sections: true
+highlight-style: pygments
+---
+
+# Adjusted Incidences
+
+```{r fig-adj-method}
+#| label: fig-adj-method
+#| fig-cap: “WHO approach to estimating incidence”
+knitr::include_graphics('adjusted_incidence_method.png')
+```
+
+## Load {.unnumbered}
+```{r load, message=FALSE, echo=FALSE}
+library(snt)
+library(readr)
+library(dplyr) 
+require(qreport)
+source("paths.R")
+routine <- read_csv(o_routine_csv)
+reprat_adm1 <- read_csv(o_reprat_adm1)
+reprat_adm2 <- read_csv(o_reprat_adm2)
+treatment_seeking_adm1 <- read_csv(o_treatment_seeking_adm1)
+treatment_seeking_adm2 <- read_csv(o_treatment_seeking_adm2)
+```
+
+## Administrative level 1
+```{r adj_adm1, warning=FALSE, message=FALSE, results='asis'}
+adm1_adj_1 <- routine |>
+    adjust_incidence_1(
+        adm0, adm1, year
+    )
+
+adm1_adj_1 <- routine |>
+    select(adm0, adm1, year, conf) |>
+    group_by(adm0, adm1, year) |>
+    summarise(
+        conf = sum(conf),
+    ) |>
+    mutate(n1 = conf) |>
+    select(-conf)
+
+adm1_adj_2 <- adm1_adj_1 |> adjust_incidence_2(reprat_adm1)
+
+adm1_adj_3 <- adm1_adj_2 |> adjust_incidence_3(treatment_seeking_adm1)
+
+makecnote(kabl(adm1_adj_3))
+```
+
+
+## Administrative level 2
+
+```{r adj_adm2, warning=FALSE, message=FALSE, results='asis'}
+adm2_adj_1 <- routine |>
+    adjust_incidence_1(
+        adm0, adm1, adm2, year
+    )
+
+adm2_adj_1 <- routine |>
+    select(adm0, adm1, adm2, year, conf) |>
+    group_by(adm0, adm1, adm2, year) |>
+    summarise(
+        conf = sum(conf, na.rm = TRUE),
+    ) |>
+    mutate(n1 = conf) |>
+    select(-conf)
+
+adm2_adj_2 <- adm2_adj_1 |> adjust_incidence_2(reprat_adm2)
+
+adm2_adj_3 <- adm2_adj_2 |> adjust_incidence_3(treatment_seeking_adm2)
+
+makecnote(kabl(adm2_adj_3))
+```
+

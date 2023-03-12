@@ -10,7 +10,8 @@
 #' @export
 #' @import dplyr
 #' @importFrom tibble tibble
-#' @importFrom rlang enquos
+#' @importFrom rlang enquos .data
+#' @importFrom labelled remove_labels
 find_outliers <-
   function(df,
            alpha = 0.99999,
@@ -19,7 +20,7 @@ find_outliers <-
     # 1. Extract the columns we want to analyze from the dataframe.
     args <- rlang::enquos(...)
     df <- df |> gen_id_if_not_exist()
-
+    df <- df |> mutate_all(remove_label)
     # get numeric columns names from the dataframe
     columns <- colnames(df |> select(where(is.numeric)))
     if (length(columns) == 0) {
@@ -45,7 +46,11 @@ find_outliers <-
         # select id and target column
         select("id", !!!args, {{ column }}) |>
         mutate(index = !!column) |>
-        rename(value = !!column)
+        rename(value = !!column) |>
+          # to work with data.table
+          mutate(id = as.character(.data$id)) |>
+          mutate(index = as.character(.data$index)) |>
+          mutate(value = as.numeric(.data$value))
 
       # 7. Add the outliers to the result tibble.
       result <- result |> bind_rows(df_outlier_list)
@@ -57,6 +62,31 @@ find_outliers <-
     # 9. Return the result tibble.
     return(result)
   }
+
+#' Data.table version of find_outliers
+#' 
+remove_outliers <- function(dt) {
+  # Create an empty list to store the outliers removed for each column
+  outliers_removed <- list()
+
+  # Loop through each column in the data.table
+  for (col in names(dt)) {
+    # Calculate the 99th percentile for the column
+    q99 <- quantile(dt[[col]], 0.99)
+
+    # Identify the outliers in the column
+    outliers <- dt[[col]][dt[[col]] > q99]
+
+    # Remove the outliers from the column
+    dt[[col]] <- dt[[col]][dt[[col]] <= q99]
+
+    # Add the outliers to the list of outliers removed
+    outliers_removed[[col]] <- outliers
+  }
+
+  # Return the data.table with outliers removed and the list of outliers removed
+  return(list(dt = dt, outliers_removed = outliers_removed))
+}
 
 #' @title Plot outliers
 #' @description Plot outliers

@@ -15,16 +15,18 @@ highlight-style: pygments
 
 ```{mermaid}
 flowchart LR
-Ld[Load Data] --> vn[Manageable<br>Variable<br>Names] --> An[Annotate<br>Add Metadata]
+Ld[Load Data] --> Dp[Define<br>Paths]
+Ld --> vn[Manageable<br>Variable<br>Names] --> An[Annotate<br>Add Metadata]
 An --> lu[Labels<br>Units]
 An --> V["View Data Dictionary<br>(metadata)"]
 ```
 
 ## Load R library
 
-```{r}
+```{r output=FALSE,warning=FALSE}
 library(snt)
 require(Hmisc)
+require(qs)
 ```
 
 ::: {#snt-package-intro .callout-tip collapse="true"}
@@ -39,9 +41,179 @@ Project: [github.com/WorldHealthOrganization/snt](https://github.com/WorldHealth
 Submit an issue: [github.com/WorldHealthOrganization/snt/issues](https://github.com/WorldHealthOrganization/snt/issues)
 :::
 
-
 ::: {#Hmisc-package-intro .callout-tip collapse="true"}
 ## Hmisc package
 
-The Hmisc package is a package developped by 
+The Hmisc package is a package developped by
 :::
+
+## Load Data
+
+```{r}
+d_routine <- "/Users/sepmein/x/projects/som/2022-snt/database/som_routine.csv"
+d <- read.csv(d_routine)
+```
+
+## Load Paths
+
+```{r}
+source("paths.R")
+```
+
+## Annotation
+
+```{r}
+#  [1] "adm0"         "adm1"         "adm2"         "adm3"        
+#  [5] "hfname"       "year"         "month"        "allout_u5"   
+#  [9] "allout_ov5"   "allout"       "alladm_u5"    "alladm_ov5"  
+# [13] "alladm"       "alldth_u5"    "alldth_ov5"   "alldth"      
+# [17] "susp_u5"      "susp_ov5"     "susp"         "pres_u5"     
+# [21] "pres_ov5"     "pres"         "test_mic_u5"  "test_mic_ov5"
+# [25] "test_mic"     "test_rdt_u5"  "test_rdt_ov5" "test_rdt"    
+# [29] "test_u5"      "test_ov5"     "test"         "maltreat_u5" 
+# [33] "maltreat_ov5" "maltreat"     "conf_mic_u5"  "conf_mic_ov5"
+# [37] "conf_mic"     "conf_rdt_u5"  "conf_rdt_ov5" "conf_rdt"    
+# [41] "conf_u5"      "conf_ov5"     "conf"         "anout_u5"    
+# [45] "anout_ov5"    "anout"        "maladm_u5"    "maladm_ov5"  
+# [49] "maladm"       "maldth_u5"    "maldth_ov5"   "maldth"      
+# [53] "anadm_u5"     "anadm_ov5"    "anadm"        "andth_u5"    
+# [57] "andth_ov5"    "andth"  
+d <- upData(d,
+            labels = c(
+              adm0 = "0 order administrative units, country name",
+              adm1 = "1st order administrative units",
+              adm2 = "2nd order administrative units",
+              adm3 = "3rd order administrative units",
+              hfname = "Health facility name",
+              year = "Year",
+              month = "Month",
+              allout_u5 = "Number of all cause outpatients in population under 5 years old",
+              allout_ov5 = "Number of all cause outpatients in population over 5 years old",
+              allout = "Number of all cause outpatients",
+              alladm_u5 = "Number of all cause inpatients in population under 5 years old",
+              alladm_ov5 = "Number of all cause inpatients in population over 5 years old",
+              alladm = "Number of all cause inpatients",
+              alldth_u5 = "Number of all cause deaths in population under 5 years old",
+              alldth_ov5 = "Number of all cause deaths in population over 5 years old",
+              alldth = "Number of all cause deaths",
+              susp_u5 = "Number of suspected malaria cases in population under 5 years old",
+              susp_ov5 = "Number of suspected malaria cases in population over 5 years old",
+              susp = "Number of suspected malaria cases",
+              pres_u5 = "Number of presumed malaria cases in population under 5 years old",
+              pres_ov5 = "Number of presumed malaria cases in population over 5 years old",
+              pres = "Number of presumed malaria cases",
+              test_mic_u5 = "Number of microscopy tests in population under 5 years old",
+              test_mic_ov5 = "Number of microscopy tests in population over 5 years old",
+              test_mic = "Number of microscopy tests",
+              test_rdt_u5 = "Number of RDT tests in population under 5 years old",
+              test_rdt_ov5 = "Number of RDT tests in population over 5 years old",
+              test_rdt = "Number of RDT tests",
+              test_u5 = "Number of all tests in population under 5 years old",
+              test_ov5 = "Number of all tests in population over 5 years old",
+              test = "Number of all tests",
+              maltreat_u5 = "Number of malaria cases treated with anti-malarial drugs in population under 5 years old",
+              maltreat_ov5 = "Number of malaria cases treated with anti-malarial drugs in population over 5 years old",
+              maltreat = "Number of malaria cases treated with anti-malarial drugs",
+              conf_mic_u5 = "Number of confirmed malaria cases by microscopy in population under 5 years old",
+              conf_mic_ov5 = "Number of confirmed malaria cases by microscopy in population over 5 years old",
+              conf_mic = "Number of confirmed malaria cases by microscopy",
+              conf_rdt_u5 = "Number of confirmed malaria cases by RDT in population under 5 years old",
+              conf_rdt_ov5 = "Number of confirmed malaria cases by RDT in population over 5 years old",
+              conf_rdt = "Number of confirmed malaria cases by RDT",
+              conf_u5 = "Number of confirmed malaria cases in population under 5 years old",
+              conf_ov5 = "Number of confirmed malaria cases in population over 5 years old",
+              conf = "Number of confirmed malaria cases",
+              anout_u5 = "Number of anemia outpatients in population under 5 years old",
+              anout_ov5 = "Number of anemia outpatients in population over 5 years old",
+              anout = "Number of anemia outpatients",
+              maladm_u5 = "Number of malaria inpatients in population under 5 years old",
+              maladm_ov5 = "Number of malaria inpatients in population over 5 years old",
+              maladm = "Number of malaria inpatients",
+              maldth_u5 = "Number of malaria deaths in population under 5 years old",
+              maldth_ov5 = "Number of malaria deaths in population over 5 years old",
+              maldth = "Number of malaria deaths",
+              anadm_u5 = "Number of anemia inpatients in population under 5 years old",
+              anadm_ov5 = "Number of anemia inpatients in population over 5 years old",
+              anadm = "Number of anemia inpatients",
+              andth_u5 = "Number of anemia deaths in population under 5 years old",
+              andth_ov5 = "Number of anemia deaths in population over 5 years old",
+              andth = "Number of anemia deaths"
+            ),
+            units = .q(
+              year = year,
+              month = month,
+              allout_u5 = "persons",
+              allout_ov5 = "persons",
+              allout = "persons",
+              alladm_u5 = "persons",
+              alladm_ov5 = "persons",
+              alladm = "persons",
+              alldth_u5 = "persons",
+              alldth_ov5 = "persons",
+              alldth = "persons",
+              susp_u5 = "persons",
+              susp_ov5 = "persons",
+              susp = "persons",
+              pres_u5 = "persons",
+              pres_ov5 = "persons",
+              pres = "persons",
+              test_mic_u5 = "persons",
+              test_mic_ov5 = "persons",
+              test_mic = "persons",
+              test_rdt_u5 = "persons",
+              test_rdt_ov5 = "persons",
+              test_rdt = "persons",
+              test_u5 = "persons",
+              test_ov5 = "persons",
+              test = "persons",
+              maltreat_u5 = "persons",
+              maltreat_ov5 = "persons",
+              maltreat = "persons",
+              conf_mic_u5 = "persons",
+              conf_mic_ov5 = "persons",
+              conf_mic = "persons",
+              conf_rdt_u5 = "persons",
+              conf_rdt_ov5 = "persons",
+              conf_rdt = "persons",
+              conf_u5 = "persons",
+              conf_ov5 = "persons",
+              conf = "persons",
+              anout_u5 = "persons",
+              anout_ov5 = "persons",
+              anout = "persons",
+              maladm_u5 = "persons",
+              maladm_ov5 = "persons",
+              maladm = "persons",
+              maldth_u5 = "persons",
+              maldth_ov5 = "persons",
+              maldth = "persons",
+              anadm_u5 = "persons",
+              anadm_ov5 = "persons",
+              anadm = "persons",
+              andth_u5 = "persons",
+              andth_ov5 = "persons",
+              andth = "persons"
+            )
+            
+            )
+
+```
+
+## Export
+
+```{r}
+# modify the threads to the number of 
+qs::qsave(d, o_routine, nthreads = 8)
+```
+
+## Variable Naming
+
+```{r message=FALSE}
+require(qreport)
+options(prType='html')
+contents(d)
+```
+
+```{r}
+ describe(d)
+```

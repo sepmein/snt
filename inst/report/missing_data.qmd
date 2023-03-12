@@ -1,0 +1,45 @@
+---
+title: "Missing Data"
+subtitle: "To understand the extent and patterns of missing data"
+date: 2023-03-07
+date-modified: 2023-03-07
+order: 3
+editor: visual
+author: "Chunzhe ZHANG(Spencer)"
+toc: true
+number-sections: true
+highlight-style: pygments
+---
+
+# Missing Data {#sec-missing}
+
+```{mermaid}
+flowchart LR
+Ext[Extent of NAs] --> PV[Per Variable] & PO[Per Observation]
+P[Patterns] --> Cl[Clustering of Missingness]
+P --> Seq[Sequential Exclusions]
+P --> Rel[Extent of Association<br>Between Values of<br>Non-missing Variables<br>and Number of Variables<br>Missing per Observation]
+```
+
+## Load Library {.unnumbered}
+
+```{r message=FALSE, warning=FALSE}
+require(Hmisc)
+require(data.table)
+require(qreport)
+require(qs)
+source("paths.R")
+```
+
+## Load Data {.unnumbered}
+
+```{r message=FALSE, warning=FALSE}
+routine <- qread(o_routine)
+routine <- setDT(routine)
+```
+
+## Missingness Report
+
+```{r misscheck, results='asis'}
+missChk(routine)
+```
