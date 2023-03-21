@@ -4,7 +4,7 @@
 \alias{fuzzy_match}
 \title{Fuzzy match}
 \usage{
-fuzzy_match(df, col, threshold = 1.1, method = "lv", ...)
+fuzzy_match(df, col, threshold = 2, method = "osa")
 }
 \arguments{
 \item{df}{Dataframe}
@@ -21,14 +21,4 @@ Dataframe
 \description{
 Fuzzy match function, check this answer for more details:
 https://stackoverflow.com/a/41560524/886198
-}
-\examples{
-df <- data.frame(
-  col = c("a", "b", "c", "aa")
-)
-fuzzy_match(df, col, match_col)
-fuzzy_match(df, col, match_col, threshold = 1)
-}
-\author{
-\link{email protected}
 }

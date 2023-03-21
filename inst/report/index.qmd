@@ -9,9 +9,10 @@ toc: true
 number-sections: true
 highlight-style: pygments
 ---
+
 # Preface
 
-This work is intended to work on the malaria sub-national analysis for [[Country]].
+This work is intended to work on the malaria sub-national analysis for \[\[Country\]\].
 
 ## Workflow
 

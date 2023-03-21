@@ -11,9 +11,10 @@ number-sections: true
 highlight-style: pygments
 ---
 
-It is important to flag suspicious values in an automated way. Checking multiple columns may involve a large number of R expressions to run to classify observations as suspicious, let’s automate the process somewhat by specifying a vector of expressions.
+It is important to flag suspicious values in an automated way. Checking multiple columns may involve a large number of R expressions to run to classify observations as suspicious, let's automate the process somewhat by specifying a vector of expressions.
 
 # Data checking
+
 ```{mermaid general_flow}
 flowchart LR
 Ran[Range Checks]
@@ -24,6 +25,7 @@ Con --> Rep
 ```
 
 ## Load Library {.unnumbered}
+
 ```{r load_lib, message=FALSE, warning=FALSE}
 require(Hmisc)
 require(data.table)
@@ -35,6 +37,7 @@ source("paths.R")
 ```
 
 ## Load Data {.unnumbered}
+
 ```{r load_data, message=FALSE, warning=FALSE}
 d <- qread(o_routine)
 setDT(d)
@@ -42,6 +45,7 @@ t <- read_csv(o_routine_csv)
 ```
 
 ## Consistency Checks
+
 ```{r data_checks, results='asis'}
 d[, id := 1: .N]
 checks <- expression(
@@ -71,16 +75,24 @@ d[, id := NULL]
 #| - “Malaria admission and all cause admission”
 #| - “Malaria deaths adn all cause admission”
 #| - “Tests and all cause outpatients”
-d |> consistency_check(allout, test)
-d |> consistency_check(susp, test)
-d |> consistency_check(test,conf)
-d |> consistency_check(conf, maltreat)
-d |> consistency_check(alladm, maladm)
-d |> consistency_check(alladm, maldth)
-d |> consistency_check(allout, test)
+p_consistency_allout_test <- d |> consistency_check(allout, test)
+ggplotlyr(p_consistency_allout_test)
+p_consistency_susp_test <- d |> consistency_check(susp, test)
+ggplotlyr(p_consistency_susp_test)
+p_consistency_test_conf <- d |> consistency_check(test,conf)
+ggplotlyr(p_consistency_test_conf)
+p_consistency_conf_maltreat <- d |> consistency_check(conf, maltreat)
+ggplotlyr(p_consistency_conf_maltreat)
+p_consistency_alladm_maladm <- d |> consistency_check(alladm, maladm)
+ggplotlyr(p_consistency_alladm_maladm)
+p_consistency_alladm_maldth <- d |> consistency_check(alladm, maldth)
+ggplotlyr(p_consistency_alladm_maldth)
+p_consistency_allout_test <- d |> consistency_check(allout, test)
+ggplotlyr(p_consistency_allout_test)
 ```
 
 ## Check Duplicates in Health Facilties
+
 ```{mermaid duplicates_process}
 flowchart LR
   fm[Fuzzy match algorithm<br>find potential duplicates]
@@ -137,10 +149,11 @@ kabl(
 #| - “All cause outpatients”
 #| - “Malaria deaths, malaria treatment, confirmed cases and tests”
 #| - “Malaria admission, all cause admission”
-t |> plot_outliers(allout_ov5,
+p_outliers_1 <- t |> plot_outliers(allout_ov5,
                          allout_u5,
                          allout)
-t |> plot_outliers(maldth_ov5,
+ggplotlyr(p_outliers_1)
+p_outliers_2 <- t |> plot_outliers(maldth_ov5,
                          maldth_u5,
                          maldth,
                          maltreat_ov5,
@@ -148,12 +161,15 @@ t |> plot_outliers(maldth_ov5,
                          maltreat,
                          conf,
                          test)
-t |> plot_outliers(maladm,
+ggplotlyr(p_outliers_2)
+p_outliers_3 <- t |> plot_outliers(maladm,
                          maladm_ov5,
                          maladm_u5,
                          alladm,
                          alladm_ov5,
                          alladm_u5)
+ggplotlyr(p_outliers_3)
+
 ```
 
 ## Report Status
@@ -163,8 +179,12 @@ t |> plot_outliers(maladm,
 #| fig-cap: “Report status by Health Facilities”
 #| fig-height: 5
 #| fig-width: 12
-t |> 
-  plot_hf_report_status(adm0, adm1, adm2, adm3, hfname, year, month)
+p_hf_report_status <- t |> 
+  plot_hf_report_status(
+    check_overlap = TRUE,
+    date_labels = "%Y",
+    adm0, adm1, adm2, adm3, hfname, year, month)
+ggplotlyr(p_hf_report_status)
 ```
 
 ```{r report_status_var, echo=FALSE, message=FALSE}
@@ -202,4 +222,3 @@ t |> plot_adm_report_status(adm0,
                                             "maldth", "maladm", 
                                             "maltreat"))
 ```
-
