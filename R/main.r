@@ -1429,20 +1429,3 @@ IHME_mortality <- R6::R6Class(
   )
 )
 
-
-# Utils -------------------------------------------------------------------
-#' @export
-fix_outliers <- function(data, outliers_df) {
-
-}
-
-#' @export
-outliers_find_hf <- function(outliers,
-                             group_by_column = "hf") {
-  result <-
-    outliers |>
-    dplyr::group_by(!!group_by_column) |>
-    dplyr::summarise(count = dplyr::n()) |>
-    dplyr::arrange(dplyr::desc(dplyr::count))
-  return(result)
-}
