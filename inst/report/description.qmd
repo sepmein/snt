@@ -1,0 +1,48 @@
+---
+title: "Descriptions"
+subtitle: "Descriptions"
+date: 2023-04-04
+date-modified: 2023-04-04
+order: 6
+author: "Chunzhe ZHANG(Spencer)"
+toc: true
+number-sections: true
+highlight-style: pygments
+---
+
+# Descriptions
+  
+## Load Library  {.unnumbered}
+```{r load_library, echo=FALSE, message=FALSE, warning=FALSE}
+require(snt)
+require(qreport)
+require(Hmisc)
+require(qs)
+require(readr)
+source("paths.R")
+options(prType='html')
+hookaddcap()
+```
+
+## Load Data {.unnumbered}
+```{r load_data, message=FALSE, warning=FALSE}
+d <- qread(o_routine)
+setDT(d)
+t <- read_csv(o_routine_csv)
+```
+
+## By Administrative 1
+### Confirmed Malaria Cases
+```{r adm1_conf}
+d[, histboxp(x = conf, group = adm1, bins = 200)]
+```
+
+### Suspected Malaria Cases
+```{r adm1_susp}
+d[, histboxp(x = susp, group = adm1, bins = 200)]
+```
+
+### Tests
+```{r adm1_test}
+d[, histboxp(x = test, group = adm1, bins = 200)]
+```

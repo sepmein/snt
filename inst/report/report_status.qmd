@@ -1,0 +1,86 @@
+---
+title: "Report Status"
+subtitle: "Check for Report Status"
+date: 2023-04-04
+date-modified: 2023-04-04
+order: 7
+editor: visual
+author: "Chunzhe ZHANG(Spencer)"
+toc: true
+number-sections: true
+highlight-style: pygments
+---
+
+## Load Library  {.unnumbered}
+```{r load_library, echo=FALSE, message=FALSE, warning=FALSE}
+require(snt)
+require(qreport)
+require(Hmisc)
+require(qs)
+require(readr)
+source("paths.R")
+options(prType='html')
+hookaddcap()
+```
+
+## Load Data {.unnumbered}
+
+```{r load_data, message=FALSE, warning=FALSE}
+d <- qread(o_routine)
+setDT(d)
+t <- read_csv(o_routine_csv)
+```
+
+
+## Report Status
+
+```{r report_status, echo=FALSE, message=FALSE}
+#| label: fig-report-status-by-hf
+#| fig-cap: “Report status by Health Facilities”
+#| fig-height: 5
+#| fig-width: 12
+t |>
+  plot_hf_report_status(
+    check_overlap = TRUE,
+    date_labels = "%Y",
+    adm0, adm1, adm2, adm3, hfname, year, month)
+# |> ggplotlyr() |> plotly::toWebGL()
+```
+
+```{r report_status_var, echo=FALSE, message=FALSE}
+#| label: fig-report-status-by-indicators
+#| fig-cap: “Report status by indicators”
+#| fig-height: 5
+#| fig-width: 12
+t |>
+  plot_indicator_report_status(
+    allout,
+    alladm,
+    alldth,
+    susp,
+    pres,
+    test,
+    maltreat,
+    conf,
+    anout,
+    maladm,
+    maldth,
+    anadm,
+    andth
+  ) |> ggplotlyr() |> plotly::toWebGL()
+```
+
+```{r report_status_adm1, echo=FALSE, message=FALSE}
+#| label: fig-report-status-by-adm1
+#| fig-cap: “Report status by ADM1”
+#| fig-height: 5
+#| fig-width: 12
+t |> plot_adm_report_status(adm0,
+                            adm1,
+                            index = c("conf", "test",
+                                      "susp", "pres",
+                                      "maldth", "maladm",
+                                      "maltreat")) |>
+  ggplotlyr() |>
+  plotly::toWebGL()
+```

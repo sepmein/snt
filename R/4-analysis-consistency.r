@@ -20,5 +20,6 @@ consistency_check <- function(df, index_a, index_b) {
             x = {{ index_b }},
             color = .data$comparison
         )) +
-        geom_abline(slope = 1)
+        geom_abline(slope = 1) +
+        theme_snt()
 }

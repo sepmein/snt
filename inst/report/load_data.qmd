@@ -27,6 +27,11 @@ An --> V["View Data Dictionary<br>(metadata)"]
 library(snt)
 require(Hmisc)
 require(qs)
+require(qreport)
+require(data.table)
+options(prType='html')
+hookaddcap()
+source("paths.R")
 ```
 
 ::: {#snt-package-intro .callout-tip collapse="true"}
@@ -52,12 +57,12 @@ The Hmisc package is a package developped by
 ```{r}
 d_routine <- "/Users/sepmein/x/projects/som/2022-snt/database/som_routine.csv"
 d <- read.csv(d_routine)
+setDT(d)
 ```
 
 ## Load Paths
 
 ```{r}
-source("paths.R")
 ```
 
 ## Annotation
@@ -208,12 +213,11 @@ qs::qsave(d, o_routine, nthreads = 8)
 
 ## Variable Naming
 
-```{r message=FALSE}
-require(qreport)
-options(prType='html')
+```{r content, message=FALSE}
 contents(d)
 ```
 
-```{r}
- describe(d)
+```{r describe, results='asis'}
+describe(d)
 ```
+

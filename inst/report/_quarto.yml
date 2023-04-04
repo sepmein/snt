@@ -10,8 +10,13 @@ book:
     - part: "Data Management"
       chapters:
         - load_data.qmd
+        - description.qmd
         - missing_data.qmd
         - data_checking.qmd
+        - duplicates.qmd
+        - outliers.qmd
+        - report_status.qmd
+        - interrelationships.qmd
     - part: "Analysis"
       chapters:
         - adjusted_incidence.qmd

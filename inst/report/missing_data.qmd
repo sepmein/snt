@@ -1,11 +1,11 @@
 ---
 title: "Missing Data"
-subtitle: "To understand the extent and patterns of missing data"
+subtitle: "to understand the extent and patterns of missing data"
 date: 2023-03-07
 date-modified: 2023-03-07
 order: 3
 editor: visual
-author: "Chunzhe ZHANG(Spencer)"
+author: "chunzhe zhang(spencer)"
 toc: true
 number-sections: true
 highlight-style: pygments
@@ -29,6 +29,8 @@ require(data.table)
 require(qreport)
 require(qs)
 source("paths.R")
+options(prType='html')
+hookaddcap()
 ```
 
 ## Load Data {.unnumbered}

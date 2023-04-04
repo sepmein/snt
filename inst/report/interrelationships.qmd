@@ -1,0 +1,44 @@
+---
+title: "Interrelationships"
+subtitle: "Interrelationships"
+date: 2023-04-04
+date-modified: 2023-04-04
+order: 6
+author: "Chunzhe ZHANG(Spencer)"
+toc: true
+number-sections: true
+highlight-style: pygments
+---
+
+# Check Interrelationships
+  
+## Load Library  {.unnumbered}
+```{r load_library, echo=FALSE, message=FALSE, warning=FALSE}
+require(snt)
+require(qreport)
+require(Hmisc)
+require(qs)
+require(readr)
+source("paths.R")
+options(prType='html')
+hookaddcap()
+```
+
+## Load Data {.unnumbered}
+
+```{r load_data, message=FALSE, warning=FALSE}
+d <- qread(o_routine)
+setDT(d)
+t <- read_csv(o_routine_csv)
+```
+
+## Display Interrelationships
+
+```{r varclus,results='asis'}
+outcomes <- .q(slos,   charges, totcst,   totmcst, avtisst,
+               d.time, death,   hospdead, sfdm2)
+vClus(d, corrmatrix=TRUE,
+      fracmiss=0.4, maxlevels=10, minprev=0.05,
+      label='fig-varclus')
+```
+

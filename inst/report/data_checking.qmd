@@ -1,5 +1,5 @@
 ---
-title: "Data Checking"
+title: "Consistency Checking"
 subtitle: "Flag suspicious values"
 date: 2023-03-07
 date-modified: 2023-03-09
@@ -34,6 +34,8 @@ require(qs)
 require(snt)
 require(readr)
 source("paths.R")
+options(prType='html')
+hookaddcap()
 ```
 
 ## Load Data {.unnumbered}
@@ -66,7 +68,7 @@ d[, id := NULL]
 #| fig-cap: “Consistency Checks”
 #| fig-height: 6
 #| fig-width: 8
-#| layout-ncol: 3
+#| layout-ncol: 1
 #| fig-subcap:
 #| - “All cause outpatients and tests”
 #| - “Suspected cases and tests”
@@ -76,149 +78,24 @@ d[, id := NULL]
 #| - “Malaria deaths adn all cause admission”
 #| - “Tests and all cause outpatients”
 p_consistency_allout_test <- d |> consistency_check(allout, test)
-ggplotlyr(p_consistency_allout_test)
+ggplotlyr(p_consistency_allout_test) |>
+  plotly::toWebGL()
 p_consistency_susp_test <- d |> consistency_check(susp, test)
-ggplotlyr(p_consistency_susp_test)
+ggplotlyr(p_consistency_susp_test)|>
+  plotly::toWebGL()
 p_consistency_test_conf <- d |> consistency_check(test,conf)
-ggplotlyr(p_consistency_test_conf)
+ggplotlyr(p_consistency_test_conf)|>
+  plotly::toWebGL()
 p_consistency_conf_maltreat <- d |> consistency_check(conf, maltreat)
-ggplotlyr(p_consistency_conf_maltreat)
+ggplotlyr(p_consistency_conf_maltreat)|>
+  plotly::toWebGL()
 p_consistency_alladm_maladm <- d |> consistency_check(alladm, maladm)
-ggplotlyr(p_consistency_alladm_maladm)
+ggplotlyr(p_consistency_alladm_maladm)|>
+  plotly::toWebGL()
 p_consistency_alladm_maldth <- d |> consistency_check(alladm, maldth)
-ggplotlyr(p_consistency_alladm_maldth)
+ggplotlyr(p_consistency_alladm_maldth)|>
+  plotly::toWebGL()
 p_consistency_allout_test <- d |> consistency_check(allout, test)
-ggplotlyr(p_consistency_allout_test)
-```
-
-## Check Duplicates in Health Facilties
-
-```{mermaid duplicates_process}
-flowchart LR
-  fm[Fuzzy match algorithm<br>find potential duplicates]
-  cr{Check year-month ranges<br>per potential duplicates}
-  fm --> cr
-  cr --> |No duplicated time series| ac(accept as duplicate)
-  cr --> |Duplicated time series| na(check data<br>scatterplot for couple of main vars<br>correlation coefficient > 95%)
-  na --> |Data same| ad[Accept as duplicate]
-  na --> |Data differ| rd[Reject as duplicate]
-  ad --> fd{{Final Database}}
-  rd --> fd
-```
-
-```{r duplicated_hf, message=FALSE, warning=FALSE}
-report_status_df <- t |>
-  report_status(adm0, adm1, adm2, adm3, hfname, year, month)
-
-report_duration <- report_status_df |>
-  get_report_duration(adm0, adm1, adm2, adm3, hfname)
-
-fuzzy_matched <- t |> fuzzy_match(col = "hfname")
-
-fuzzy_matched <- fuzzy_matched |> 
-  dplyr::left_join(report_duration, by = "hfname") |>
-  dplyr::left_join(report_duration, by = c("match"= "hfname"))
-
-fuzzy_matched_with_laps <- 
-  fuzzy_matched |> check_laps()
-
-kabl(fuzzy_matched_with_laps)
-```
-
-## Outliers
-
-Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to consider for the researcher, rather than to be an automatized procedure which mindless application is a substitute for thinking. Always review the outliers before take any actions.
-
-```{r outliers, echo=FALSE, message=FALSE}
-kabl(
-  t |> find_outliers(
-    alpha = 0.999999999999,
-    both_sides = FALSE,
-    adm0, adm1, adm2, adm3, hfname, year, month
-    ) |> dplyr::select(-id)
-  )
-```
-
-```{r fig_outliers, message=FALSE, warning=FALSE}
-#| label: fig-outliers
-#| fig-cap: “Check outliers”
-#| fig-height: 5
-#| fig-width: 12
-#| layout-ncol: 1
-#| fig-subcap:
-#| - “All cause outpatients”
-#| - “Malaria deaths, malaria treatment, confirmed cases and tests”
-#| - “Malaria admission, all cause admission”
-p_outliers_1 <- t |> plot_outliers(allout_ov5,
-                         allout_u5,
-                         allout)
-ggplotlyr(p_outliers_1)
-p_outliers_2 <- t |> plot_outliers(maldth_ov5,
-                         maldth_u5,
-                         maldth,
-                         maltreat_ov5,
-                         maltreat_u5,
-                         maltreat,
-                         conf,
-                         test)
-ggplotlyr(p_outliers_2)
-p_outliers_3 <- t |> plot_outliers(maladm,
-                         maladm_ov5,
-                         maladm_u5,
-                         alladm,
-                         alladm_ov5,
-                         alladm_u5)
-ggplotlyr(p_outliers_3)
-
-```
-
-## Report Status
-
-```{r report_status, echo=FALSE, message=FALSE}
-#| label: fig-report-status-by-hf
-#| fig-cap: “Report status by Health Facilities”
-#| fig-height: 5
-#| fig-width: 12
-p_hf_report_status <- t |> 
-  plot_hf_report_status(
-    check_overlap = TRUE,
-    date_labels = "%Y",
-    adm0, adm1, adm2, adm3, hfname, year, month)
-ggplotlyr(p_hf_report_status)
-```
-
-```{r report_status_var, echo=FALSE, message=FALSE}
-#| label: fig-report-status-by-indicators
-#| fig-cap: “Report status by indicators”
-#| fig-height: 5
-#| fig-width: 12
-t |>
-  plot_indicator_report_status(
-    allout,
-    alladm,
-    alldth,
-    susp,
-    pres,
-    test,
-    maltreat,
-    conf,
-    anout,
-    maladm,
-    maldth,
-    anadm,
-    andth
-    )
-```
-
-```{r report_status_adm1, echo=FALSE, message=FALSE}
-#| label: fig-report-status-by-adm1
-#| fig-cap: “Report status by ADM1”
-#| fig-height: 5
-#| fig-width: 12
-t |> plot_adm_report_status(adm0,
-                                  adm1,
-                                  index = c("conf", "test",
-                                            "susp","pres",
-                                            "maldth", "maladm", 
-                                            "maltreat"))
+ggplotlyr(p_consistency_allout_test)|>
+  plotly::toWebGL()
 ```

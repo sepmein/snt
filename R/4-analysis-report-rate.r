@@ -46,8 +46,9 @@ plot_hf_report_status <- function(
             y = "Health Facilities",
             x = "Date"
         ) +
-        theme(axis.text.y = element_blank()) +
-        scale_fill_manual(values = c("N" = "white", "Y" = "blue"))
+        ggplot2::theme(axis.text.y = element_blank()) +
+        scale_fill_manual(values = c("N" = "white", "Y" = "blue")) +
+        theme_snt()
 }
 
 #' Plot Report Status by indicators
@@ -84,7 +85,8 @@ plot_indicator_report_status <- function(df, ...) {
             y = .data$index,
             fill = .data$report_rate
         )) +
-        scale_fill_viridis_c()
+        scale_fill_viridis_c() +
+        theme_snt()
 }
 
 #' Plot Report Status by district month
@@ -129,5 +131,6 @@ plot_adm_report_status <- function(
             title = "Report Status By Adm1 and Date",
             y = "Districts",
             x = "Date"
-        )
+        ) +
+        theme_snt()
 }

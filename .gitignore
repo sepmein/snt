@@ -72,6 +72,7 @@ inst/report/**/*.css
 inst/report/**/*.woff
 inst/report/**/*.js
 inst/report/**/*.qs
+inst/report/**/*.qmd-tmp.R
 
 ### R.Bookdown Stack ###
 # R package: bookdown caching files

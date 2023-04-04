@@ -124,5 +124,5 @@ plot_outliers <- function(df, ..., save_to = NULL) {
     )
   }
 
-  print(plot)
+  return(plot)
 }

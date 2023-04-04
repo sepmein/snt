@@ -1,0 +1,88 @@
+---
+title: "Outliers"
+subtitle: "Check for outliers"
+date: 2023-04-04
+date-modified: 2023-04-04
+order: 6
+author: "Chunzhe ZHANG(Spencer)"
+toc: true
+number-sections: true
+highlight-style: pygments
+---
+
+# Check Outliers
+
+## Load Library  {.unnumbered}
+```{r load_library, echo=FALSE, message=FALSE, warning=FALSE}
+require(snt)
+require(qreport)
+require(Hmisc)
+require(qs)
+require(readr)
+source("paths.R")
+options(prType='html')
+hookaddcap()
+```
+
+## Load Data {.unnumbered}
+
+```{r load_data, message=FALSE, warning=FALSE}
+d <- qread(o_routine)
+setDT(d)
+t <- read_csv(o_routine_csv)
+```
+
+## Outliers
+
+Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to consider for the researcher, rather than to be an automatized procedure which mindless application is a substitute for thinking. Always review the outliers before take any actions.
+
+```{r fig_outliers, message=FALSE, warning=FALSE}
+#| label: fig-outliers
+#| fig-cap: “Check outliers”
+#| fig-height: 8
+#| fig-width: 12
+#| layout-ncol: 1
+#| fig-subcap:
+#| - “All cause outpatients”
+#| - “Malaria deaths, malaria treatment, confirmed cases and tests”
+#| - “Malaria admission, all cause admission”
+x1 <- t |> plot_outliers(allout_ov5,
+                   allout_u5,
+                   allout)
+
+ggplotlyr(x1) |>
+  plotly::toWebGL()
+
+x2 <- t |> plot_outliers(maldth_ov5,
+                   maldth_u5,
+                   maldth,
+                   maltreat_ov5,
+                   maltreat_u5,
+                   maltreat,
+                   conf,
+                   test)
+
+ggplotlyr(x2) |>
+  plotly::toWebGL()
+
+x3 <- t |> plot_outliers(maladm,
+                   maladm_ov5,
+                   maladm_u5,
+                   alladm,
+                   alladm_ov5,
+                   alladm_u5)
+
+ggplotlyr(x3) |>
+  plotly::toWebGL()
+```
+
+Detailed list for outliers
+```{r outliers, echo=FALSE, message=FALSE}
+kabl(
+  t |> find_outliers(
+    alpha = 0.999999999999,
+    both_sides = FALSE,
+    adm0, adm1, adm2, adm3, hfname, year, month
+  ) |> dplyr::select(-id)
+)
+```

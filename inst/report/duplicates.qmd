@@ -1,0 +1,72 @@
+---
+title: "Duplicates"
+subtitle: "Check for duplicates"
+date: 2023-04-04
+date-modified: 2023-04-04
+order: 5
+editor: visual
+author: "Chunzhe ZHANG(Spencer)"
+toc: true
+number-sections: true
+highlight-style: pygments
+---
+
+## Load Library  {.unnumbered}
+```{r load_library, echo=FALSE, message=FALSE, warning=FALSE}
+require(snt)
+require(qreport)
+require(Hmisc)
+require(qs)
+require(readr)
+source("paths.R")
+options(prType='html')
+hookaddcap()
+```
+
+## Load Data {.unnumbered}
+
+```{r load_data, message=FALSE, warning=FALSE}
+d <- qread(o_routine)
+setDT(d)
+t <- read_csv(o_routine_csv)
+```
+
+
+## Check Duplicates in Health Facilties
+
+```{mermaid duplicates_process}
+flowchart LR
+  fm[Fuzzy match algorithm<br>find potential duplicates]
+  cr{Check year-month ranges<br>per potential duplicates}
+  fm --> cr
+  cr --> |No duplicated time series| ac(accept as duplicate)
+  cr --> |Duplicated time series| na(check data<br>scatterplot for couple of main vars<br>correlation coefficient > 95%)
+  na --> |Data same| ad[Accept as duplicate]
+  na --> |Data differ| rd[Reject as duplicate]
+  ad --> fd{{Final Database}}
+  rd --> fd
+```
+
+```{r duplicated_hf, message=FALSE, warning=FALSE}
+report_status_df <- t |>
+  report_status(adm0, adm1, adm2, adm3, hfname, year, month)
+
+report_duration <- report_status_df |>
+  get_report_duration(adm0, adm1, adm2, adm3, hfname)
+
+fuzzy_matched <- t |> fuzzy_match(col = "hfname")
+
+fuzzy_matched <- fuzzy_matched |> 
+  dplyr::left_join(report_duration, by = "hfname") |>
+  dplyr::left_join(report_duration, by = c("match"= "hfname"))
+
+fuzzy_matched_with_laps <- 
+  fuzzy_matched |> check_laps()
+
+makecnote(
+kabl(fuzzy_matched_with_laps),
+  label = "Fuzzy Matched with Laps",
+  wide = TRUE
+  )
+```
+
