@@ -29,7 +29,7 @@ require(data.table)
 require(qreport)
 require(qs)
 source("paths.R")
-options(prType='html')
+options(prType='html', grType='plotly')
 hookaddcap()
 ```
 

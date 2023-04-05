@@ -1,0 +1,15 @@
+---
+title: "list_of_figures_and_tables"
+date: 2023-04-04
+date-modified: 2023-04-04
+order: 6
+author: "Chunzhe ZHANG(Spencer)"
+toc: true
+number-sections: true
+highlight-style: pygments
+---
+
+```{r print_list_of_figures}
+require(qreport)
+# printCap(book=TRUE)
+```

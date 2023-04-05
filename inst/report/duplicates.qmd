@@ -11,7 +11,8 @@ number-sections: true
 highlight-style: pygments
 ---
 
-## Load Library  {.unnumbered}
+## Load Library {.unnumbered}
+
 ```{r load_library, echo=FALSE, message=FALSE, warning=FALSE}
 require(snt)
 require(qreport)
@@ -31,7 +32,6 @@ setDT(d)
 t <- read_csv(o_routine_csv)
 ```
 
-
 ## Check Duplicates in Health Facilties
 
 ```{mermaid duplicates_process}
@@ -47,7 +47,7 @@ flowchart LR
   rd --> fd
 ```
 
-```{r duplicated_hf, message=FALSE, warning=FALSE}
+```{r duplicated_hf, message=FALSE, warning=FALSE, results='asis'}
 report_status_df <- t |>
   report_status(adm0, adm1, adm2, adm3, hfname, year, month)
 
@@ -69,4 +69,3 @@ kabl(fuzzy_matched_with_laps),
   wide = TRUE
   )
 ```
-

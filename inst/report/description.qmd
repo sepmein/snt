@@ -20,8 +20,8 @@ require(Hmisc)
 require(qs)
 require(readr)
 source("paths.R")
-options(prType='html')
-hookaddcap()
+options(prType='html',grType='plotly')
+qreport::hookaddcap()
 ```
 
 ## Load Data {.unnumbered}
@@ -30,11 +30,36 @@ d <- qread(o_routine)
 setDT(d)
 t <- read_csv(o_routine_csv)
 ```
+## Data Overview
+
+```{r data_overview, results='asis'}
+dataOverview(d)
+```
+## By Year
+```{r year_conf_test}
+plot(summaryM(conf + test ~ year, data=d))
+```
+
+```{r year_allout_alladm}
+plot(summaryM(allout + alladm ~ year, data=d))
+```
+
+```{r year_tests}
+plot(summaryM(test_mic + test_rdt ~ year, data=d))
+```
+
+```{r year_maladm_maldth}
+plot(summaryM(maladm + maldth ~ year, data=d))
+```
 
 ## By Administrative 1
 ### Confirmed Malaria Cases
 ```{r adm1_conf}
 d[, histboxp(x = conf, group = adm1, bins = 200)]
+```
+
+```{r adm1_conf_gt}
+d |> gtsummary::tbl_summary()
 ```
 
 ### Suspected Malaria Cases

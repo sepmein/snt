@@ -27,6 +27,7 @@ book:
     - summary.qmd
   appendices:
     - references.qmd
+    - list_of_figures_and_tables.qmd
 
 bibliography: references.bib
 
@@ -44,7 +45,10 @@ format:
     smooth-scroll: true
     link-external-icon: true
 
+title-block-banner: true
 editor: visual
 toc: true
 number-sections: true
 highlight-style: pygments
+execute:
+  cache: true
