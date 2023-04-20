@@ -11,8 +11,9 @@ highlight-style: pygments
 ---
 
 # Descriptions
-  
-## Load Library  {.unnumbered}
+
+## Load Library {.unnumbered}
+
 ```{r load_library, echo=FALSE, message=FALSE, warning=FALSE}
 require(snt)
 require(qreport)
@@ -25,17 +26,21 @@ qreport::hookaddcap()
 ```
 
 ## Load Data {.unnumbered}
+
 ```{r load_data, message=FALSE, warning=FALSE}
 d <- qread(o_routine)
 setDT(d)
 t <- read_csv(o_routine_csv)
 ```
+
 ## Data Overview
 
 ```{r data_overview, results='asis'}
 dataOverview(d)
 ```
+
 ## By Year
+
 ```{r year_conf_test}
 plot(summaryM(conf + test ~ year, data=d))
 ```
@@ -53,7 +58,9 @@ plot(summaryM(maladm + maldth ~ year, data=d))
 ```
 
 ## By Administrative 1
+
 ### Confirmed Malaria Cases
+
 ```{r adm1_conf}
 d[, histboxp(x = conf, group = adm1, bins = 200)]
 ```
@@ -63,11 +70,13 @@ d |> gtsummary::tbl_summary()
 ```
 
 ### Suspected Malaria Cases
+
 ```{r adm1_susp}
 d[, histboxp(x = susp, group = adm1, bins = 200)]
 ```
 
 ### Tests
+
 ```{r adm1_test}
 d[, histboxp(x = test, group = adm1, bins = 200)]
 ```
