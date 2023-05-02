@@ -46,9 +46,9 @@ plot_hf_report_status <- function(
             y = "Health Facilities",
             x = "Date"
         ) +
-        ggplot2::theme(axis.text.y = element_blank()) +
-        scale_fill_manual(values = c("N" = "white", "Y" = "blue")) +
-        theme_snt()
+        theme_snt()+
+        theme(axis.text.y = element_blank()) +
+        scale_fill_manual(values = c("N" = "white", "Y" = "blue")) 
 }
 
 #' Plot Report Status by indicators
