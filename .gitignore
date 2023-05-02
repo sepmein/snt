@@ -52,6 +52,9 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
+# document generate
+man/
+
 # pkgdown site
 docs/
 

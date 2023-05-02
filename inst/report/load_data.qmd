@@ -220,4 +220,3 @@ contents(d)
 ```{r describe, results='asis'}
 describe(d)
 ```
-

@@ -80,43 +80,18 @@ report_status <- function(df, ...) {
     ) |>
     # ungroup data frame
     ungroup()
-  # test year or month is included in args or not
-  if (!("year" %in% args)) {
-    # create reported column
-    df <- df |>
-      mutate(
-        reported = if_else(rowSums(
-          across(
-            !any_of(c("year", "month")) & where(is.numeric)
-          ),
-          na.rm = TRUE
-        ) == 0, 0, 1)
-      )
-  } else {
-    if (!("month" %in% args)) {
-      # create reported column
-      df <- df |>
+
+
+  df <- df |>
         mutate(
           reported = if_else(rowSums(
             across(
-              !c("month") & where(is.numeric)
+              !any_of(c("year", "month")) & !c(!!!args) & where(is.numeric) 
             ),
             na.rm = TRUE
           ) == 0, 0, 1)
         )
-    } else {
-      # create reported column
-      df <- df |>
-        mutate(
-          reported = if_else(rowSums(
-            across(
-              where(is.numeric)
-            ),
-            na.rm = TRUE
-          ) == 0, 0, 1)
-        )
-    }
-  }
+ 
   # select only arguments and reported column
   df |>
     select(
