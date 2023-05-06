@@ -27,3 +27,17 @@ gen_id_if_not_exist <- function(df,
   }
   return(df)
 }
+
+#' Generate ID if not exist data.table version
+#' @param dt data table
+#' @param id_column ID column name
+#' @return data table
+#' @export
+#' @import data.table
+#' @importFrom uuid UUIDgenerate
+gen_id_dt <- function(dt, id_column = "id") {
+  if (!(id_column %in% colnames(dt))) {
+    dt[, (id_column) := replicate(nrow(dt), UUIDgenerate())]
+  }
+  return(dt)
+}

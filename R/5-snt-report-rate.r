@@ -1,16 +1,11 @@
-#' Calculate the reporting rate for each indicator
-#' @param df A data frame
-#' @param ... Columns to calculate the reporting rate, excluding year and month
-#' @return Dataframe
-#' @import dplyr
-#' @importFrom rlang enquos
-#' @importFrom tibble tibble
-#' @export
-report_rate <- function(df, ...) {
-  args <- enquos(...)
-  target_list <- df |>
+#' Calculate the expected reports
+#' 
+expected <- function(df) {
+    target_list <- df |>
     select(!!!args) |>
     unique()
+
+
   min_year <- min(df$year)
   max_year <- max(df$year)
   year <- tibble(year = min_year:max_year)
@@ -22,6 +17,33 @@ report_rate <- function(df, ...) {
     mutate(
       exp = 1
     )
+    return(exp)
+}
+
+#' Calculate the reporting rate for each indicator
+#' 
+#' For each indicator, calculate the reporting rate for each year and month
+#' The reporting rate is calculated as the number of reports divided by the
+#' number of expected reports. Here, the expected reports are calculated as
+#' the number of unique combinations of the provided columns, multiplied by
+#' the number of months and years in the data.
+#' So in this function, the data is first grouped by the provided columns,
+#' and then the number of unique combinations is calculated. Then, the data
+#' is expanded to include all combinations of the provided columns, years,
+#' and months. Then, the number of expected reports is calculated as the
+#' number of unique combinations multiplied by the number of months and years.
+#' Finally, the number of reports is calculated as the sum of the reports
+#' for each combination of the provided columns, years, and months.
+#' 
+#' @param df A data frame
+#' @param ... Columns to calculate the reporting rate, excluding year and month
+#' @return Dataframe
+#' @import dplyr
+#' @importFrom rlang enquos
+#' @importFrom tibble tibble
+#' @export
+report_rate <- function(df, ...) {
+  args <- enquos(...)
   rep <- df |>
     mutate(
       rep = if_else(rowSums(

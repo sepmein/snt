@@ -15,5 +15,16 @@ report_rate(df, ...)
 Dataframe
 }
 \description{
-Calculate the reporting rate for each indicator
+For each indicator, calculate the reporting rate for each year and month
+The reporting rate is calculated as the number of reports divided by the
+number of expected reports. Here, the expected reports are calculated as
+the number of unique combinations of the provided columns, multiplied by
+the number of months and years in the data.
+So in this function, the data is first grouped by the provided columns,
+and then the number of unique combinations is calculated. Then, the data
+is expanded to include all combinations of the provided columns, years,
+and months. Then, the number of expected reports is calculated as the
+number of unique combinations multiplied by the number of months and years.
+Finally, the number of reports is calculated as the sum of the reports
+for each combination of the provided columns, years, and months.
 }

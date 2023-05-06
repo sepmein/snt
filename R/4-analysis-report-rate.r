@@ -103,26 +103,20 @@ plot_indicator_report_status <- function(df, ...) {
 plot_adm_report_status <- function(
     df, ...,
     index = c("conf", "test", "susp")) {
-    args <- enquos(...)
+        args <- enquos(...)
+        report_status <- df |> report_status(!!!args)
 
-    report_status <- df |>
-        pivot_longer(
-            cols = index,
-            names_to = "index",
-            values_to = "value"
-        ) |>
-        mutate(reported = if_else(.data$value > 0, 1, 0)) |>
-        group_by(!!!args, .data$year, .data$month) |>
-        summarise(reports = sum(.data$reported, na.rm = TRUE), n = n()) |>
-        mutate(report_rate = .data$reports / n) |>
-        mutate(date = make_date(.data$year, .data$month, 1))
+    report_status <- report_status |>
+        mutate(
+            date = make_date(.data$year, .data$month, 1)
+        )
 
     ggplot(report_status) +
         geom_tile(aes(
             x = .data$date,
             # todo change this to more flexible argument
             y = .data$adm1,
-            fill = .data$report_rate
+            fill = .data$reported
         )) +
         scale_fill_viridis_c() +
         scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
@@ -134,3 +128,8 @@ plot_adm_report_status <- function(
         ) +
         theme_snt()
 }
+
+# group_by
+# for example group by 
+# summarise
+# plot
