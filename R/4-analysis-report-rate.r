@@ -1,6 +1,5 @@
 #' Plot Report Status
 #' @param df A data frame
-#' @param ... Columns to group by
 #' @return Dataframe
 #' @import dplyr
 #' @importFrom rlang enquos .data
@@ -8,47 +7,42 @@
 #' @importFrom lubridate make_date
 #' @export
 plot_hf_report_status <- function(
-    df, check_overlap = TRUE,
-    date_labels = "%Y", ...) {
-    # TODO how to solve the problem of month is not included in args
-    # TODO how to solve the problem of hf not included in args
-    # TODO solve the preset argument problem, hfname, reported, year, month
+    report_status) {
+  # TODO how to solve the problem of month is not included in args
+  # TODO how to solve the problem of hf not included in args
+  # TODO solve the preset argument problem, hfname, reported, year, month
 
-    args <- enquos(...)
-    # select numeric columns excerpt for year and month
-    report_status <- df |> report_status(!!!args)
+  # make robust
+  # hfname, year and month are required
+  # check if hfname is present
+  stopifnot("hf" %in% names(report_status))
+  # check if year is present
+  stopifnot("year" %in% names(report_status))
+  # check if month is present
+  stopifnot("month" %in% names(report_status))
 
-    # make robust
-    # hfname, year and month are required
-    # check if hfname is present
-    stopifnot("hfname" %in% names(report_status))
-    # check if year is present
-    stopifnot("year" %in% names(report_status))
-    # check if month is present
-    stopifnot("month" %in% names(report_status))
-
-    report_status |>
-        mutate(
-            date = make_date(.data$year, .data$month, 1)
-        ) |>
-        ggplot(aes(
-            x = .data$date,
-            y = .data$hfname,
-            fill = .data$reported
-        )) +
-        geom_tile() +
-        scale_x_date(
-            date_labels = date_labels,
-            guide = guide_axis(check.overlap = check_overlap)
-        ) +
-        labs(
-            title = "Report Status",
-            y = "Health Facilities",
-            x = "Date"
-        ) +
-        theme_snt()+
-        theme(axis.text.y = element_blank()) +
-        scale_fill_manual(values = c("N" = "white", "Y" = "blue")) 
+  report_status[
+    ,
+    `:=`(date = make_date(year, month, 1), rep = fifelse(rep == 0, "N", "Y"))
+  ] |>
+    ggplot(aes(
+      x = date,
+      y = hf,
+      fill = rep
+    )) +
+    geom_tile() +
+    scale_x_date(
+      date_labels = "%Y",
+      guide = guide_axis(check.overlap = T)
+    ) +
+    labs(
+      title = "Report Status",
+      y = "Health Facilities",
+      x = "Date"
+    ) +
+    snt::theme_snt() +
+    theme(axis.text.y = element_blank()) +
+    scale_fill_manual(values = c("N" = "white", "Y" = "blue"))
 }
 
 #' Plot Report Status by indicators
@@ -62,31 +56,17 @@ plot_hf_report_status <- function(
 #' @importFrom tidyr pivot_longer
 #' @export
 #' @author Chunzhe ZHANG
-plot_indicator_report_status <- function(df, ...) {
-    args <- enquos(...)
+plot_indicator_report_rate <- function(rep_rat, indicator) {
 
-    report_status <- df |>
-        pivot_longer(
-            cols = c(!!!args),
-            names_to = "index",
-            values_to = "value"
-        ) |>
-        mutate(reported = if_else(.data$value > 0, 1, 0)) |>
-        group_by(.data$index, .data$year) |>
-        summarise(
-            reports = sum(.data$reported, na.rm = TRUE),
-            n = n()
-        ) |>
-        mutate(report_rate = .data$reports / n)
-
-    ggplot(report_status) +
-        geom_tile(aes(
-            x = .data$year,
-            y = .data$index,
-            fill = .data$report_rate
-        )) +
-        scale_fill_viridis_c() +
-        theme_snt()
+  rep_rat[, ..indicator] |>
+  ggplot() +
+    geom_tile(aes(
+      x = .data$year,
+      y = .data$index,
+      fill = .data$rep_rat
+    )) +
+    scale_fill_viridis_c() +
+    theme_snt()
 }
 
 #' Plot Report Status by district month
@@ -100,36 +80,28 @@ plot_indicator_report_status <- function(df, ...) {
 #' @importFrom lubridate make_date
 #' @importFrom tidyr pivot_longer
 #' @export
-plot_adm_report_status <- function(
-    df, ...,
-    index = c("conf", "test", "susp")) {
-        args <- enquos(...)
-        report_status <- df |> report_status(!!!args)
-
-    report_status <- report_status |>
-        mutate(
-            date = make_date(.data$year, .data$month, 1)
-        )
-
-    ggplot(report_status) +
-        geom_tile(aes(
-            x = .data$date,
-            # todo change this to more flexible argument
-            y = .data$adm1,
-            fill = .data$reported
-        )) +
-        scale_fill_viridis_c() +
-        scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
-        scale_x_date(date_labels = "%Y-%m") +
-        labs(
-            title = "Report Status By Adm1 and Date",
-            y = "Districts",
-            x = "Date"
-        ) +
-        theme_snt()
+plot_adm1_report_rate <- function(rep_rat) {
+  rep_rat[, date := make_date(year, month, day = 1)]
+  ggplot(rep_rat) +
+    geom_tile(aes(
+      x = .data$date,
+      # todo change this to more flexible argument
+      y = .data$adm1,
+      fill = .data$rep_rate
+    )) +
+    scale_fill_viridis_c() +
+    scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+    scale_x_date(date_labels = "%Y-%m") +
+    labs(
+      title = "Report Status By Adm1 and Date",
+      y = "Districts",
+      x = "Date"
+    ) +
+    theme_snt()
 }
 
 # group_by
-# for example group by 
+# for example group by
 # summarise
 # plot
+

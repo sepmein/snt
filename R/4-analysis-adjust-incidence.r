@@ -7,17 +7,17 @@
 #' @export
 #' @author Chunzhe ZHANG
 adjust_incidence_1 <- function(df, ...) {
-    args <- enquos(...)
-    df |>
-        group_by(!!!args) |>
-        summarise(
-            conf = sum(.data$conf, na.rm = TRUE),
-            susp = sum(.data$susp, na.rm = TRUE),
-            test = sum(.data$test, na.rm = TRUE)
-        ) |>
-        mutate(
-            n1 = conf + susp * conf / test
-        )
+  args <- enquos(...)
+  df |>
+    group_by(!!!args) |>
+    summarise(
+      conf = sum(.data$conf, na.rm = TRUE),
+      susp = sum(.data$pres, na.rm = TRUE),
+      test = sum(.data$test, na.rm = TRUE)
+    ) |>
+    mutate(
+      n1 = conf + pres * conf / test
+    )
 }
 
 #' Adjust incidence 2
@@ -26,9 +26,9 @@ adjust_incidence_1 <- function(df, ...) {
 #' @return Dataframe
 #' @export
 adjust_incidence_2 <- function(df, reprat_df) {
-    df |>
-        left_join(reprat_df) |>
-        mutate(n2 = .data$n1 / .data$reprat)
+  df |>
+    left_join(reprat_df) |>
+    mutate(n2 = .data$n1 / .data$reprat)
 }
 
 #' Adjust incidence 3
@@ -38,14 +38,51 @@ adjust_incidence_2 <- function(df, reprat_df) {
 #' @return Dataframe
 #' @export
 adjust_incidence_3 <- function(df, treatment_seeking_df) {
-    df |>
-        left_join(treatment_seeking_df) |>
-        mutate(
-            n3 = .data$n2 +
-                .data$n2 * .data$priv_treat / .data$pub_treat +
-                .data$n2 * .data$no_treat / .data$pub_treat
-        )
+  df |>
+    left_join(treatment_seeking_df) |>
+    mutate(
+      n3 = .data$n2 +
+        .data$n2 * .data$priv_treat / .data$pub_treat +
+        .data$n2 * .data$no_treat / .data$pub_treat
+    )
 }
+
+#' @import data.table
+#' @export
+adjust_incidence_1_dt <- function(df, adm_by, date_by) {
+  by_cols <- get_by_cols(adm_by, date_by)
+  df[, .(
+    conf = sum(conf, na.rm = TRUE),
+    pres = sum(pres, na.rm = TRUE),
+    test = sum(test, na.rm = TRUE)
+  ),
+  by = by_cols
+  ][, n1 := conf + pres * conf / test]
+}
+
+#' @import data.table
+#' @export
+adjust_incidence_2_dt <- function(df, reprat_df) {
+  df[reprat_df, on = names(reprat_df), nomatch = 0][, n2 := n1 / reprat]
+}
+
+#' Calculate the adjusted incidence 3
+#'
+#' @param df A data table, calculated by adjust_incidence_2_dt, must contain n2
+#' @param treatment_seeking_df A data frame
+#' @param on Columns to join on
+#' @return Dataframe
+#' @import data.table
+#' @export
+adjust_incidence_3_dt <- function(df, treatment_seeking_df, on) {
+  df[treatment_seeking_df,
+    on = on
+  ][
+    ,
+    n3 := n2 + n2 * priv_treat / pub_treat + n2 * no_treat / pub_treat
+  ]
+}
+
 
 #' Plot incidences
 #' @param df A data frame
@@ -60,11 +97,11 @@ plot_map_by_year <- function(
     col,
     breaks = c(0, 250, 350, 450, 20000),
     palette = hcl.colors(4, "Blue-Red")) {
-    tm_shape(df) +
-        tm_polygons(
-            col = col,
-            breaks = breaks,
-            palette = palette
-        ) +
-        tmap::tm_facets(by = "year")
+  tm_shape(df) +
+    tm_polygons(
+      col = col,
+      breaks = breaks,
+      palette = palette
+    ) +
+    tmap::tm_facets(by = "year")
 }

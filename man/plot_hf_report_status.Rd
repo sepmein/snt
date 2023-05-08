@@ -4,12 +4,10 @@
 \alias{plot_hf_report_status}
 \title{Plot Report Status}
 \usage{
-plot_hf_report_status(df, check_overlap = TRUE, date_labels = "\%Y", ...)
+plot_hf_report_status(report_status)
 }
 \arguments{
 \item{df}{A data frame}
-
-\item{...}{Columns to group by}
 }
 \value{
 Dataframe
