@@ -14,10 +14,14 @@ test_that("raster resource load ", {
     index_name = "rainfall"
   )
 
-  rainfall$load(target_adm_level = 2,
-                adm2_name_in_shp = "NAME_2")
+  rainfall$load(
+    target_adm_level = 2,
+    adm2_name_in_shp = "NAME_2"
+  )
 
   expect_equal(
-    nrow(rainfall$data|>select(NAME_2) |> distinct()), nrow(sf::st_read(p_adm2_shp)) )
+    nrow(rainfall$data |> select(NAME_2) |>
+      distinct()),
+    nrow(sf::st_read(p_adm2_shp))
+  )
 })
-

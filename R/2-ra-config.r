@@ -3,11 +3,11 @@
 #' @export
 #' @seealso https://github.com/johnaponte/repana
 #' @param country country name
-#' @param db database type, either "postgres" or "SQLite"
+#' @param db database type, either 'postgres' or 'SQLite'
 #' @examples
-#' generate_default_config(country = "nigeria")
-#' generate_default_config(country = "nigeria", db = "postgres")
-#' generate_default_config(country = "nigeria", db = "SQLite")
+#' generate_default_config(country = 'nigeria')
+#' generate_default_config(country = 'nigeria', db = 'postgres')
+#' generate_default_config(country = 'nigeria', db = 'SQLite')
 generate_default_config <- function(country = "Nigeria", db = "SQLite") {
   country <- paste0(" country: ", country, "\n")
   cores <- config_parallel()
@@ -15,22 +15,10 @@ generate_default_config <- function(country = "Nigeria", db = "SQLite") {
 
   if (!file.exists("config.yml")) {
     cat(
-      "default:\n",
-      country,
-      " dirs:\n",
-      "   data: _data\n",
-      "   functions: _functions\n",
-      "   handmade: handmade\n",
-      "   database: database\n",
-      "   reports: reports\n",
-      "   logs: logs\n",
-      " clean_before_new_analysis:\n",
-      "   - database\n",
-      "   - reports\n",
-      "   - logs\n",
-      db,
-      cores,
-      file = "config.yml"
+      "default:\n", country, " dirs:\n", "   data: _data\n", "   functions: _functions\n",
+      "   handmade: handmade\n", "   database: database\n", "   reports: reports\n",
+      "   logs: logs\n", " clean_before_new_analysis:\n", "   - database\n",
+      "   - reports\n", "   - logs\n", db, cores, file = "config.yml"
     )
   }
 }
@@ -46,26 +34,42 @@ generate_default_gitignore <- function() {
   if (!file.exists(".gitignore")) {
     cat("# Created by make_structure\n", file = ".gitignore")
   }
-  xx <- trimws(readLines(".gitignore"), "both")
+  xx <- trimws(
+    readLines(".gitignore"),
+    "both"
+  )
   if (get_os() == "osx" && !any(grep("^\\.DS_Store$", xx))) {
     cat(".DS_Store\n", file = ".gitignore", append = TRUE)
   }
-  if (!any(grepl(paste0("^config.yml$"), xx))) {
+  if (!any(
+    grepl(
+      paste0("^config.yml$"),
+      xx
+    )
+  )) {
     cat("config.yml", "\n", file = ".gitignore", append = TRUE)
   }
   in_gitignore <- config::get("clean_before_new_analysis")
-  lapply(in_gitignore, function(x) {
-    tdir <- trimws(config::get("dirs")[[x]], "both")
-    if (length(tdir) == 0) {
-      stop(
-        x,
-        " not defined in dirs. check the config.yml file\n"
+  lapply(
+    in_gitignore, function(x) {
+      tdir <- trimws(
+        config::get("dirs")[[x]],
+        "both"
       )
+      if (length(tdir) ==
+        0) {
+        stop(x, " not defined in dirs. check the config.yml file\n")
+      }
+      if (!any(
+        grepl(
+          paste0("^", tdir, "$"),
+          xx
+        )
+      )) {
+        cat(tdir, "\n", file = ".gitignore", append = TRUE)
+      }
     }
-    if (!any(grepl(paste0("^", tdir, "$"), xx))) {
-      cat(tdir, "\n", file = ".gitignore", append = TRUE)
-    }
-  })
+  )
 }
 
 #' @title Make Structure
@@ -84,7 +88,7 @@ setup <- function() {
 #' @param path path of the file
 #' @export
 #' @return return the path
-#' @examples get_path("data", "test.csv")
+#' @examples get_path('data', 'test.csv')
 get_path <- function(type, path) {
   config <- config::get()
   type <- config[["dirs"]][[type]]
@@ -98,15 +102,11 @@ get_path <- function(type, path) {
 #' @param path String path
 #' @export
 type_of_path <- function(path) {
-  # If the path is not a character string, return an error
-  # if (!is.character(path)) {
-  #     stop("Error: path must be a character string")
-  # }
+  # If the path is not a character string, return an error if
+  # (!is.character(path)) { stop('Error: path must be a character string') }
 
-  # # If the path is an empty string, return an error
-  # if (nchar(path) == 0) {
-  #     stop("Error: path cannot be an empty string")
-  # }
+  # # If the path is an empty string, return an error if (nchar(path) == 0) {
+  # stop('Error: path cannot be an empty string') }
   if (dir.exists(path)) {
     result <- "dir"
   } else if (file_test("-f", path)) {
@@ -153,27 +153,15 @@ use_relative_or_absolute <- function(root, relative) {
 #'
 #' @return a list contain the db info
 #' @rdname config
-config_set_db <- function(db = "SQLite",
-                          db_name = NULL,
-                          db_user = NULL,
-                          db_pass = NULL) {
+config_set_db <- function(db = "SQLite", db_name = NULL, db_user = NULL, db_pass = NULL) {
   if (db == "postgres") {
     db <- paste0(
-      " db:\n",
-      "   package: RPostgres\n",
-      "   dbconnect: Postgres\n",
-      "   host: localhost\n",
-      "   port: 5432\n",
-      "   name: malaria\n",
-      "   user: postgres\n",
-      "   password: postgres\n"
+      " db:\n", "   package: RPostgres\n", "   dbconnect: Postgres\n", "   host: localhost\n",
+      "   port: 5432\n", "   name: malaria\n", "   user: postgres\n", "   password: postgres\n"
     )
   } else if (db == "SQLite") {
     db <- paste0(
-      " db:\n",
-      "   package: RSQLite\n",
-      "   dbconnect: SQLite\n",
-      '   dbname: ":memory:"\n'
+      " db:\n", "   package: RSQLite\n", "   dbconnect: SQLite\n", "   dbname: \":memory:\"\n"
     )
   } else {
     stop("db must be either 'postgres' or 'SQLite'")
@@ -193,13 +181,7 @@ config_get_db <- function() {
   name <- get("db")$name
   user <- get("db")$user
   pass <- get("db")$pass
-  return(list(
-    host = host,
-    port = port,
-    name = name,
-    user = user,
-    pass = pass
-  ))
+  return(list(host = host, port = port, name = name, user = user, pass = pass))
 }
 
 # Parallel -----

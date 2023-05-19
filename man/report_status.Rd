@@ -15,6 +15,6 @@ report_status(df, ...)
 Dataframe
 }
 \description{
-If any indicator is reported, the report status is "Y", otherwise "N"
+If any indicator is reported, the report status is 'Y', otherwise 'N'
 grouped by the provided columns
 }

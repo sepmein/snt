@@ -5,8 +5,7 @@
 routine_replace <- function(df) {
   country <- config_get_country()
   # filter tibble by country name
-  filtered_routine_rename_database <-
-    snt::import_routine_replace |>
+  filtered_routine_rename_database <- snt::import_routine_replace |>
     dplyr::filter(country == country)
   find_and_rename <- function(names) {
     from <- filtered_routine_rename_database$from
@@ -28,10 +27,7 @@ routine_replace <- function(df) {
     return(formatted)
   }
   df <- df |>
-    dplyr::mutate_if(
-      is.character,
-      find_and_rename
-    )
+    dplyr::mutate_if(is.character, find_and_rename)
   return(df)
 }
 
@@ -47,33 +43,28 @@ routine_replace <- function(df) {
 #' @export
 #' @importFrom rlang .data
 #' @import dplyr
-import_replace <- function(df,
-                           replace_database,
-                           snt_country,
-                           column,
-                           by = FALSE) {
+import_replace <- function(df, replace_database, snt_country, column, by = FALSE) {
   temp_column <- paste0(column, "_")
   filtered_replace_database <- replace_database |>
     filter(.data$country == snt_country) |>
     select(-.data$country) |>
-    rename(
-      !!column := .data$from,
-      !!temp_column := .data$to
-    )
+    rename(!!column := .data$from, !!temp_column := .data$to)
   if (isFALSE(by)) {
     df <- df |>
       left_join(filtered_replace_database)
   } else if (is.vector(by)) {
     by[column] <- column
     df <- df |>
-      left_join(filtered_replace_database,
-        by = by
-      )
+      left_join(filtered_replace_database, by = by)
   }
   df <- df |>
     mutate_at(
       c(temp_column),
-      ~ if_else(is.na(.x), !!sym(column), .x)
+      ~if_else(
+        is.na(.x),
+        !!sym(column),
+        .x
+      )
     ) |>
     select(-!!column) |>
     dplyr::rename(!!column := !!temp_column)

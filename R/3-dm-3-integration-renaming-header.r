@@ -25,7 +25,7 @@
 to_lower <- function(df) {
   df <- df |>
     rename_with(
-      ~ str_to_lower(.x),
+      ~str_to_lower(.x),
       .cols = everything()
     )
   return(df)
@@ -41,9 +41,9 @@ to_lower <- function(df) {
 routine_rename <- function(df) {
   country <- config_get_country()
   # filter tibble by country name
-  df <- df |> to_lower()
-  filtered_by_country <-
-    snt::import_routine_rename |>
+  df <- df |>
+    to_lower()
+  filtered_by_country <- snt::import_routine_rename |>
     filter(.data[["country"]] == country)
   find_and_rename <- function(names) {
     from <- filtered_by_country$from
@@ -77,8 +77,7 @@ routine_rename <- function(df) {
 adm_rename <- function(df) {
   country <- config_get_country()
   # filter tibble by country name
-  filtered_by_country <-
-    snt::import_adm_rename |>
+  filtered_by_country <- snt::import_adm_rename |>
     filter(.data[["country"]] == country)
   find_and_rename <- function(names) {
     from <- filtered_by_country$from

@@ -8,7 +8,8 @@ transmute_numeric <- function(df) {
     dplyr::filter(.data[["type"]] == "numeric") |>
     dplyr::select("variable")
   # find columns in meta that are in df
-  meta <- meta[meta$variable %in% names(df), ]
+  meta <- meta[meta$variable %in% names(df),
+    ]
   df |>
     dplyr::transmute(is.numeric, as.integer)
 }

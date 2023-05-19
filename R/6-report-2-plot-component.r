@@ -6,11 +6,12 @@
 #' @return complementary color
 #' @export
 complementary_color <- function(color) {
-        rgb(255 - col2rgb(color)[1],
-                255 - col2rgb(color)[2],
-                255 - col2rgb(color)[3],
-                maxColorValue = 255
-        )
+  rgb(
+    255 - col2rgb(color)[1],
+    255 - col2rgb(color)[2],
+    255 - col2rgb(color)[3],
+    maxColorValue = 255
+  )
 }
 
 max_val <- 255
@@ -70,46 +71,24 @@ cm_iptp_urban_pbo_smc_vac <- vac_palette_7[7]
 #' @description color palette
 #' @export
 color <- list(
-        itn = list(
-                pbo = pbo,
-                llins = llins,
-                dual_ai = dual_ai,
-                urban_pbo = urban_pbo,
-                urban_llins = urban_llins,
-                urban_dual_ai = urban_dual_ai
-        ),
-        smc = smc,
-        pmc = pmc,
-        irs = irs,
-        vaccine = list(
-                vac1p = vac1p,
-                vac1 = vac1,
-                vac2 = vac2,
-                vac3 = vac3,
-                vac4 = vac4,
-                vac5 = vac5,
-                no_vac = no_vac
-        ),
-        no_intervention = no_intervention,
-        strategy = list(
-                cm_iptp_llins = cm_iptp_llins,
-                cm_iptp_llins_smc = cm_iptp_llins_smc,
-                cm_iptp_pbo = cm_iptp_pbo,
-                cm_iptp_pbo_smc = cm_iptp_pbo_smc,
-                cm_iptp_dui_ai = cm_iptp_dui_ai,
-                cm_iptp_pbo_pmc = cm_iptp_pbo_pmc,
-                cm_iptp_pbo_smc = cm_iptp_pbo_smc,
-                cm_iptp_urban_pbo = cm_iptp_urban_pbo,
-                cm_iptp_urban_pbo_pmc = cm_iptp_urban_pbo_pmc,
-                cm_iptp_urban_pbo_smc = cm_iptp_urban_pbo_smc,
-                cm_iptp_pbo_pmc_vac = cm_iptp_pbo_pmc_vac,
-                cm_iptp_pbo_pmc_vacpri = cm_iptp_pbo_pmc_vacpri,
-                cm_iptp_pbo_smc_vac = cm_iptp_pbo_smc_vac,
-                cm_iptp_pbo_smc_vacpri = cm_iptp_pbo_smc_vacpri,
-                cm_iptp_urban_pbo_vac = cm_iptp_urban_pbo_vac,
-                cm_iptp_urban_pbo_pmc_vac = cm_iptp_urban_pbo_pmc_vac,
-                cm_iptp_urban_pbo_smc_vac = cm_iptp_urban_pbo_smc_vac
-        )
+  itn = list(
+    pbo = pbo, llins = llins, dual_ai = dual_ai, urban_pbo = urban_pbo, urban_llins = urban_llins,
+    urban_dual_ai = urban_dual_ai
+  ),
+  smc = smc, pmc = pmc, irs = irs, vaccine = list(
+    vac1p = vac1p, vac1 = vac1, vac2 = vac2, vac3 = vac3, vac4 = vac4, vac5 = vac5,
+    no_vac = no_vac
+  ),
+  no_intervention = no_intervention, strategy = list(
+    cm_iptp_llins = cm_iptp_llins, cm_iptp_llins_smc = cm_iptp_llins_smc, cm_iptp_pbo = cm_iptp_pbo,
+    cm_iptp_pbo_smc = cm_iptp_pbo_smc, cm_iptp_dui_ai = cm_iptp_dui_ai, cm_iptp_pbo_pmc = cm_iptp_pbo_pmc,
+    cm_iptp_pbo_smc = cm_iptp_pbo_smc, cm_iptp_urban_pbo = cm_iptp_urban_pbo,
+    cm_iptp_urban_pbo_pmc = cm_iptp_urban_pbo_pmc, cm_iptp_urban_pbo_smc = cm_iptp_urban_pbo_smc,
+    cm_iptp_pbo_pmc_vac = cm_iptp_pbo_pmc_vac, cm_iptp_pbo_pmc_vacpri = cm_iptp_pbo_pmc_vacpri,
+    cm_iptp_pbo_smc_vac = cm_iptp_pbo_smc_vac, cm_iptp_pbo_smc_vacpri = cm_iptp_pbo_smc_vacpri,
+    cm_iptp_urban_pbo_vac = cm_iptp_urban_pbo_vac, cm_iptp_urban_pbo_pmc_vac = cm_iptp_urban_pbo_pmc_vac,
+    cm_iptp_urban_pbo_smc_vac = cm_iptp_urban_pbo_smc_vac
+  )
 )
 
 # theme ------
@@ -118,7 +97,7 @@ color <- list(
 #' @export
 #' @importFrom cowplot theme_cowplot
 theme_snt <- function(font_size = 12, font_family = "sans") {
-        theme_cowplot(font_size = font_size, font_family = font_family)
+  theme_cowplot(font_size = font_size, font_family = font_family)
 }
 
 # align plots ------
@@ -127,22 +106,14 @@ theme_snt <- function(font_size = 12, font_family = "sans") {
 #' Use methods from the cowplot package.
 #' @param ... plots to align
 #' @param ncol number of columns, default is 1
-#' @param align how to align, default is "v" (vertical)
-#' @param axis axis to align, default is "l" (left)
+#' @param align how to align, default is 'v' (vertical)
+#' @param axis axis to align, default is 'l' (left)
 #' @export
 #' @importFrom cowplot plot_grid
 #' @return a list of plots
-align_plots <- function(...,
-                        ncol = 1,
-                        align = "v",
-                        axis = "l") {
-        plots <- plot_grid(...,
-                ncol = ncol,
-                nrow = nrow,
-                align = align,
-                axis = axis
-        )
-        return(plots)
+align_plots <- function(..., ncol = 1, align = "v", axis = "l") {
+  plots <- plot_grid(..., ncol = ncol, nrow = nrow, align = align, axis = axis)
+  return(plots)
 }
 
 # axis ------
@@ -153,9 +124,9 @@ align_plots <- function(...,
 #' @importFrom scales label_comma
 #' @export
 scale_numbered <- function(axis = "x") {
-        if (axis == "x") {
-                scale_y_continuous(labels = label_comma())
-        } else if (axis == "y") {
-                scale_y_continuous(labels = label_comma())
-        }
+  if (axis == "x") {
+    scale_y_continuous(labels = label_comma())
+  } else if (axis == "y") {
+    scale_y_continuous(labels = label_comma())
+  }
 }

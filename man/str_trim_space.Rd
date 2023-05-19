@@ -21,7 +21,7 @@ replace two or more spaces with one space
 }
 \examples{
 df <- data.frame(
-  col = c("a  b", "b  c", "c  d")
+  col = c('a  b', 'b  c', 'c  d')
 )
 str_trim_space(df, col)
 }

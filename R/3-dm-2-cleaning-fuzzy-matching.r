@@ -18,31 +18,40 @@ fuzzy_match <- function(df, col, threshold = 2, method = "osa") {
   # Calculate pairwise distances between strings
   distances <- stringdistmatrix(unique_strings, unique_strings, method)
 
-  # Set diagonal elements to infinity so that the string isn't considered similar to itself
+  # Set diagonal elements to infinity so that the string isn't considered
+  # similar to itself
   diag(distances) <- Inf
 
-  similar_indices <- which(distances < 2, arr.ind = TRUE)
+  similar_indices <- which(distances < threshold, arr.ind = TRUE)
 
-  # Find the row and column indices of similar strings (i.e., those with distance less than 2)
-  similar_strings <-
-    data.frame(
-      unique_strings[similar_indices[, 1]],
-      unique_strings[similar_indices[, 2]]
-    )
+  # Find the row and column indices of similar strings (i.e., those with
+  # distance less than 2)
+  similar_strings <- data.frame(unique_strings[similar_indices[, 1]], unique_strings[similar_indices[, 2]])
   result <- split(similar_strings[, 2], similar_strings[, 1])
   result <- as.list(unlist(result))
   result <- tibble(
-    {{ col }} := names(result),
+    {
+      {
+        col
+      }
+    } := names(result),
     match = unlist(result)
   )
 
-  # As in the fuzzy match algorithm above
-  # the algorithm will add a trailing number to the multiple matches
-  # we need to remove the trailing number to get the original string
-  # and been able to match the original string with the original data
-  # example of the trailing number: "Tama Health Clinic1"
+  # As in the fuzzy match algorithm above the algorithm will add a trailing
+  # number to the multiple matches we need to remove the trailing number to
+  # get the original string and been able to match the original string with
+  # the original data example of the trailing number: 'Tama Health Clinic1'
   result <- result |>
-    mutate(!!col := str_remove({{ col }}, "\\d$"))
+    mutate(
+      !!col := str_remove(
+        {
+          {
+          col
+          }
+        }, "\\d$"
+      )
+    )
 
   return(result)
 }
@@ -57,47 +66,23 @@ fuzzy_match <- function(df, col, threshold = 2, method = "osa") {
 check_laps <- function(df) {
   df |>
     dplyr::mutate(
-      min_date.x = lubridate::make_date(
-        year = .data$min_year.x,
-        month = .data$min_month.x
-      ),
-      max_date.x = lubridate::make_date(
-        year = .data$max_year.x,
-        month = .data$max_month.x
-      ),
-      min_date.y = lubridate::make_date(
-        year = .data$min_year.y,
-        month = .data$min_month.y
-      ),
-      max_date.y = lubridate::make_date(
-        year = .data$max_year.y,
-        month = .data$max_month.y
-      )
+      min_date.x = lubridate::make_date(year = .data$min_year.x, month = .data$min_month.x),
+      max_date.x = lubridate::make_date(year = .data$max_year.x, month = .data$max_month.x),
+      min_date.y = lubridate::make_date(year = .data$min_year.y, month = .data$min_month.y),
+      max_date.y = lubridate::make_date(year = .data$max_year.y, month = .data$max_month.y)
     ) |>
     dplyr::mutate(
-      laps_x_lt_y = if_else(
-        .data$max_date.x < .data$min_date.y,
-        "Y",
-        "N"
-      ),
-      laps_y_lt_x = if_else(
-        .data$max_date.y < .data$min_date.x,
-        "Y",
-        "N"
-      ),
+      laps_x_lt_y = if_else(.data$max_date.x < .data$min_date.y, "Y", "N"),
+      laps_y_lt_x = if_else(.data$max_date.y < .data$min_date.x, "Y", "N"),
+      laps = if_else(.data$laps_x_lt_y == "Y" | .data$laps_y_lt_x == "Y", "Y", "N"),
       laps = if_else(
-        .data$laps_x_lt_y == "Y" | .data$laps_y_lt_x == "Y",
-        "Y",
-        "N"
-      ),
-      laps = if_else(
-        is.na(.data$laps), "Y", "N"
+        is.na(.data$laps),
+        "Y", "N"
       )
     ) |>
     select(
-      -laps_x_lt_y, -laps_y_lt_x,
-      -min_year.x, -max_year.x, -min_month.x, -max_month.x,
-      -min_year.y, -max_year.y, -min_month.y, -max_month.y,
+      -laps_x_lt_y, -laps_y_lt_x, -min_year.x, -max_year.x, -min_month.x,
+      -max_month.x, -min_year.y, -max_year.y, -min_month.y, -max_month.y,
       -min_date.x, -max_date.x, -min_date.y, -max_date.y
     )
 }
@@ -112,36 +97,31 @@ correlation_test <- function(df) {
 #' df: dataframe to be checked for duplicates
 #' @param col column to be used for fuzzy matching
 #' @param threshold minimum match level for fuzzy matching, default is 1.1
-#' @param method fuzzy matching method, default is "lv"
+#' @param method fuzzy matching method, default is 'lv'
 #' @param ... group_by columns to get the report status and duration for each group
 #' @return Dataframe
 #' @export
 fuzzy_match_enhanced <- function(df, col, threshold = 1.1, method = "lv", ...) {
-  # col: column to be used for fuzzy matching
-  # threshold: minimum match level for fuzzy matching
-  # method: fuzzy matching method
-  # report_id: name of report id column
-  # report_start: name of report start date column
-  # report_end: name of report end date column
-  # report_status: name of report status column
+  # col: column to be used for fuzzy matching threshold: minimum match level
+  # for fuzzy matching method: fuzzy matching method report_id: name of report
+  # id column report_start: name of report start date column report_end: name
+  # of report end date column report_status: name of report status column
   # report_status_type: status value to indicate report is current
-  # report_status_date: name of report status date column
-  # report_status_col: name of report status column
-  # fuzzy_match: name of fuzzy match column
+  # report_status_date: name of report status date column report_status_col:
+  # name of report status column fuzzy_match: name of fuzzy match column
   # overlap: name of overlap column
-  args <- enquos(...) # get arguments
-  # exclude year and month columns from args
-
-  report_duration_df <- df |> # get report duration
+  args <- enquos(...)  # get arguments
+  # exclude year and month columns from args get report duration
+  report_duration_df <- df |>
     report_status(!!!args) |>
     get_report_duration(!!!args)
-  fuzzy_matched_df <- df |> # fuzzy match
+  fuzzy_matched_df <- df |>
     fuzzy_match(col, threshold, method, !!!args)
-  overlapped <- fuzzy_matched_df |> # check for overlaps
+  overlapped <- fuzzy_matched_df |>
     left_join(report_duration_df, by = col) |>
-    left_join(report_duration_df, by = c("match" = col)) |>
+    left_join(report_duration_df, by = c(match = col)) |>
     check_laps()
   fuzzy_matched_df <- fuzzy_matched_df |>
-    left_join(overlapped, by = c(col, "match")) # add overlap information
+    left_join(overlapped, by = c(col, "match"))
   return(fuzzy_matched_df)
 }

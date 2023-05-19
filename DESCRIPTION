@@ -10,20 +10,12 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports:
-    R6,
-    RCurl,
     lubridate,
     ggplot2,
     scales,
-    gridExtra,
-    grid,
     dplyr,
-    raster,
-    sp,
-    rgdal,
     rts,
     tidyr,
-    gdalUtils,
     R.utils,
     magrittr,
     tibble,
@@ -43,13 +35,17 @@ Imports:
     qs,
     cowplot,
     data.table,
-    uuid
+    uuid,
+    malariaAtlas,
+    stars,
+    DBI,
+    wesanderson
 Depends: 
     R (>= 2.10)
 LazyData: true
 Suggests: 
+    covr,
     roxygen2,
-    spelling,
     testthat (>= 3.0.0)
 Language: en-US
 Config/testthat/edition: 3
@@ -59,4 +55,5 @@ BugReports: https://github.com/sepmein/snt/issues
 Remotes: 
     r-lib/devtools,
     r-lib/pkgdown,
-    r-lib/usethis
+    r-lib/usethis,
+    ropensci/spelling

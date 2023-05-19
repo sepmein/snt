@@ -30,11 +30,12 @@ get_os <- function() {
 #' @export
 #' @importFrom config get
 mkdir <- function() {
-  lapply(c(
-    get("dirs")
-  ), function(x) {
-    if (!dir.exists(x)) {
-      dir.create(x, recursive = TRUE)
+  lapply(
+    c(get("dirs")),
+    function(x) {
+      if (!dir.exists(x)) {
+        dir.create(x, recursive = TRUE)
+      }
     }
-  })
+  )
 }

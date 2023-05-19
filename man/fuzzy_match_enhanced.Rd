@@ -15,7 +15,7 @@ df: dataframe to be checked for duplicates}
 
 \item{threshold}{minimum match level for fuzzy matching, default is 1.1}
 
-\item{method}{fuzzy matching method, default is "lv"}
+\item{method}{fuzzy matching method, default is 'lv'}
 
 \item{...}{group_by columns to get the report status and duration for each group}
 }

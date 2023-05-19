@@ -23,7 +23,7 @@ df <- data.frame(
   b = c(4, 5, 6)
 )
 df <- gen_id_if_not_exist(df)
-df <- gen_id_if_not_exist(df, "id")
+df <- gen_id_if_not_exist(df, 'id')
 }
 \author{
 Chunzhe ZHANG

@@ -1,5 +1,5 @@
 #' Calculate the expected reports
-#'
+#' @param df A dataframe
 expected <- function(df) {
   target_list <- df |>
     select(!!!args) |>
@@ -14,9 +14,7 @@ expected <- function(df) {
     cross_join(year) |>
     cross_join(month)
   exp <- target_list_ym |>
-    mutate(
-      exp = 1
-    )
+    mutate(exp = 1)
   return(exp)
 }
 
@@ -46,24 +44,28 @@ report_rate <- function(df, ...) {
   args <- enquos(...)
   rep <- df |>
     mutate(
-      rep = if_else(rowSums(
-        across(
-          !c(!!!args, year, month) & where(is.numeric)
+      rep = if_else(
+        rowSums(
+          across(
+          !c(!!!args, year, month) &
+            where(is.numeric)
         ),
-        na.rm = TRUE
-      ) == 0, 0, 1)
+          na.rm = TRUE
+        ) ==
+          0, 0, 1
+      )
     ) |>
-    select(
-      !!!args, year, month,
-      rep
-    )
+    select(!!!args, year, month, rep)
 
   reprate <- exp |>
     left_join(rep) |>
     # filling NA with 0
-    mutate(
-      rep = if_else(is.na(rep), 0, rep)
+  mutate(
+    rep = if_else(
+      is.na(rep),
+      0, rep
     )
+  )
 
   reprate |>
     group_by(!!!args) |>
@@ -71,31 +73,33 @@ report_rate <- function(df, ...) {
       exp = sum(exp),
       rep = sum(rep)
     ) |>
-    mutate(
-      reprat = rep / exp
-    )
+    mutate(reprat = rep/exp)
 }
 
 #' Calculate the reporting rate
 #'
 #' The reporting rate is calculated as the number of reports divided by the
 #' @param dt An aggragated dt, should already contain the meta_adm and meta_date @param adm_by A character vector of the adm columns @param date_by A character vector of the date columns
+#' @param adm_by A character vector of the adm columns
+#' @param date_by A character vector of the date columns
 #' @return A data table, with the following columns:
 #' adm_by_cols, date_by_cols, rep, exp, rep_rat
-#' @import data.table
+#' @importFrom data.table fifelse .SD
 #' @export
 report_status_dt <- function(dt, adm_by, date_by) {
   # always exclude those meta columns from the dt
-  exclude_cols <- grep("adm1|adm2|hf|year|month|^id", names(dt), value = TRUE)
+  exclude_cols <- grep(
+    "adm1|adm2|hf|year|month|^id", names(dt),
+    value = TRUE
+  )
   by_cols <- get_by_cols(adm_by, date_by)
-  report_rate <- dt[
-    ,
-    .(
-      rep = fifelse(sum(.SD, na.rm = TRUE) == 0, 0, 1)
-    ),
-    by = by_cols,
-    .SDcols = -exclude_cols
-  ]
+  report_rate <- dt[, .(
+    rep = fifelse(
+      sum(.SD, na.rm = TRUE) ==
+        0, 0, 1
+    )
+  ),
+    by = by_cols, .SDcols = -exclude_cols]
   return(report_rate)
 }
 
@@ -104,50 +108,80 @@ report_status_dt <- function(dt, adm_by, date_by) {
 #' Calculate report rate
 #' @export
 #' @param dt data.table
-#' @param adm_by
-#' @param date_by
-#' @import data.table
-report_rate_dt <- function(dt, adm_by, date_by, on) {
+#' @param adm_by character vector
+#' @param date_by character vector
+#' @param on 'adm' or 'index'
+#' @param col character vector
+#' @importFrom data.table melt .N .SD
+report_rate_dt <- function(dt, adm_by, date_by, on, col = NULL) {
   stopifnot(on %in% c("adm", "index"))
   # exclude those meta columns from the dt
-  exclude_cols <- grep("adm1|adm2|hf|year|month|^id", names(dt), value = TRUE)
+  exclude_cols <- grep(
+    "adm1|adm2|hf|year|month|^id", names(dt),
+    value = TRUE
+  )
   # get the by columns
   by_cols <- get_by_cols(adm_by, date_by)
   # calculate the expected reports
 
+  measure.vars <- setdiff(
+    names(dt),
+    exclude_cols
+  )
+  if (!is.null(col)) {
+    # get the intersect of set of mesure.vars and col
+    measure.vars <- intersect(measure.vars, col)
+  }
   if (on == "index") {
-    # if on index
-    # pivot the dt to long format by the by_cols for each indicator
-    # for each row, which is meta - indicator combination, the expected value should be 1
-    # the reported values is 0 if is is an NA, else it is 1
-    melt_dt <- melt(dt,
-      id.vars = by_cols,
-      measure.vars = setdiff(
-        names(dt),
-        exclude_cols
-      )
-    )
-    # then group by the by_cols, plus the pivot index column and calculate the sum of expected and reported
-    rep_rat <- melt_dt[
-      ,
-      .(rep = sum(value > 0, na.rm = TRUE), exp = .N),
-      by = c(by_cols, "variable")
-    ]
+    # if on index pivot the dt to long format by the by_cols for each
+    # indicator for each row, which is meta - indicator combination, the
+    # expected value should be 1 the reported values is 0 if is is an NA, else
+    # it is 1
+    melt_dt <- melt(dt, id.vars = by_cols, measure.vars = measure.vars)
+    # then group by the by_cols, plus the pivot index column and calculate the
+    # sum of expected and reported
+    rep_rat <- melt_dt[, .(
+      rep = sum(
+        !is.na(value),
+        na.rm = TRUE
+      ),
+      exp = .N
+    ),
+      by = c(by_cols, "variable")]
   } else if (on == "adm") {
-    # if on adm
-    # sum across the by_cols, and then calculate the reporting rate
-    rep_rat <- dt[,
-      .(
-        rep = sum(.SD > 0, na.rm = TRUE),
+    # if col is not null, then only calculate the reporting rate for those
+    # columns first test those cols, they should be in names(dt), otherwise
+    # stop
+    if (!is.null(col)) {
+      if (!all(col %in% names(dt))) {
+        stop("The col argument should be a subset of names(dt)")
+      }
+
+      rep_rat <- dt[, .(
+        rep = sum(
+          !is.na(.SD),
+          na.rm = TRUE
+        ),
         exp = .N * length(.SD)
       ),
-      by = by_cols,
-      .SDcols = -exclude_cols
-    ]
+        by = by_cols, .SDcols = col]
+    } else {
+      # if on adm sum across the by_cols, and then calculate the reporting
+      # rate
+      rep_rat <- dt[, .(
+        rep = sum(
+          !is.na(.SD),
+          na.rm = TRUE
+        ),
+        exp = .N * length(.SD)
+      ),
+        by = by_cols, .SDcols = -exclude_cols]
+    }
+    rep_rat[, rep_rat := rep/exp]
+    # after that calculate the reporting rate as the sum of reported divided
+    # by the sum of expected
+    return(rep_rat)
   }
-  rep_rat[, rep_rat := rep / exp]
-  # after that calculate the reporting rate as the sum of reported divided by the sum of expected
-  return(rep_rat)
 }
 
 #' Get group by columns
@@ -186,7 +220,7 @@ get_by_cols <- function(adm_by, date_by) {
 
 #' Calculate the report status
 #'
-#' If any indicator is reported, the report status is "Y", otherwise "N"
+#' If any indicator is reported, the report status is 'Y', otherwise 'N'
 #' grouped by the provided columns
 #' @param df A data frame
 #' @param ... Columns to group by
@@ -201,36 +235,37 @@ report_status <- function(df, ...) {
   df <- df |>
     group_by(!!!args) |>
     # calculate sum for each group for all numeric columns
-    summarise(
-      across(
-        !any_of(c("year", "month")) &
-          where(is.numeric),
-        ~ sum(.x, na.rm = TRUE)
-      )
-    ) |>
+  summarise(
+    across(
+      !any_of(c("year", "month")) &
+        where(is.numeric),
+      ~sum(.x, na.rm = TRUE)
+    )
+  ) |>
     # ungroup data frame
-    ungroup()
+  ungroup()
 
 
   df <- df |>
     mutate(
-      reported = if_else(rowSums(
-        across(
-          !any_of(c("year", "month")) & !c(!!!args) & where(is.numeric)
+      reported = if_else(
+        rowSums(
+          across(
+          !any_of(c("year", "month")) &
+            !c(!!!args) &
+            where(is.numeric)
         ),
-        na.rm = TRUE
-      ) == 0, 0, 1)
+          na.rm = TRUE
+        ) ==
+          0, 0, 1
+      )
     )
 
   # select only arguments and reported column
   df |>
-    select(
-      !!!args, "reported"
-    ) |>
+    select(!!!args, "reported") |>
     # convert reported to character
-    mutate(
-      reported = if_else(.data$reported > 0, "Y", "N")
-    )
+  mutate(reported = if_else(.data$reported > 0, "Y", "N"))
 }
 
 #' Calculate the report duration

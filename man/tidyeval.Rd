@@ -26,73 +26,107 @@ passed from function arguments inside other tidy eval functions.
 \verb{\{\{} is designed for individual arguments. To pass multiple
 arguments contained in dots, use \code{...} in the normal way.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{my_function <- function(data, var, ...) \{
-  data |>
-    group_by(...) |>
-    summarise(mean = mean(\{\{ var \}\}))
-\}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{my_function <- function(data, var, ...)
 }\if{html}{\out{</div>}}
-\item \code{\link[=enquo]{enquo()}} and \code{\link[=enquos]{enquos()}} delay the execution of one or several
+}
+
+{
+data |>
+group_by(...) |>
+summarise(mean = mean({{ var }}))
+}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{
+* [enquo()] and [enquos()] delay the execution of one or several
 function arguments. The former returns a single expression, the
 latter returns a list of expressions. Once defused, expressions
 will no longer evaluate on their own. They must be injected back
-into an evaluation context with \verb{!!} (for a single expression) and
-\verb{!!!} (for a list of expressions).
+into an evaluation context with `!!` (for a single expression) and
+`!!!` (for a list of expressions).
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{my_function <- function(data, var, ...) \{
-  # Defuse
-  var <- enquo(var)
-  dots <- enquos(...)
-
-  # Inject
-  data |>
-    group_by(!!!dots) |>
-    summarise(mean = mean(!!var))
-\}
 }\if{html}{\out{</div>}}
 
-In this simple case, the code is equivalent to the usage of \verb{\{\{}
-and \code{...} above. Defusing with \code{enquo()} or \code{enquos()} is only
+my_function <- function(data, var, ...)
+{
+# Defuse
+var <- enquo(var)
+dots <- enquos(...)
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# Inject
+data |>
+  group_by(!!!dots) |>
+  summarise(mean = mean(!!var))
+}\if{html}{\out{</div>}}
+
+}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{
+In this simple case, the code is equivalent to the usage of `\{\{`
+and `...` above. Defusing with `enquo()` or `enquos()` is only
 needed in more complex cases, for instance if you need to inspect
 or modify the expressions in some way.
-\item The \code{.data} pronoun is an object that represents the current
+
+* The `.data` pronoun is an object that represents the current
 slice of data. If you have a variable name in a string, use the
-\code{.data} pronoun to subset that variable with \code{[[}.
+`.data` pronoun to subset that variable with `[[`.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{my_var <- "disp"
+}\if{html}{\out{</div>}}
+
+my_var <- 'disp'
 mtcars |> summarise(mean = mean(.data[[my_var]]))
-}\if{html}{\out{</div>}}
-\item Another tidy eval operator is \verb{:=}. It makes it possible to use
-glue and curly-curly syntax on the LHS of \code{=}. For technical
-reasons, the R language doesn't support complex expressions on
-the left of \code{=}, so we use \verb{:=} as a workaround.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{my_function <- function(data, var, suffix = "foo") \{
-  # Use `\{\{` to tunnel function arguments and the usual glue
-  # operator `\{` to interpolate plain strings.
-  data |>
-    summarise("\{\{ var \}\}_mean_\{suffix\}" := mean(\{\{ var \}\}))
-\}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{
+* Another tidy eval operator is `:=`. It makes it possible to use
+glue and curly-curly syntax on the LHS of `=`. For technical
+reasons, the R language doesn't support complex expressions on
+the left of `=`, so we use `:=` as a workaround.
+
 }\if{html}{\out{</div>}}
-\item Many tidy eval functions like \code{dplyr::mutate()} or
-\code{dplyr::summarise()} give an automatic name to unnamed inputs. If
+
+my_function <- function(data, var, suffix = 'foo')
+{
+# Use \verb{\{\{} to tunnel function arguments and the usual glue
+# operator \verb{\{} to interpolate plain strings.
+data |>
+summarise('{{ var }}\emph{mean}{suffix}' := mean({{ var }}))
+}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{
+* Many tidy eval functions like `dplyr::mutate()` or
+`dplyr::summarise()` give an automatic name to unnamed inputs. If
 you need to create the same sort of automatic names by yourself,
-use \code{as_label()}. For instance, the glue-tunnelling syntax above
+use `as_label()`. For instance, the glue-tunnelling syntax above
 can be reproduced manually with:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{my_function <- function(data, var, suffix = "foo") \{
-  var <- enquo(var)
-  prefix <- as_label(var)
-  data |>
-    summarise("\{prefix\}_mean_\{suffix\}" := mean(!!var))
-\}
 }\if{html}{\out{</div>}}
 
-Expressions defused with \code{enquo()} (or tunnelled with \verb{\{\{}) need
-not be simple column names, they can be arbitrarily complex.
-\code{as_label()} handles those cases gracefully. If your code assumes
-a simple column name, use \code{as_name()} instead. This is safer
-because it throws an error if the input is not a name as expected.
+my_function <- function(data, var, suffix = 'foo')
+{
+var <- enquo(var)
+prefix <- as_label(var)
+data |>
+summarise('{prefix}\emph{mean}{suffix}' := mean(!!var))
 }
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{
+Expressions defused with `enquo()` (or tunnelled with `\{\{`) need
+not be simple column names, they can be arbitrarily complex.
+`as_label()` handles those cases gracefully. If your code assumes
+a simple column name, use `as_name()` instead. This is safer
+because it throws an error if the input is not a name as expected.
+
+
+[dplyr programming
+vignette]: R:dplyr\%20programming\%0Avignette
+[ggplot2 in packages
+vignette]: R:ggplot2\%20in\%20packages\%0Avignette
+[Metaprogramming
+section]: R:Metaprogramming\%0Asection
+[Advanced
+R]: R:Advanced\%0AR
+[enquo()]: R:enquo()
+[enquos()]: R:enquos()
+[my_var]: R:my_var
+}\if{html}{\out{</div>}}
 }
 \keyword{internal}

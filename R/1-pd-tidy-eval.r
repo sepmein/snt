@@ -22,7 +22,8 @@
 #'   arguments contained in dots, use `...` in the normal way.
 #'
 #'   ```
-#'   my_function <- function(data, var, ...) {
+#'   my_function <- function(data, var, ...)
+#'  {
 #'     data |>
 #'       group_by(...) |>
 #'       summarise(mean = mean({{ var }}))
@@ -37,7 +38,8 @@
 #'   `!!!` (for a list of expressions).
 #'
 #'   ```
-#'   my_function <- function(data, var, ...) {
+#'   my_function <- function(data, var, ...)
+#'  {
 #'     # Defuse
 #'     var <- enquo(var)
 #'     dots <- enquos(...)
@@ -59,7 +61,7 @@
 #'   `.data` pronoun to subset that variable with `[[`.
 #'
 #'   ```
-#'   my_var <- "disp"
+#'   my_var <- 'disp'
 #'   mtcars |> summarise(mean = mean(.data[[my_var]]))
 #'   ```
 #'
@@ -69,11 +71,12 @@
 #'   the left of `=`, so we use `:=` as a workaround.
 #'
 #'   ```
-#'   my_function <- function(data, var, suffix = "foo") {
+#'   my_function <- function(data, var, suffix = 'foo')
+#'  {
 #'     # Use `{{` to tunnel function arguments and the usual glue
 #'     # operator `{` to interpolate plain strings.
 #'     data |>
-#'       summarise("{{ var }}_mean_{suffix}" := mean({{ var }}))
+#'       summarise('{{ var }}_mean_{suffix}' := mean({{ var }}))
 #'   }
 #'   ```
 #'
@@ -84,11 +87,12 @@
 #'   can be reproduced manually with:
 #'
 #'   ```
-#'   my_function <- function(data, var, suffix = "foo") {
+#'   my_function <- function(data, var, suffix = 'foo')
+#'  {
 #'     var <- enquo(var)
 #'     prefix <- as_label(var)
 #'     data |>
-#'       summarise("{prefix}_mean_{suffix}" := mean(!!var))
+#'       summarise('{prefix}_mean_{suffix}' := mean(!!var))
 #'   }
 #'   ```
 #'

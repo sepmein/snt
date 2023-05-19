@@ -15,7 +15,7 @@ p_out: path to the output shapefile
 \examples{
 extract_shp_from_gishub(
   p_gishub = p_shapefile_adm2,
-  iso3 = "COG",
+  iso3 = 'COG',
   p_out = p_congo_shp
 )
 congo_shp <- st_read(p_congo_shp)

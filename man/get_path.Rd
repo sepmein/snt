@@ -18,5 +18,5 @@ return the path
 Get path from config.yml and from user defined file
 }
 \examples{
-get_path("data", "test.csv")
+get_path('data', 'test.csv')
 }

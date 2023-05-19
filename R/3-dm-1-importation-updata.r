@@ -4,7 +4,7 @@
 #' such as hf_type
 #' @param d Data table
 #' @export
-#' @import data.table
+#' @importFrom data.table setkey :=
 dissect_meta <- function(d) {
   # test if adm1 is in d, where d is a data.table
   test_meta_columns(d)
@@ -18,8 +18,8 @@ dissect_meta <- function(d) {
   d <- d[meta_admin, on = admin_group]
 
 
-  # remove admin_group in d, and add another column called adm_id,
-  # which is the id in the meta_admin
+  # remove admin_group in d, and add another column called adm_id, which is
+  # the id in the meta_admin
   admin_group <- get_adm_group(d)
   d[, (admin_group) := NULL]
 
@@ -29,17 +29,13 @@ dissect_meta <- function(d) {
   # merge with meta_date
   d <- d[meta_date, on = date_group]
 
-  # remove date_group in d, and add another column called date_id,
-  # which is the id in the meta_date
+  # remove date_group in d, and add another column called date_id, which is
+  # the id in the meta_date
   d[, (date_group) := NULL]
 
   setkey(d, id, id_adm, id_date)
   # return d
-  return(list(
-    d = d,
-    meta_admin = meta_admin,
-    meta_date = meta_date
-  ))
+  return(list(d = d, meta_admin = meta_admin, meta_date = meta_date))
 }
 
 #' @title Assemble data 🈴
@@ -48,16 +44,17 @@ dissect_meta <- function(d) {
 #' @param meta_adm Meta admin table's id_adm
 #' @param meta_date Meta date table's id_date
 #' @export
-#' @importFrom data.table key merge.data.table CJ
+#' @importFrom data.table key merge.data.table CJ setkey
 #' @examples
 #' assemble_meta(d, meta_admin, meta_date)
 assemble_meta <- function(meta_adm, meta_date, d = NULL) {
-  # arguments should have keys
-  # d should have id, id_adm, id_date
-  # meta_adm should have id_adm
-  # meta_date should have id_date
-  # test if they have the above keys
-  if (!all(key(d) == c("id", "id_adm", "id_date"))) {
+  # arguments should have keys d should have id, id_adm, id_date meta_adm
+  # should have id_adm meta_date should have id_date test if they have the
+  # above keys
+  if (!all(
+    key(d) ==
+      c("id", "id_adm", "id_date")
+  )) {
     stop("d should have id, id_adm, id_date as key")
   }
   adm_level <- get_adm_level(meta_adm)
@@ -70,16 +67,22 @@ assemble_meta <- function(meta_adm, meta_date, d = NULL) {
   if (adm_level == "hf") {
     adm_keys <- c("id_adm", "id_adm1", "id_adm2", "id_hf")
   }
-  if (!all(key(meta_adm) == adm_keys)) {
+  if (!all(
+    key(meta_adm) ==
+      adm_keys
+  )) {
     stop("meta_adm should have id_adm as key")
   }
 
-  if (!all(key(meta_date) == c("id_date"))) {
+  if (!all(
+    key(meta_date) ==
+      c("id_date")
+  )) {
     stop("meta_date should have id_date as key")
   }
   # if d is NULL, return meta_adm and meta_date
   meta <- CJ(id_adm = meta_adm$id_adm, id_date = meta_date$id_date)
-  meta <- merge(meta, meta_adm, by ="id_adm")
+  meta <- merge(meta, meta_adm, by = "id_adm")
   meta <- merge(meta, meta_date, by = "id_date")
   setkey(meta, id_adm, id_date)
   if (is.null(d)) {
@@ -89,13 +92,18 @@ assemble_meta <- function(meta_adm, meta_date, d = NULL) {
     assembled <- d[meta, on = c("id_adm", "id_date")]
     setkey(assembled, id, id_adm, id_date)
     adm_group <- get_adm_group
-    setcolorder(assembled, c("id", names(meta_adm), names(meta_date)))
+    setcolorder(
+      assembled, c(
+        "id", names(meta_adm),
+        names(meta_date)
+      )
+    )
   }
   return(assembled)
 }
 
 
-#' @import data.table
+#' @importFrom data.table setkey setcolorder
 gen_meta_adm <- function(d) {
   adm_group <- get_adm_group(d)
   adm_level <- get_adm_level(d)
@@ -157,19 +165,19 @@ gen_meta_adm <- function(d) {
   return(meta_admin)
 }
 
-#' @import data.table
+#' @importFrom data.table CJ setkey
 gen_meta_date <- function(d) {
   date_group <- get_date_group(d)
   date_label <- get_date_level(d)
   dates <- d[, ..date_group]
   dates <- unique(dates)
   if (date_label == "month") {
-    meta_date = CJ(
+    meta_date <- CJ(
       year = min(dates$year):max(dates$year),
       month = 1:12
     )
   } else {
-    meta_date = CJ(year = min(dates$year):max(dates$year))
+    meta_date <- CJ(year = min(dates$year):max(dates$year))
   }
   gen_id_dt(meta_date, "id_date")
   setkey(meta_date, id_date)
@@ -231,14 +239,10 @@ get_date_group <- function(d) {
 
 test_meta_columns <- function(d) {
   column_name <- colnames(d)
-  # if hf is in d, then adm1, adm2 should be also in d
-  # Otherwise stop
-  # if adm2 is in d, then adm1 should be also in d
-  # Otherwise stop
-  # adm1 must be in d, Otherwise stop
-  # if month is in d, then year should be also in d
-  # Otherwise stop
-  # year must in d
+  # if hf is in d, then adm1, adm2 should be also in d Otherwise stop if adm2
+  # is in d, then adm1 should be also in d Otherwise stop adm1 must be in d,
+  # Otherwise stop if month is in d, then year should be also in d Otherwise
+  # stop year must in d
   if (!("year" %in% column_name)) {
     stop("year must be in d")
   }

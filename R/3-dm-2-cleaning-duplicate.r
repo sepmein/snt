@@ -33,7 +33,7 @@ merge_dups <- function(df, ...) {
   # summarize dups by sum up all other columns excerpt for args
   dups_to_merge <- dups_to_merge |>
     group_by(!!!args) |>
-    summarise_all(~ sum(.x, na.rm = TRUE)) |>
+    summarise_all(~sum(.x, na.rm = TRUE)) |>
     ungroup()
 
   # remove dups from df

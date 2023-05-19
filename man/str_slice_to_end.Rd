@@ -20,7 +20,7 @@ string
 String Util Slice a pattern and append it to the end
 }
 \examples{
-"General Hospital Awa Onna"
-str_slice_to_end("General Hospital Awa Onna", "General Hospital")
-"Awa Onna General Hospital"
+'General Hospital Awa Onna'
+str_slice_to_end('General Hospital Awa Onna', 'General Hospital')
+'Awa Onna General Hospital'
 }

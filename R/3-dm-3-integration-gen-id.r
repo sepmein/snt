@@ -14,16 +14,11 @@
 #'   b = c(4, 5, 6)
 #' )
 #' df <- gen_id_if_not_exist(df)
-#' df <- gen_id_if_not_exist(df, "id")
-gen_id_if_not_exist <- function(df,
-                                id_column = "id") {
+#' df <- gen_id_if_not_exist(df, 'id')
+gen_id_if_not_exist <- function(df, id_column = "id") {
   if (!(id_column %in% colnames(df))) {
     df <- df |>
-      dplyr::mutate(
-        !!id_column := replicate(
-          dplyr::n(), uuid::UUIDgenerate()
-        )
-      )
+      dplyr::mutate(!!id_column := replicate(dplyr::n(), uuid::UUIDgenerate()))
   }
   return(df)
 }
@@ -33,11 +28,14 @@ gen_id_if_not_exist <- function(df,
 #' @param id_column ID column name
 #' @return data table
 #' @export
-#' @import data.table
+#' @importFrom data.table :=
 #' @importFrom uuid UUIDgenerate
 gen_id_dt <- function(dt, id_column = "id") {
   if (!(id_column %in% colnames(dt))) {
-    dt[, (id_column) := replicate(nrow(dt), UUIDgenerate())]
+    dt[, (id_column) := replicate(
+      nrow(dt),
+      UUIDgenerate()
+    )]
   }
   return(dt)
 }

@@ -13,9 +13,9 @@ align_plots(..., ncol = 1, align = "v", axis = "l")
 
 \item{ncol}{number of columns, default is 1}
 
-\item{align}{how to align, default is "v" (vertical)}
+\item{align}{how to align, default is 'v' (vertical)}
 
-\item{axis}{axis to align, default is "l" (left)}
+\item{axis}{axis to align, default is 'l' (left)}
 }
 \value{
 a list of plots

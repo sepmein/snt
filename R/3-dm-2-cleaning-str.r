@@ -8,13 +8,23 @@
 #' @importFrom stringr str_replace
 #' @examples
 #' df <- data.frame(
-#'   col = c("a  b", "b  c", "c  d")
+#'   col = c('a  b', 'b  c', 'c  d')
 #' )
 #' str_trim_space(df, col)
 str_trim_space <- function(df, column) {
   df |>
     mutate(
-      {{ column }} := str_replace({{ column }}, " +|\t+", " ")
+      {
+        {
+          column
+        }
+      } := str_replace(
+        {
+          {
+          column
+          }
+        }, " +|\t+", " "
+      )
     )
 }
 
@@ -28,18 +38,44 @@ str_trim_space <- function(df, column) {
 #' @export
 #'
 #' @examples
-#' "General Hospital Awa Onna"
-#' str_slice_to_end("General Hospital Awa Onna", "General Hospital")
-#' "Awa Onna General Hospital"
+#' 'General Hospital Awa Onna'
+#' str_slice_to_end('General Hospital Awa Onna', 'General Hospital')
+#' 'Awa Onna General Hospital'
 #' @importFrom stringr str_remove str_c str_trim str_detect
-str_slice_to_end <-
-  function(df, column, pattern) {
-    df |>
-      mutate({{ column }} := str_replace(
-        {{ column }},
-        str_c("(.*)(", pattern, ")(.*)"),
+str_slice_to_end <- function(df, column, pattern) {
+  df |>
+    mutate(
+      {
+        {
+          column
+        }
+      } := str_replace(
+        {
+          {
+          column
+          }
+        }, str_c("(.*)(", pattern, ")(.*)"),
         "\\1 \\3 \\2"
-      )) |>
-      str_trim_space({{ column }}) |>
-      mutate({{ column }} := str_trim({{ column }}))
-  }
+      )
+    ) |>
+    str_trim_space(
+      {
+        {
+          column
+        }
+      }
+    ) |>
+    mutate(
+      {
+        {
+          column
+        }
+      } := str_trim(
+        {
+          {
+          column
+          }
+        }
+      )
+    )
+}
