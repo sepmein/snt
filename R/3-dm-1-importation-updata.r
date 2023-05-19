@@ -5,6 +5,7 @@
 #' @param d Data table
 #' @export
 #' @importFrom data.table setkey :=
+#' @rdname import
 dissect_meta <- function(d) {
   # test if adm1 is in d, where d is a data.table
   test_meta_columns(d)
@@ -91,7 +92,6 @@ assemble_meta <- function(meta_adm, meta_date, d = NULL) {
     # full join d with meta_adm and meta_date
     assembled <- d[meta, on = c("id_adm", "id_date")]
     setkey(assembled, id, id_adm, id_date)
-    adm_group <- get_adm_group
     setcolorder(
       assembled, c(
         "id", names(meta_adm),
