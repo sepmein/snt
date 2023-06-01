@@ -4,8 +4,6 @@ expected <- function(df) {
   target_list <- df |>
     select(!!!args) |>
     unique()
-
-
   min_year <- min(df$year)
   max_year <- max(df$year)
   year <- tibble(year = min_year:max_year)
@@ -17,7 +15,6 @@ expected <- function(df) {
     mutate(exp = 1)
   return(exp)
 }
-
 #' Calculate the reporting rate for each indicator
 #'
 #' For each indicator, calculate the reporting rate for each year and month
@@ -56,7 +53,6 @@ report_rate <- function(df, ...) {
       )
     ) |>
     select(!!!args, year, month, rep)
-
   reprate <- exp |>
     left_join(rep) |>
     # filling NA with 0
@@ -66,7 +62,6 @@ report_rate <- function(df, ...) {
       0, rep
     )
   )
-
   reprate |>
     group_by(!!!args) |>
     summarize(
@@ -75,7 +70,6 @@ report_rate <- function(df, ...) {
     ) |>
     mutate(reprat = rep/exp)
 }
-
 #' Calculate the reporting rate
 #'
 #' The reporting rate is calculated as the number of reports divided by the
@@ -102,7 +96,6 @@ sn_ana_report_status <- function(dt, adm_by, date_by) {
     by = by_cols, .SDcols = -exclude_cols]
   return(report_rate)
 }
-
 #' report rate
 #'
 #' Calculate report rate
@@ -123,7 +116,6 @@ sn_ana_report_rate <- function(dt, adm_by, date_by, on, col = NULL) {
   # get the by columns
   by_cols <- get_by_cols(adm_by, date_by)
   # calculate the expected reports
-
   measure.vars <- setdiff(
     names(dt),
     exclude_cols
@@ -133,13 +125,14 @@ sn_ana_report_rate <- function(dt, adm_by, date_by, on, col = NULL) {
     measure.vars <- intersect(measure.vars, col)
   }
   if (on == "index") {
-    # if on index pivot the dt to long format by the by_cols for each
-    # indicator for each row, which is meta - indicator combination, the
-    # expected value should be 1 the reported values is 0 if is is an NA, else
-    # it is 1
+    # if on index pivot the dt to long format by the
+    # by_cols for each indicator for each row, which is
+    # meta - indicator combination, the expected value
+    # should be 1 the reported values is 0 if is is an NA,
+    # else it is 1
     melt_dt <- melt(dt, id.vars = by_cols, measure.vars = measure.vars)
-    # then group by the by_cols, plus the pivot index column and calculate the
-    # sum of expected and reported
+    # then group by the by_cols, plus the pivot index
+    # column and calculate the sum of expected and reported
     rep_rat <- melt_dt[, .(
       rep = sum(
         !is.na(value),
@@ -149,14 +142,13 @@ sn_ana_report_rate <- function(dt, adm_by, date_by, on, col = NULL) {
     ),
       by = c(by_cols, "variable")]
   } else if (on == "adm") {
-    # if col is not null, then only calculate the reporting rate for those
-    # columns first test those cols, they should be in names(dt), otherwise
-    # stop
+    # if col is not null, then only calculate the reporting
+    # rate for those columns first test those cols, they
+    # should be in names(dt), otherwise stop
     if (!is.null(col)) {
       if (!all(col %in% names(dt))) {
         stop("The col argument should be a subset of names(dt)")
       }
-
       rep_rat <- dt[, .(
         rep = sum(
           !is.na(.SD),
@@ -166,8 +158,8 @@ sn_ana_report_rate <- function(dt, adm_by, date_by, on, col = NULL) {
       ),
         by = by_cols, .SDcols = col]
     } else {
-      # if on adm sum across the by_cols, and then calculate the reporting
-      # rate
+      # if on adm sum across the by_cols, and then
+      # calculate the reporting rate
       rep_rat <- dt[, .(
         rep = sum(
           !is.na(.SD),
@@ -178,12 +170,11 @@ sn_ana_report_rate <- function(dt, adm_by, date_by, on, col = NULL) {
         by = by_cols, .SDcols = -exclude_cols]
     }
     rep_rat[, rep_rat := rep/exp]
-    # after that calculate the reporting rate as the sum of reported divided
-    # by the sum of expected
+    # after that calculate the reporting rate as the sum of
+    # reported divided by the sum of expected
     return(rep_rat)
   }
 }
-
 #' Get group by columns
 #'
 #' adm_by should be either adm1, adm2, or hf
@@ -216,8 +207,6 @@ get_by_cols <- function(adm_by, date_by) {
   by_cols <- c(adm_by_cols, date_by_cols)
   return(by_cols)
 }
-
-
 #' Calculate the report status
 #'
 #' If any indicator is reported, the report status is 'Y', otherwise 'N'
@@ -244,8 +233,6 @@ report_status <- function(df, ...) {
   ) |>
     # ungroup data frame
   ungroup()
-
-
   df <- df |>
     mutate(
       reported = if_else(
@@ -260,14 +247,12 @@ report_status <- function(df, ...) {
           0, 0, 1
       )
     )
-
   # select only arguments and reported column
   df |>
     select(!!!args, "reported") |>
     # convert reported to character
   mutate(reported = if_else(.data$reported > 0, "Y", "N"))
 }
-
 #' Calculate the report duration
 #' Get the min max report year and month for each group based on the report status
 #' This code filters the data by the reported column to only include data
@@ -304,7 +289,6 @@ get_report_duration <- function(df, ...) {
     distinct(!!!args) |>
     left_join(report_duration)
 }
-
 #' Get the unique values not in compare database
 #'
 #' This function takes a target and compare data.table and returns the unique
@@ -317,22 +301,24 @@ get_report_duration <- function(df, ...) {
 #' @examples
 #' library(data.table)
 #' target <- data.table(
-#'  adm1 = c("a", "a", "b", "b", "c", "c"),
-#'  adm2 = c("a", "b", "a", "b", "a", "b"),
-#' hf = c("a", "b", "a", "b", "a", "b")
+#'  adm1 = c('a', 'a', 'b', 'b', 'c', 'c'),
+#'  adm2 = c('a', 'b', 'a', 'b', 'a', 'b'),
+#' hf = c('a', 'b', 'a', 'b', 'a', 'b')
 #' )
 #' compare <- data.table(
-#'  adm1 = c("a", "a", "b", "b", "c"),
-#'  adm2 = c("a", "b", "a", "b", "a"),
-#' hf = c("a", "b", "a", "b", "a")
+#'  adm1 = c('a', 'a', 'b', 'b', 'c'),
+#'  adm2 = c('a', 'b', 'a', 'b', 'a'),
+#' hf = c('a', 'b', 'a', 'b', 'a')
 #' )
-#' by <- "adm1"
+#' by <- 'adm1'
 #' sn_unique_diff(target, compare, by)
 sn_unique_diff <- function(target, compare, by) {
-  # target should be a data.table
-  # compare should be a data.table
-  # by should be a character vector of column names
-  tar <- target[, .SD, .SDcols = by] |> unique()
-  comp <- compare[, .SD, .SDcols = by] |> unique()
+  # target should be a data.table compare should be a
+  # data.table by should be a character vector of column
+  # names
+  tar <- target[, .SD, .SDcols = by] |>
+    unique()
+  comp <- compare[, .SD, .SDcols = by] |>
+    unique()
   not_in_compare <- tar[!comp, on = by]
 }

@@ -12,10 +12,10 @@
 #' group_by('hf', 'year')
 #' group_by('hf', 'month')
 sn_aggregate_by <- function(admin_level, date_level) {
-  # choose from admin_level, if adm1, then produce, adm1, if adm2, then
-  # produce adm1, adm2, if hf, then produce adm1, adm2, hf choose from
-  # date_level, if year, then produce year, if month, then produce year, month
-
+  # choose from admin_level, if adm1, then produce, adm1,
+  # if adm2, then produce adm1, adm2, if hf, then produce
+  # adm1, adm2, hf choose from date_level, if year, then
+  # produce year, if month, then produce year, month
   if (admin_level == "adm1") {
     if (date_level == "year") {
       return(c("adm1", "year"))
@@ -40,4 +40,3 @@ sn_aggregate_by <- function(admin_level, date_level) {
     )
   }
 }
-

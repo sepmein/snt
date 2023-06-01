@@ -30,7 +30,6 @@ routine_replace <- function(df) {
     dplyr::mutate_if(is.character, find_and_rename)
   return(df)
 }
-
 #' A helper function to import routine database
 #'
 #' @param df Target dataframe to be replaced
@@ -68,6 +67,5 @@ import_replace <- function(df, replace_database, snt_country, column, by = FALSE
     ) |>
     select(-!!column) |>
     dplyr::rename(!!column := !!temp_column)
-
   return(df)
 }

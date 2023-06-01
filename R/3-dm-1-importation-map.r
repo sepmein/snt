@@ -13,7 +13,6 @@ sn_get_map_walk_healthcare <- function(iso, layer) {
   )
   return(access_walking)
 }
-
 #' @export
 #' @rdname MAP
 sn_get_map_motor_healthcare <- function(iso, layer) {

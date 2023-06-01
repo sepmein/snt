@@ -9,7 +9,8 @@
 #' @export
 sn_clean_missing <- function(df, path, ...) {
   args <- enquos(...)
-  # get missing for each column in args, if it is missing, remove the row
+  # get missing for each column in args, if it is missing,
+  # remove the row
   missing <- df |>
     filter(
       if_any(
@@ -17,11 +18,9 @@ sn_clean_missing <- function(df, path, ...) {
         ~is.na(.x)
       )
     )
-
   # store missing data in the path
   missing |>
     write_csv(path)
-
   df <- df |>
     anti_join(missing)
 }

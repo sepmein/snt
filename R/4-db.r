@@ -2,13 +2,11 @@
 db_name <- "malaria"
 db_user <- "sepmein"
 db_pass <- "crimson"
-
 get_con <- function() {
   db_name <- config::get()
   db_user <- "sepmein"
   db_pass <- "crimson"
 }
-
 # sql -----------
 #' @export
 sql_select_adm0_year <- "select * from adm0_year"
@@ -22,40 +20,33 @@ sql_select_adm1_month <- "select * from adm1_month"
 sql_select_adm2_year <- "select * from adm2_year"
 #' @export
 sql_select_adm2_month <- "select * from adm2_month"
-
 ## sql constrain -----------
 #' @export
 constrain_adm0 <- function(positional_index) {
   return(paste0("adm0 = $", positional_index))
 }
-
 #' @export
 constrain_adm1 <- function(positional_index) {
   return(paste0("adm1 = $", positional_index))
 }
-
 #' @export
 constrain_adm2 <- function(positional_index) {
   return(paste0("adm2 = $", positional_index))
 }
-
 #' @export
 constrain_year <- function(positional_index) {
   return(paste0("year = $", positional_index))
 }
-
 #' @export
 constrain_range_year_included <- function(positional_index) {
   first <- positional_index
   second <- positional_index + 1
   return(paste0("year >= $", first, " and year <= $", second))
 }
-
 #' @export
 constrain_indicator <- function(positional_index) {
   return(paste0("index = $", positional_index))
 }
-
 #' @export
 constrain_indicators <- function(positional_index, ...) {
   # index IN ('foo', 'bar') index IN ($n1, $n2, $n3)
@@ -64,29 +55,25 @@ constrain_indicators <- function(positional_index, ...) {
   result <- paste0("index IN (", combined_hashes, ")")
   return(result)
 }
-
 ## sql generator fns -------------
-
 #' @export
 add_and <- function(sql) {
   sql <- paste(sql, "AND", sep = " ")
   return(sql)
 }
-
 #' @export
 add_where <- function(sql) {
   sql <- paste(sql, "WHERE", sep = " ")
   return(sql)
 }
-
 #' @export
 add_constrain <- function(sql, constrain_fn, index, ...) {
   constrain <- constrain_fn(index, ...)
   sql <- paste(sql, constrain, sep = " ")
   return(sql)
 }
-
-# query -------- adm0_year by adm0, year, year_from, year_to, indicators
+# query -------- adm0_year by adm0, year, year_from,
+# year_to, indicators
 #' dbp select
 #' @param adm0 adm0
 #' @param year year
@@ -100,8 +87,8 @@ add_constrain <- function(sql, constrain_fn, index, ...) {
 #' @importFrom DBI dbConnect dbDisconnect dbGetQuery
 #' @importFrom RPostgres Postgres
 dbq_select <- function(
-  adm0 = NULL, year = NULL, year_from = NULL, year_to = NULL, indicators = NULL,
-  aggregation = "yearly", level = NULL
+  adm0 = NULL, year = NULL, year_from = NULL, year_to = NULL,
+  indicators = NULL, aggregation = "yearly", level = NULL
 ) {
   # Decide on the db query
   if (level == "adm0") {
@@ -125,15 +112,15 @@ dbq_select <- function(
   } else {
     stop("dbq_select, level should be either adm0, adm1 or adm2")
   }
-
   # Build connection
-  con <- DBI::dbConnect(RPostgres::Postgres(), dbname = db_name, user = db_user, password = db_pass)
-
+  con <- DBI::dbConnect(
+    RPostgres::Postgres(), dbname = db_name, user = db_user,
+    password = db_pass
+  )
   query_list <- c()
   index <- 1
   first <- TRUE
   modified <- FALSE
-
   # applied adm0 as number
   if (!is.null(adm0)) {
     if (first) {
@@ -169,7 +156,6 @@ dbq_select <- function(
     }
     if (length == 1) {
       # example 'cases_wmr'
-
       sql <- add_constrain(sql, constrain_indicator, index)
       index <- index + 1
       query_list <- append(query_list, indicators)
@@ -211,7 +197,6 @@ dbq_select <- function(
       tidyr::pivot_wider(names_from = index, values_from = value)
   )
 }
-
 #' @export
 format_level <- function(level) {
   levels <- c("adm0", "adm1", "adm2")
@@ -221,7 +206,6 @@ format_level <- function(level) {
   }
   return(formatted)
 }
-
 #' @export
 format_adm0 <- function(adm0) {
   return(stringr::str_to_upper(adm0))

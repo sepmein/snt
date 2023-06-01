@@ -36,8 +36,9 @@
 #' @importFrom stringr str_detect str_replace
 #' @importFrom lubridate make_date day month year
 sn_get_files <- function(smart_path) {
-  # detect country code find special character in special path parameter loop
-  # through file path in the path.list return valid file
+  # detect country code find special character in special
+  # path parameter loop through file path in the path.list
+  # return valid file
   pattern <- "\\*yyyy\\*|\\*mm\\*|\\*dd\\*"
   year_pattern <- "\\*yyyy\\*"
   month_pattern <- "\\*mm\\*"
@@ -48,12 +49,11 @@ sn_get_files <- function(smart_path) {
       "Reading path do not contain pattern, please modify the year into *yyyy* and month into *mm*"
     )
   }
-
   is_year_pattern_found <- stringr::str_detect(smart_path, year_pattern)
   is_month_pattern_found <- stringr::str_detect(smart_path, month_pattern)
   is_day_pattern_found <- stringr::str_detect(smart_path, day_pattern)
-
-  # if day pattern is found, then both year and month pattern should be found
+  # if day pattern is found, then both year and month
+  # pattern should be found
   if (is_day_pattern_found) {
     if (!(is_year_pattern_found && is_month_pattern_found)) {
       stop(
@@ -63,7 +63,8 @@ sn_get_files <- function(smart_path) {
       seq_by <- "day"
     }
   } else if (is_month_pattern_found) {
-    # if month pattern is found, then year pattern should be found
+    # if month pattern is found, then year pattern should
+    # be found
     if (!(is_year_pattern_found)) {
       stop(
         "The path contains month pattern (*mm*), but does not contain year pattern (*yyyy*)"
@@ -74,45 +75,45 @@ sn_get_files <- function(smart_path) {
   } else if (is_year_pattern_found) {
     seq_by <- "year"
   }
-
-  # Generate a sequence of dates, with one date for each day.
+  # Generate a sequence of dates, with one date for each
+  # day.
   target_date_range <- seq(
     from = lubridate::make_date(1980, 1, 1),
     to = lubridate::make_date(2050, 12, 31),
     by = seq_by
   )
-
   # Create empty lists for the results
   result_file_list <- c()
   result_date <- c()
-
   for (i in seq_along(target_date_range)) {
     if (seq_by == "day") {
       replacement_day <- as.character(day(target_date_range[i]))
       replacement_month <- as.character(month(target_date_range[i]))
       replacement_year <- as.character(year(target_date_range[i]))
-
       target_file_path <- file.path(
         smart_path |>
           stringr::str_replace(year_pattern, replacement_year) |>
-          stringr::str_replace(month_pattern, stringr::str_pad(replacement_month, 2, pad = "0")) |>
-          stringr::str_replace(day_pattern, stringr::str_pad(replacement_day, 2, pad = "0"))
+          stringr::str_replace(
+          month_pattern, stringr::str_pad(replacement_month, 2, pad = "0")
+        ) |>
+          stringr::str_replace(
+          day_pattern, stringr::str_pad(replacement_day, 2, pad = "0")
+        )
       )
       target_year <- as.numeric(replacement_year)
       target_month <- as.numeric(replacement_month)
       target_day <- as.numeric(replacement_day)
     }
-
     if (seq_by == "month") {
       replacement_month <- as.character(month(target_date_range[i]))
       replacement_year <- as.character(year(target_date_range[i]))
-
       # Get the path to the target file.
-
       target_file_path <- file.path(
         smart_path |>
           stringr::str_replace(year_pattern, replacement_year) |>
-          stringr::str_replace(month_pattern, stringr::str_pad(replacement_month, 2, pad = "0"))
+          stringr::str_replace(
+          month_pattern, stringr::str_pad(replacement_month, 2, pad = "0")
+        )
       )
       # Get the year, month, and day of the target file.
       target_year <- as.numeric(replacement_year)
@@ -120,30 +121,33 @@ sn_get_files <- function(smart_path) {
       target_day <- 1
     }
     if (seq_by == "year") {
-      # Create a character string containing the year to be replaced
+      # Create a character string containing the year to be
+      # replaced
       replacement_year <- as.character(year(target_date_range[i]))
       # Replace the year in the file path with the new year
       target_file_path <- file.path(
         smart_path |>
           stringr::str_replace(year_pattern, replacement_year)
       )
-      # Create the year, month, and day values for the new file path
+      # Create the year, month, and day values for the new
+      # file path
       target_year <- as.numeric(replacement_year)
       target_month <- 1
       target_day <- 1
     }
-    # If the new file path exists, add it to the list of file paths
+    # If the new file path exists, add it to the list of
+    # file paths
     if (file.exists(target_file_path)) {
       result_file_list <- append(result_file_list, target_file_path)
-      # Create a date object for the new file path and add it to the list of
-      # dates
-      result_date <- append(result_date, lubridate::make_date(target_year, target_month, target_day))
+      # Create a date object for the new file path and add
+      # it to the list of dates
+      result_date <- append(
+        result_date, lubridate::make_date(target_year, target_month, target_day)
+      )
     }
   }
-
   return(list(files = result_file_list, dates = result_date))
 }
-
 #' @title Read excel files by year
 #'
 #' @description Read excel files by year
@@ -165,7 +169,6 @@ smart_read_excel_by_year <- function(smart_path, skip = 0, clean = TRUE) {
   }
   return(result)
 }
-
 smart_get_all_files_in_dir <- function(smart_path, skip = 0, clean = TRUE, country = snt_country) {
   if (!(dir.exists(smart_path))) {
     stop("Path does not exists.")
@@ -181,9 +184,13 @@ smart_get_all_files_in_dir <- function(smart_path, skip = 0, clean = TRUE, count
   if (clean) {
     result <- result |>
       # rename using internal rename database
-    dplyr::mutate(data = purrr::map(data, ~routine_rename(.x, cty = country))) |>
+    dplyr::mutate(
+      data = purrr::map(data, ~routine_rename(.x, cty = country))
+    ) |>
       # replace using internal replace database
-    dplyr::mutate(data = purrr::map(data, ~routine_replace(.x, cty = country)))
+    dplyr::mutate(
+      data = purrr::map(data, ~routine_replace(.x, cty = country))
+    )
   }
   return(result)
 }

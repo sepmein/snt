@@ -1,6 +1,6 @@
 Package: snt
 Title: Malaria Subnational Tailoring
-Version: 0.3.0
+Version: 0.3.0.9000
 Authors@R: 
     person("Chunzhe", "Zhang", , "zhangc@who.int", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))

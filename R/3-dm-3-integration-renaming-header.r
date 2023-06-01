@@ -1,5 +1,4 @@
 # Renaming all the variables in the dataset
-
 #' @title Renaming the dataset to lower case
 #' @description Renaming the dataset to lower case
 #' @param df dataframe to be renamed
@@ -30,7 +29,6 @@ sn_to_lower <- function(df) {
     )
   return(df)
 }
-
 #' @title Rename Columns in Routine data
 #'
 #' @description Rename columns in routine data
@@ -65,7 +63,6 @@ routine_rename <- function(df) {
     dplyr::rename_with(find_and_rename)
   return(df)
 }
-
 #' rename the administrative zone names
 #'
 #' Detect if adm0, adm1, adm2, adm3 are in the dataframe, if they are

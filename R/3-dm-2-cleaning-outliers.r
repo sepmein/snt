@@ -12,7 +12,8 @@
 #' @importFrom tibble tibble
 #' @importFrom rlang enquos .data
 sn_check_outliers <- function(df, alpha = 0.99999, both_sides = FALSE, ...) {
-  # 1. Extract the columns we want to analyze from the dataframe.
+  # 1. Extract the columns we want to analyze from the
+  # dataframe.
   args <- rlang::enquos(...)
   df <- df |>
     gen_id_if_not_exist()
@@ -25,10 +26,8 @@ sn_check_outliers <- function(df, alpha = 0.99999, both_sides = FALSE, ...) {
     0) {
     stop("No numeric columns in the dataframe")
   }
-
   # 2. Initialize an empty tibble to store the outliers.
   result <- tibble::tibble(id = character(), value = numeric(), index = character())
-
   # 3. Loop over the columns that we want to analyze.
   for (column in columns) {
     # 4. Extract the upper bound for this column.
@@ -51,7 +50,6 @@ sn_check_outliers <- function(df, alpha = 0.99999, both_sides = FALSE, ...) {
     mutate(id = as.character(.data$id)) |>
       mutate(index = as.character(.data$index)) |>
       mutate(value = as.numeric(.data$value))
-
     # 7. Add the outliers to the result tibble.
     result <- result |>
       bind_rows(df_outlier_list)
@@ -60,37 +58,30 @@ sn_check_outliers <- function(df, alpha = 0.99999, both_sides = FALSE, ...) {
   result <- result |>
     left_join(df) |>
     select(id, !!!args, .data$index, .data$value)
-
   # 9. Return the result tibble.
   return(result)
 }
-
 #' Data.table version of find_outliers
 #'
 sn_clean_outliers <- function(dt) {
-  # Create an empty list to store the outliers removed for each column
+  # Create an empty list to store the outliers removed for
+  # each column
   outliers_removed <- list()
-
   # Loop through each column in the data.table
   for (col in names(dt)) {
     # Calculate the 99th percentile for the column
     q99 <- quantile(dt[[col]], 0.99)
-
     # Identify the outliers in the column
     outliers <- dt[[col]][dt[[col]] > q99]
-
     # Remove the outliers from the column
     dt[[col]] <- dt[[col]][dt[[col]] <= q99]
-
     # Add the outliers to the list of outliers removed
     outliers_removed[[col]] <- outliers
   }
-
-  # Return the data.table with outliers removed and the list of outliers
-  # removed
+  # Return the data.table with outliers removed and the
+  # list of outliers removed
   return(list(dt = dt, outliers_removed = outliers_removed))
 }
-
 #' @title Plot outliers
 #' @description Plot outliers
 #' @param df dataframe
@@ -117,11 +108,9 @@ plot_outliers <- function(df, ..., save_to = NULL) {
     aes(color = .data$year),
     alpha = 0.5
   )
-
   if (!is.null(save_to)) {
     plot |>
       ggsave(save_to, width = 5, height = 4, dpi = 300)
   }
-
   return(plot)
 }

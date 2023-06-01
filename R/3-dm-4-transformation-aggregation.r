@@ -10,5 +10,5 @@
 #' Detailed the reasons please refer to this
 #' [answer](https://stackoverflow.com/a/18604487/886198)
 sn_math_mean <- function(data) {
-  return(sum(data, na.rm = TRUE) / length(data))
+  return(sum(data, na.rm = TRUE)/length(data))
 }

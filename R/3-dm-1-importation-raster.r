@@ -49,7 +49,8 @@
 #' dimension called year, which the list of year is returned by the smart read function
 #' @importFrom stars read_stars st_set_dimensions
 sn_read_star <- function(smart_list, index) {
-  # make sure the smart_list is a list and has two elements files and years
+  # make sure the smart_list is a list and has two elements
+  # files and years
   if (!is.list(smart_list)) {
     stop("`smart_list` is not a list")
   }
@@ -63,19 +64,16 @@ sn_read_star <- function(smart_list, index) {
   if (!is.list(smart_list$years)) {
     stop("`smart_list` does not have a list element called `years`")
   }
-
   # Read all the files in the list
   star <- read_stars(smart_list$files, proxy = TRUE) |>
     # Merge the files into a single stack
-    merge() |>
+  merge() |>
     # Rename the bands to the year
-    setNames(index) |>
+  setNames(index) |>
     # Set the band dimension to be the year
-    st_set_dimensions("band",
-      values = smart_list$year,
-      names = "year", point = TRUE
-    )
+  st_set_dimensions(
+    "band", values = smart_list$year, names = "year", point = TRUE
+  )
   # Return the stacked image
   return(star)
 }
-

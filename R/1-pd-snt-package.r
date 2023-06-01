@@ -1,6 +1,5 @@
 #' @keywords internal
 "_PACKAGE"
-
 ## usethis namespace: start
 #' @importFrom tibble tibble
 #' @importFrom data.table data.table

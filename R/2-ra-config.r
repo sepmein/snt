@@ -12,17 +12,17 @@ generate_default_config <- function(country = "Nigeria", db = "SQLite") {
   country <- paste0(" country: ", country, "\n")
   cores <- config_parallel()
   db <- config_set_db(db)
-
   if (!file.exists("config.yml")) {
     cat(
-      "default:\n", country, " dirs:\n", "   data: _data\n", "   functions: _functions\n",
-      "   handmade: handmade\n", "   database: database\n", "   reports: reports\n",
-      "   logs: logs\n", " clean_before_new_analysis:\n", "   - database\n",
-      "   - reports\n", "   - logs\n", db, cores, file = "config.yml"
+      "default:\n", country, " dirs:\n", "   data: _data\n",
+      "   functions: _functions\n", "   handmade: handmade\n",
+      "   database: database\n", "   reports: reports\n",
+      "   logs: logs\n", " clean_before_new_analysis:\n",
+      "   - database\n", "   - reports\n", "   - logs\n",
+      db, cores, file = "config.yml"
     )
   }
 }
-
 #' @title Generate Default .gitignore
 #' @description Write .gitignore if not exists
 #' @export
@@ -71,7 +71,6 @@ generate_default_gitignore <- function() {
     }
   )
 }
-
 #' @title Make Structure
 #' @description Make the structure of the project
 #' @export
@@ -80,7 +79,6 @@ setup <- function() {
   generate_default_gitignore()
   mkdir()
 }
-
 #' Get path
 #'
 #' Get path from config.yml and from user defined file
@@ -94,7 +92,6 @@ get_path <- function(type, path) {
   type <- config[["dirs"]][[type]]
   return(file.path(type, path))
 }
-
 #' @title Check type of path
 #' @description check type of path. check the existence of the dir or file
 #' if they exist then return the type of the path
@@ -102,11 +99,12 @@ get_path <- function(type, path) {
 #' @param path String path
 #' @export
 type_of_path <- function(path) {
-  # If the path is not a character string, return an error if
-  # (!is.character(path)) { stop('Error: path must be a character string') }
-
-  # # If the path is an empty string, return an error if (nchar(path) == 0) {
-  # stop('Error: path cannot be an empty string') }
+  # If the path is not a character string, return an error
+  # if (!is.character(path)) { stop('Error: path must be a
+  # character string') }
+  # # If the path is an empty string, return an error if
+  # (nchar(path) == 0) { stop('Error: path cannot be an
+  # empty string') }
   if (dir.exists(path)) {
     result <- "dir"
   } else if (file_test("-f", path)) {
@@ -116,7 +114,6 @@ type_of_path <- function(path) {
   }
   return(result)
 }
-
 #' @title Check to use relative or absolute path
 #' @description Combine root and relative check if they exist in path
 #' Check relative path exists
@@ -129,21 +126,16 @@ type_of_path <- function(path) {
 #' @export
 use_relative_or_absolute <- function(root, relative) {
   relative_path_type <- type_of_path(relative)
-
   if (!is.null(relative_path_type)) {
     return(relative)
   }
-
   combined_root <- file.path(root, relative)
   combined_root_path_type <- type_of_path(combined_root)
-
   if (!is.null(combined_root_path_type)) {
     return(combined_root)
   }
-
   return(FALSE)
 }
-
 # Database ------
 #' Config database
 #'
@@ -153,22 +145,25 @@ use_relative_or_absolute <- function(root, relative) {
 #'
 #' @return a list contain the db info
 #' @rdname config
-config_set_db <- function(db = "SQLite", db_name = NULL, db_user = NULL, db_pass = NULL) {
+config_set_db <- function(
+  db = "SQLite", db_name = NULL, db_user = NULL, db_pass = NULL
+) {
   if (db == "postgres") {
     db <- paste0(
-      " db:\n", "   package: RPostgres\n", "   dbconnect: Postgres\n", "   host: localhost\n",
-      "   port: 5432\n", "   name: malaria\n", "   user: postgres\n", "   password: postgres\n"
+      " db:\n", "   package: RPostgres\n", "   dbconnect: Postgres\n",
+      "   host: localhost\n", "   port: 5432\n", "   name: malaria\n",
+      "   user: postgres\n", "   password: postgres\n"
     )
   } else if (db == "SQLite") {
     db <- paste0(
-      " db:\n", "   package: RSQLite\n", "   dbconnect: SQLite\n", "   dbname: \":memory:\"\n"
+      " db:\n", "   package: RSQLite\n", "   dbconnect: SQLite\n",
+      "   dbname: \":memory:\"\n"
     )
   } else {
     stop("db must be either 'postgres' or 'SQLite'")
   }
   return(db)
 }
-
 #' Get Db Connection from Configurations
 #'
 #' @return db connection
@@ -181,9 +176,13 @@ config_get_db <- function() {
   name <- get("db")$name
   user <- get("db")$user
   pass <- get("db")$pass
-  return(list(host = host, port = port, name = name, user = user, pass = pass))
+  return(
+    list(
+      host = host, port = port, name = name, user = user,
+      pass = pass
+    )
+  )
 }
-
 # Parallel -----
 #' Configuration for parallel execution
 #'
@@ -194,9 +193,7 @@ config_parallel <- function() {
   cores <- parallel::detectCores()
   return(paste0(" cores: ", cores, "\n"))
 }
-
 # Country -----
-
 #' @title Get Country from the yaml configuration file
 #' @description Get the country from the yaml configuration file
 #' TODO: format country name to ISO3 country code

@@ -3,7 +3,6 @@
 #' A dataset containing the country code
 #' original column names and the formatted column names
 #' import_routine_rename.
-
 #' @format A tibble with BDI:
 #' \describe{
 #'   \item{country}{country code, ISO3 code}
@@ -12,7 +11,6 @@
 #'   ...
 #' }
 "import_routine_rename"
-
 #' Database for Replace column values in Routine Data
 #'
 #' A dataset containing the country code
@@ -27,7 +25,6 @@
 #'   ...
 #' }
 "import_routine_replace"
-
 #' Database for Replace health facilities in Routine Data
 #'
 #' A dataset containing the country code, district name
@@ -43,7 +40,6 @@
 #'   ...
 #' }
 "import_routine_replace_hfname"
-
 #' Database for Set Adm2 Cluster in Routine Data
 #'
 #' A dataset containing the country code, adm2, and the cluster

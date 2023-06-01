@@ -15,7 +15,6 @@ sn_plot_rainfall <- function(rainfall) {
     labs(x = "Month", y = "Rainfall (mm)") +
     cowplot::theme_cowplot() + theme(axis.text = element_text(size = 6.6))
 }
-
 #' @title Plot outliers
 #' @description Plot outliers
 #' @param df dataframe
@@ -42,15 +41,12 @@ sn_plot_outliers <- function(df, ..., save_to = NULL) {
     aes(color = .data$year),
     alpha = 0.5
   )
-
   if (!is.null(save_to)) {
     plot |>
       ggsave(save_to, width = 5, height = 4, dpi = 300)
   }
-
   return(plot)
 }
-
 #' Plot incidences
 #' @param df A data frame
 #' @param col Column name to plot
@@ -60,13 +56,13 @@ sn_plot_outliers <- function(df, ..., save_to = NULL) {
 #' @importFrom tmap tm_shape tm_polygons tm_facets
 #' @importFrom grDevices hcl.colors
 sn_plot_incidence_by_year <- function(
-    df, col, breaks = c(0, 250, 350, 450, 20000),
-    palette = hcl.colors(4, "Blue-Red")) {
+  df, col, breaks = c(0, 250, 350, 450, 20000),
+  palette = hcl.colors(4, "Blue-Red")
+) {
   tm_shape(df) +
     tm_polygons(col = col, breaks = breaks, palette = palette) +
     tm_facets(by = "year")
 }
-
 #' @title Consistency check plot
 #' @description Consistency check
 #' @param df dataframe
@@ -81,15 +77,30 @@ sn_plot_consistency <- function(df, index_a, index_b) {
   df |>
     mutate(
       comparison = if_else(
-        {{ index_a }} < {{ index_b }}, TRUE, FALSE
+        {
+          {
+          index_a
+          }
+        } < {
+          {
+          index_b
+          }
+        }, TRUE, FALSE
       )
     ) |>
-    ggplot() +
-    geom_point(
-      aes(
-        y = {{ index_a }}, x = {{ index_b }}, color = .data$comparison
-      )
-    ) +
+    ggplot() + geom_point(
+    aes(
+      y = {
+        {
+          index_a
+        }
+      }, x = {
+        {
+          index_b
+        }
+      }, color = .data$comparison
+    )
+  ) +
     geom_abline(slope = 1) +
     theme_snt()
 }

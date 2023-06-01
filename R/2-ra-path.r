@@ -23,7 +23,6 @@ get_os <- function() {
   tolower(os)
   return(os)
 }
-
 #' @title Make Directory
 #' @description Make Directory based on the config
 #' @return NULL

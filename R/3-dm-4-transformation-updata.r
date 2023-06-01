@@ -13,32 +13,27 @@ sn_gen_dissect <- function(d) {
   admin_group <- get_adm_group(d)
   date_group <- get_date_group(d)
   # gen_id_if_not_exist
-
   meta_admin <- gen_meta_adm(d)
   sn_gen_id(d, "id")
   # merge with meta_admin
   d <- d[meta_admin, on = admin_group]
-
-  # remove admin_group in d, and add another column called adm_id, which is
-  # the id in the meta_admin
+  # remove admin_group in d, and add another column called
+  # adm_id, which is the id in the meta_admin
   admin_group <- get_adm_group(d)
   d[, (admin_group) := NULL]
-
   # select date_group
   meta_date <- gen_meta_date(d)
-
   # merge with meta_date
   d <- d[meta_date, on = date_group]
-
-  # remove date_group in d, and add another column called date_id, which is
-  # the id in the meta_date
+  # remove date_group in d, and add another column called
+  # date_id, which is the id in the meta_date
   d[, (date_group) := NULL]
-
   setkey(d, id, id_adm, id_date)
   # return d
-  return(list(d = d, meta_admin = meta_admin, meta_date = meta_date))
+  return(
+    list(d = d, meta_admin = meta_admin, meta_date = meta_date)
+  )
 }
-
 #' @title Assemble data 🈴
 #' @description Assemble data by admin level and date level
 #' @param d Data table's id, id_adm, id_date
@@ -49,9 +44,9 @@ sn_gen_dissect <- function(d) {
 #' @examples
 #' assemble_meta(d, meta_admin, meta_date)
 sn_gen_assemble <- function(meta_adm, meta_date, d = NULL) {
-  # arguments should have keys d should have id, id_adm, id_date meta_adm
-  # should have id_adm meta_date should have id_date test if they have the
-  # above keys
+  # arguments should have keys d should have id, id_adm,
+  # id_date meta_adm should have id_adm meta_date should
+  # have id_date test if they have the above keys
   if (!all(
     key(d) ==
       c("id", "id_adm", "id_date")
@@ -74,7 +69,6 @@ sn_gen_assemble <- function(meta_adm, meta_date, d = NULL) {
   )) {
     stop("meta_adm should have id_adm as key")
   }
-
   if (!all(
     key(meta_date) ==
       c("id_date")
@@ -101,8 +95,6 @@ sn_gen_assemble <- function(meta_adm, meta_date, d = NULL) {
   }
   return(assembled)
 }
-
-
 #' @importFrom data.table setkey setcolorder
 gen_meta_adm <- function(d) {
   adm_group <- get_adm_group(d)
@@ -114,7 +106,8 @@ gen_meta_adm <- function(d) {
   sn_gen_id(meta_admin, "id_adm")
   if (adm_level == "adm1") {
     if (!"id_adm1" %in% adm_group) {
-      # get unique adm1s and gen id, then merge back to meta_admin
+      # get unique adm1s and gen id, then merge back to
+      # meta_admin
       adm1 <- meta_admin[, .(adm1 = unique(adm1))]
       sn_gen_id(adm1, "id_adm1")
       meta_admin <- merge(meta_admin, adm1, by = "adm1", all = TRUE)
@@ -122,49 +115,58 @@ gen_meta_adm <- function(d) {
     setkey(meta_admin, id_adm, id_adm1)
     setcolorder(meta_admin, c("id_adm", "adm1", "id_adm1"))
   }
-
   if (adm_level == "adm2") {
     if (!"id_adm1" %in% adm_group) {
-      # get unique adm1s and gen id, then merge back to meta_admin
+      # get unique adm1s and gen id, then merge back to
+      # meta_admin
       adm1 <- meta_admin[, .(adm1 = unique(adm1))]
       sn_gen_id(adm1, "id_adm1")
       meta_admin <- merge(meta_admin, adm1, by = "adm1", all = TRUE)
     }
     if (!"id_adm2" %in% adm_group) {
-      # get unique adm2 and gen id, then merge back to meta_admin
+      # get unique adm2 and gen id, then merge back to
+      # meta_admin
       adm2 <- meta_admin[, .(adm2 = unique(adm2))]
       sn_gen_id(adm2, "adm2")
       meta_admin <- merge(meta_admin, adm2, by = "adm2", all = TRUE)
     }
     setkey(meta_admin, id_adm, id_adm1, id_adm2)
-    setcolorder(meta_admin, c("id_adm", "adm1", "id_adm1", "adm2", "id_adm2"))
+    setcolorder(
+      meta_admin, c("id_adm", "adm1", "id_adm1", "adm2", "id_adm2")
+    )
   }
-
   if (adm_level == "hf") {
     if (!"id_adm1" %in% adm_group) {
-      # get unique adm1s and gen id, then merge back to meta_admin
+      # get unique adm1s and gen id, then merge back to
+      # meta_admin
       adm1 <- meta_admin[, .(adm1 = unique(adm1))]
       sn_gen_id(adm1, "id_adm1")
       meta_admin <- merge(meta_admin, adm1, by = "adm1", all = TRUE)
     }
     if (!"id_adm2" %in% adm_group) {
-      # get unique adm2 and gen id, then merge back to meta_admin
+      # get unique adm2 and gen id, then merge back to
+      # meta_admin
       adm2 <- meta_admin[, .(adm2 = unique(adm2))]
       sn_gen_id(adm2, "adm2")
       meta_admin <- merge(meta_admin, adm2, by = "adm2", all = TRUE)
     }
     if (!"id_hf" %in% adm_group) {
-      # get unique hf and gen id, then merge back to meta_admin
+      # get unique hf and gen id, then merge back to
+      # meta_admin
       hf <- meta_admin[, .(hf = unique(hf))]
       sn_gen_id(hf, "id_hf")
       meta_admin <- merge(meta_admin, hf, by = "hf", all = TRUE)
     }
     setkey(meta_admin, id_adm, id_adm1, id_adm2, id_hf)
-    setcolorder(meta_admin, c("id_adm", "adm1", "id_adm1", "adm2", "id_adm2", "hf", "id_hf"))
+    setcolorder(
+      meta_admin, c(
+        "id_adm", "adm1", "id_adm1", "adm2", "id_adm2",
+        "hf", "id_hf"
+      )
+    )
   }
   return(meta_admin)
 }
-
 #' @importFrom data.table CJ setkey
 gen_meta_date <- function(d) {
   date_group <- get_date_group(d)
@@ -181,10 +183,8 @@ gen_meta_date <- function(d) {
   }
   sn_gen_id(meta_date, "id_date")
   setkey(meta_date, id_date)
-
   return(meta_date)
 }
-
 get_adm_level <- function(d) {
   if ("hf" %in% colnames(d)) {
     return("hf")
@@ -196,7 +196,6 @@ get_adm_level <- function(d) {
     stop("adm1, adm2, hf must be in d")
   }
 }
-
 get_adm_group <- function(d) {
   admin_level <- get_adm_level(d)
   if (admin_level == "hf") {
@@ -217,7 +216,6 @@ get_adm_group <- function(d) {
   }
   return(adm_group)
 }
-
 get_date_level <- function(d) {
   if ("month" %in% colnames(d)) {
     return("month")
@@ -227,7 +225,6 @@ get_date_level <- function(d) {
     stop("month, year must be in d")
   }
 }
-
 get_date_group <- function(d) {
   date_level <- get_date_level(d)
   if (date_level == "month") {
@@ -236,13 +233,13 @@ get_date_group <- function(d) {
     return(c("year"))
   }
 }
-
 test_meta_columns <- function(d) {
   column_name <- colnames(d)
-  # if hf is in d, then adm1, adm2 should be also in d Otherwise stop if adm2
-  # is in d, then adm1 should be also in d Otherwise stop adm1 must be in d,
-  # Otherwise stop if month is in d, then year should be also in d Otherwise
-  # stop year must in d
+  # if hf is in d, then adm1, adm2 should be also in d
+  # Otherwise stop if adm2 is in d, then adm1 should be
+  # also in d Otherwise stop adm1 must be in d, Otherwise
+  # stop if month is in d, then year should be also in d
+  # Otherwise stop year must in d
   if (!("year" %in% column_name)) {
     stop("year must be in d")
   }

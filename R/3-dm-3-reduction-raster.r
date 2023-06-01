@@ -15,7 +15,8 @@
 #' @importFrom sf st_crs st_as_sf st_join st_transform st_equals
 #' @rdname gis-reduction
 sn_st_aggregate <- function(star, shp, fun) {
-  # project the shapefile coordinate system with the star object
+  # project the shapefile coordinate system with the star
+  # object
   shp <- shp |>
     st_transform(st_crs(star))
   aggregated <- aggregate(star, shp, fun, na.rm = TRUE)
@@ -28,7 +29,6 @@ sn_st_aggregate <- function(star, shp, fun) {
     st_transform(st_crs(shp))
   return(result)
 }
-
 #' stars crop function
 #'
 #' Provide a stars or stars-proxy object, a shapefile,
@@ -50,7 +50,5 @@ sn_st_crop <- function(star, shp) {
     st_transform(st_crs(shp))
   return(cropped)
 }
-
 #' stars bbox function
 #' TODO
-

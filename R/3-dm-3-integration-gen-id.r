@@ -22,7 +22,6 @@ gen_id_if_not_exist <- function(df, id_column = "id") {
   }
   return(df)
 }
-
 #' Generate ID if not exist data.table version
 #' @param dt data table
 #' @param id_column ID column name

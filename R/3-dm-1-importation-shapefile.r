@@ -19,8 +19,9 @@
 #' @importFrom dplyr bind_rows
 #' @rdname gis
 bind_who_gis_adm2_shp <- function(
-  shp_regional_afro_adm2, shp_regional_amro_adm2, shp_regional_emro_adm2, shp_regional_euro_adm2,
-  shp_regional_searo_adm2, shp_regional_wpro_adm2, shp_global_adm2
+  shp_regional_afro_adm2, shp_regional_amro_adm2, shp_regional_emro_adm2,
+  shp_regional_euro_adm2, shp_regional_searo_adm2, shp_regional_wpro_adm2,
+  shp_global_adm2
 ) {
   shp_regional_afro_adm2 <- st_read(shp_regional_afro_adm2)
   shp_regional_amro_adm2 <- st_read(shp_regional_amro_adm2)
@@ -28,19 +29,16 @@ bind_who_gis_adm2_shp <- function(
   shp_regional_euro_adm2 <- st_read(shp_regional_euro_adm2)
   shp_regional_searo_adm2 <- st_read(shp_regional_searo_adm2)
   shp_regional_wpro_adm2 <- st_read(shp_regional_wpro_adm2)
-
   shp_global_adm2 <- bind_rows(shp_regional_afro_adm2, shp_regional_amro_adm2) |>
     bind_rows(shp_regional_emro_adm2) |>
     bind_rows(shp_regional_emro_adm2) |>
     bind_rows(shp_regional_euro_adm2) |>
     bind_rows(shp_regional_searo_adm2) |>
     bind_rows(shp_regional_wpro_adm2)
-
   shp_global_adm2 |>
     st_write(shp_global_adm2, layer_options = "ENCODING=UTF-8")
   return(shp_global_adm2)
 }
-
 #' extract a country from WHO GIS hub adm2 shapefile
 #'
 #' @param shp_global_adm2 Path to the shapefile of the WHO Global Region
@@ -54,22 +52,20 @@ bind_who_gis_adm2_shp <- function(
 extract_country_from_who_gis_adm2_shp <- function(shp_global_adm2, iso3, save_path) {
   # read the shapefile
   shp_global_adm2 <- st_read(shp_global_adm2)
-
   # filter the shapefile by ISO3 code
   shp_country <- shp_global_adm2 |>
     filter(.data$ISO_3_CODE == iso3)
-
   # check if the filtered shapefile is empty
   if (nrow(shp_country) ==
     0) {
-    stop("No shapefile for the given ISO3 code. Please check the code.")
+    stop(
+      "No shapefile for the given ISO3 code. Please check the code."
+    )
   }
-
   # write the filtered shapefile
   shp_country |>
     st_write(save_path, layer_options = "ENCODING=UTF-8")
 }
-
 #' extract adm1 adm2 list from WHO GIS hub adm2 shapefile
 #'
 #' @param shp_global_adm2 Path to the shapefile of the WHO Global Region
@@ -83,20 +79,18 @@ extract_adm1_adm2_from_who_gis_adm2_shp <- function(shp_global_adm2) {
   # read the shapefile
   shp_global_adm2 <- st_read(shp_global_adm2) |>
     st_drop_geometry()
-
   # extract adm1 and adm2 list
   adm1_adm2_list <- shp_global_adm2 |>
     select(
-      .data$ADM0_NAME, .data$ADM0_GUID, .data$ISO_3_CODE, .data$ADM1_NAME,
-      .data$ADM2_NAME, .data$ADM1_GUID, .data$GUID
+      .data$ADM0_NAME, .data$ADM0_GUID, .data$ISO_3_CODE,
+      .data$ADM1_NAME, .data$ADM2_NAME, .data$ADM1_GUID,
+      .data$GUID
     ) |>
     rename(ADM2_GUID = .data$GUID) |>
     distinct() |>
     arrange(.data$ADM1_NAME, .data$ADM2_NAME)
   return(adm1_adm2_list)
 }
-
-
 #' @title Extract shapefile for a country
 #'
 #' @description Extract shapefile for a country

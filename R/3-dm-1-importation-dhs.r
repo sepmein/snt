@@ -1,5 +1,4 @@
 dhs_api_endpoint <- "https://api.dhsprogram.com/rest/dhs/data/"
-
 #' Import DHS data from API
 #'
 #' Get all DHS data from DHI.org. Given a year to be imported
