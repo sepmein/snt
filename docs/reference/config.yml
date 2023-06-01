@@ -12,8 +12,7 @@ default:
     - reports
     - logs
   db:
-   package: RPostgres
-   dbconnect: Postgres
-   dbname: malaria
-   dbhost: localhost
-   dbport: 5432
+   package: RSQLite
+   dbconnect: SQLite
+   dbname: ":memory:"
+  cores: 8

@@ -1,4 +1,39 @@
 url: https://sepmein.github.io/snt/
 template:
   bootstrap: 5
+  bootswatch: morph
 
+reference:
+- title: Data Integration
+  contents:
+  - starts_with("sn_get_")
+  - starts_with("sn_read_")
+
+- title: Data Cleaning
+  contents:
+  - starts_with("sn_check_")
+  - starts_with("sn_clean_")
+
+- title: Data Transformation
+  contents:
+  - starts_with("sn_to_")
+  - starts_with("sn_gen_")
+
+- title: Data Reduction
+  contents:
+  - sn_st_aggregate
+  - sn_st_crop
+  - starts_with("sn_reduce_")
+
+- title: Analysis
+  contents:
+  - starts_with("sn_ana_")
+
+- title: Development
+  contents:
+  - dev_update
+  - update_database
+
+- title: Math
+  contents:
+  - starts_with("sn_math_")

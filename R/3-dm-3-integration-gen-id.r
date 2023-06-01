@@ -30,7 +30,7 @@ gen_id_if_not_exist <- function(df, id_column = "id") {
 #' @export
 #' @importFrom data.table :=
 #' @importFrom uuid UUIDgenerate
-gen_id_dt <- function(dt, id_column = "id") {
+sn_gen_id <- function(dt, id_column = "id") {
   if (!(id_column %in% colnames(dt))) {
     dt[, (id_column) := replicate(
       nrow(dt),

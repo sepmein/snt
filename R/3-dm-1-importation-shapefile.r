@@ -17,7 +17,7 @@
 #' @export
 #' @importFrom sf st_read st_write
 #' @importFrom dplyr bind_rows
-#' @rdname import
+#' @rdname gis
 bind_who_gis_adm2_shp <- function(
   shp_regional_afro_adm2, shp_regional_amro_adm2, shp_regional_emro_adm2, shp_regional_euro_adm2,
   shp_regional_searo_adm2, shp_regional_wpro_adm2, shp_global_adm2
@@ -50,6 +50,7 @@ bind_who_gis_adm2_shp <- function(
 #' @importFrom sf st_read st_write
 #' @importFrom dplyr filter
 #' @importFrom rlang .data
+#' @rdname gis
 extract_country_from_who_gis_adm2_shp <- function(shp_global_adm2, iso3, save_path) {
   # read the shapefile
   shp_global_adm2 <- st_read(shp_global_adm2)
@@ -77,6 +78,7 @@ extract_country_from_who_gis_adm2_shp <- function(shp_global_adm2, iso3, save_pa
 #' @importFrom sf st_read st_drop_geometry
 #' @importFrom dplyr filter distinct select arrange
 #' @importFrom rlang .data
+#' @rdname gis
 extract_adm1_adm2_from_who_gis_adm2_shp <- function(shp_global_adm2) {
   # read the shapefile
   shp_global_adm2 <- st_read(shp_global_adm2) |>
@@ -111,6 +113,10 @@ extract_adm1_adm2_from_who_gis_adm2_shp <- function(shp_global_adm2) {
 #' congo_shp <- st_read(p_congo_shp)
 #' plot(congo_shp)
 #' @author Chunzhe ZHANG
+#' @importFrom sf st_read st_write
+#' @importFrom dplyr filter
+#' @importFrom rlang .data
+#' @rdname gis
 extract_shp_from_gishub <- function(p_gishub, iso3, p_out) {
   gishub <- st_read(p_gishub)
   gishub |>

@@ -7,7 +7,7 @@
 #' @importFrom readr write_csv
 #' @importFrom rlang enquos
 #' @export
-remove_and_export_missing <- function(df, path, ...) {
+sn_clean_missing <- function(df, path, ...) {
   args <- enquos(...)
   # get missing for each column in args, if it is missing, remove the row
   missing <- df |>

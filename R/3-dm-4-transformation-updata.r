@@ -5,8 +5,9 @@
 #' @param d Data table
 #' @export
 #' @importFrom data.table setkey :=
-#' @rdname import
-dissect_meta <- function(d) {
+#' @returns a list, containing three object, disected data.table,
+#' a meta admin data.table, a meta date data.table
+sn_gen_dissect <- function(d) {
   # test if adm1 is in d, where d is a data.table
   test_meta_columns(d)
   admin_group <- get_adm_group(d)
@@ -14,10 +15,9 @@ dissect_meta <- function(d) {
   # gen_id_if_not_exist
 
   meta_admin <- gen_meta_adm(d)
-  gen_id_dt(d, "id")
+  sn_gen_id(d, "id")
   # merge with meta_admin
   d <- d[meta_admin, on = admin_group]
-
 
   # remove admin_group in d, and add another column called adm_id, which is
   # the id in the meta_admin
@@ -48,7 +48,7 @@ dissect_meta <- function(d) {
 #' @importFrom data.table key merge.data.table CJ setkey
 #' @examples
 #' assemble_meta(d, meta_admin, meta_date)
-assemble_meta <- function(meta_adm, meta_date, d = NULL) {
+sn_gen_assemble <- function(meta_adm, meta_date, d = NULL) {
   # arguments should have keys d should have id, id_adm, id_date meta_adm
   # should have id_adm meta_date should have id_date test if they have the
   # above keys
@@ -111,12 +111,12 @@ gen_meta_adm <- function(d) {
   meta_admin <- d[, ..adm_group]
   # get unique admins
   meta_admin <- unique(meta_admin)
-  gen_id_dt(meta_admin, "id_adm")
+  sn_gen_id(meta_admin, "id_adm")
   if (adm_level == "adm1") {
     if (!"id_adm1" %in% adm_group) {
       # get unique adm1s and gen id, then merge back to meta_admin
       adm1 <- meta_admin[, .(adm1 = unique(adm1))]
-      gen_id_dt(adm1, "id_adm1")
+      sn_gen_id(adm1, "id_adm1")
       meta_admin <- merge(meta_admin, adm1, by = "adm1", all = TRUE)
     }
     setkey(meta_admin, id_adm, id_adm1)
@@ -127,13 +127,13 @@ gen_meta_adm <- function(d) {
     if (!"id_adm1" %in% adm_group) {
       # get unique adm1s and gen id, then merge back to meta_admin
       adm1 <- meta_admin[, .(adm1 = unique(adm1))]
-      gen_id_dt(adm1, "id_adm1")
+      sn_gen_id(adm1, "id_adm1")
       meta_admin <- merge(meta_admin, adm1, by = "adm1", all = TRUE)
     }
     if (!"id_adm2" %in% adm_group) {
       # get unique adm2 and gen id, then merge back to meta_admin
       adm2 <- meta_admin[, .(adm2 = unique(adm2))]
-      gen_id_dt(adm2, "adm2")
+      sn_gen_id(adm2, "adm2")
       meta_admin <- merge(meta_admin, adm2, by = "adm2", all = TRUE)
     }
     setkey(meta_admin, id_adm, id_adm1, id_adm2)
@@ -144,19 +144,19 @@ gen_meta_adm <- function(d) {
     if (!"id_adm1" %in% adm_group) {
       # get unique adm1s and gen id, then merge back to meta_admin
       adm1 <- meta_admin[, .(adm1 = unique(adm1))]
-      gen_id_dt(adm1, "id_adm1")
+      sn_gen_id(adm1, "id_adm1")
       meta_admin <- merge(meta_admin, adm1, by = "adm1", all = TRUE)
     }
     if (!"id_adm2" %in% adm_group) {
       # get unique adm2 and gen id, then merge back to meta_admin
       adm2 <- meta_admin[, .(adm2 = unique(adm2))]
-      gen_id_dt(adm2, "adm2")
+      sn_gen_id(adm2, "adm2")
       meta_admin <- merge(meta_admin, adm2, by = "adm2", all = TRUE)
     }
     if (!"id_hf" %in% adm_group) {
       # get unique hf and gen id, then merge back to meta_admin
       hf <- meta_admin[, .(hf = unique(hf))]
-      gen_id_dt(hf, "id_hf")
+      sn_gen_id(hf, "id_hf")
       meta_admin <- merge(meta_admin, hf, by = "hf", all = TRUE)
     }
     setkey(meta_admin, id_adm, id_adm1, id_adm2, id_hf)
@@ -179,7 +179,7 @@ gen_meta_date <- function(d) {
   } else {
     meta_date <- CJ(year = min(dates$year):max(dates$year))
   }
-  gen_id_dt(meta_date, "id_date")
+  sn_gen_id(meta_date, "id_date")
   setkey(meta_date, id_date)
 
   return(meta_date)

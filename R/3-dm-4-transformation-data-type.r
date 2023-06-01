@@ -1,9 +1,10 @@
 #' Transmute numeric columns to the correct type
 #'
+#' Need more documentation
 #' @param df A data frame
 #' @return A data frame
 #' @export
-transmute_numeric <- function(df) {
+sn_to_numeric <- function(df) {
   meta <- snt::meta |>
     dplyr::filter(.data[["type"]] == "numeric") |>
     dplyr::select("variable")

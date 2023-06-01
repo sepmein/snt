@@ -8,52 +8,42 @@
 #' @param threshold Threshold for fuzzy match
 #' @return Dataframe
 #' @export
-#' @importFrom stringdist stringdistmatrix
-#' @importFrom tibble tibble
-#' @importFrom dplyr filter
-fuzzy_match <- function(df, col, threshold = 2, method = "osa") {
-  # Get unique strings in the column
-  unique_strings <- unique(df[[col]])
-
-  # Calculate pairwise distances between strings
-  distances <- stringdistmatrix(unique_strings, unique_strings, method)
-
-  # Set diagonal elements to infinity so that the string isn't considered
-  # similar to itself
-  diag(distances) <- Inf
-
-  similar_indices <- which(distances < threshold, arr.ind = TRUE)
-
-  # Find the row and column indices of similar strings (i.e., those with
-  # distance less than 2)
-  similar_strings <- data.frame(unique_strings[similar_indices[, 1]], unique_strings[similar_indices[, 2]])
-  result <- split(similar_strings[, 2], similar_strings[, 1])
-  result <- as.list(unlist(result))
-  result <- tibble(
-    {
-      {
-        col
-      }
-    } := names(result),
-    match = unlist(result)
-  )
-
-  # As in the fuzzy match algorithm above the algorithm will add a trailing
-  # number to the multiple matches we need to remove the trailing number to
-  # get the original string and been able to match the original string with
-  # the original data example of the trailing number: 'Tama Health Clinic1'
-  result <- result |>
-    mutate(
-      !!col := str_remove(
-        {
-          {
-          col
-          }
-        }, "\\d$"
-      )
+sn_check_fuzzy <- function(source,
+                           target = NULL,
+                           col,
+                           threshold = 0.1,
+                           method = "jw", export = NULL) {
+  source_col <- source[, .SD, .SDcols = col] |> unique()
+  if (is.null(target)) {
+    fuzzy <- fuzzyjoin::stringdist_join(
+      source_col, source_col,
+      distance_col = "dist", method = method, max_dist = threshold
     )
+  } else {
+    target_col <- target[, .SD, .SDcols = col] |> unique()
+    fuzzy <- fuzzyjoin::stringdist_join(
+      source_col, target_col,
+      distance_col = "dist", method = method, max_dist = threshold
+    )
+  }
 
-  return(result)
+  setDT(fuzzy)
+  setkey(fuzzy, dist)
+
+  if (!(is.null(target))) {
+    # get the first column name and the second column name
+    col.x <- names(fuzzy)[1]
+    col.y <- names(fuzzy)[2]
+    fuzzy <- fuzzy[col.x != col.y, env = list(col.x = col.x, col.y = col.y)]
+    col.x.in.target <- fuzzy[target_col, on = c(col.x = col), nomatch = NULL]
+    col.y.in.target <- fuzzy[target_col, on = c(col.y = col), nomatch = NULL]
+    fuzzy[col.x.in.target, on = col.x, col.x.in := TRUE]
+    fuzzy[col.y.in.target, on = col.y, col.y.in := TRUE]
+    if (!is.null(export)) {
+      to_fix <- fuzzy[col.x.in == FALSE & col.y.in == TRUE]
+      fwrite(to_fix, export)
+    }
+  }
 }
 
 #' Check laps
@@ -63,18 +53,32 @@ fuzzy_match <- function(df, col, threshold = 2, method = "osa") {
 #' @importFrom lubridate make_date
 #' @importFrom rlang .data
 #' @export
-check_laps <- function(df) {
+sn_check_laps <- function(df) {
   df |>
     dplyr::mutate(
-      min_date.x = lubridate::make_date(year = .data$min_year.x, month = .data$min_month.x),
-      max_date.x = lubridate::make_date(year = .data$max_year.x, month = .data$max_month.x),
-      min_date.y = lubridate::make_date(year = .data$min_year.y, month = .data$min_month.y),
-      max_date.y = lubridate::make_date(year = .data$max_year.y, month = .data$max_month.y)
+      min_date.x = make_date(
+        year = .data$min_year.x, month = .data$min_month.x
+      ),
+      max_date.x = make_date(
+        year = .data$max_year.x, month = .data$max_month.x
+      ),
+      min_date.y = make_date(
+        year = .data$min_year.y, month = .data$min_month.y
+      ),
+      max_date.y = make_date(
+        year = .data$max_year.y, month = .data$max_month.y
+      )
     ) |>
     dplyr::mutate(
-      laps_x_lt_y = if_else(.data$max_date.x < .data$min_date.y, "Y", "N"),
-      laps_y_lt_x = if_else(.data$max_date.y < .data$min_date.x, "Y", "N"),
-      laps = if_else(.data$laps_x_lt_y == "Y" | .data$laps_y_lt_x == "Y", "Y", "N"),
+      laps_x_lt_y = if_else(
+        .data$max_date.x < .data$min_date.y, "Y", "N"
+      ),
+      laps_y_lt_x = if_else(
+        .data$max_date.y < .data$min_date.x, "Y", "N"
+      ),
+      laps = if_else(
+        .data$laps_x_lt_y == "Y" | .data$laps_y_lt_x == "Y", "Y", "N"
+      ),
       laps = if_else(
         is.na(.data$laps),
         "Y", "N"
@@ -85,10 +89,6 @@ check_laps <- function(df) {
       -max_month.x, -min_year.y, -max_year.y, -min_month.y, -max_month.y,
       -min_date.x, -max_date.x, -min_date.y, -max_date.y
     )
-}
-
-correlation_test <- function(df) {
-
 }
 
 #' Fuzzy match result
@@ -110,7 +110,7 @@ fuzzy_match_enhanced <- function(df, col, threshold = 1.1, method = "lv", ...) {
   # report_status_date: name of report status date column report_status_col:
   # name of report status column fuzzy_match: name of fuzzy match column
   # overlap: name of overlap column
-  args <- enquos(...)  # get arguments
+  args <- enquos(...) # get arguments
   # exclude year and month columns from args get report duration
   report_duration_df <- df |>
     report_status(!!!args) |>

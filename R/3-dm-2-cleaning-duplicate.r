@@ -5,7 +5,7 @@
 #' @importFrom dplyr group_by summarise filter n
 #' @importFrom rlang enquos
 #' @export
-check_dups <- function(df, ...) {
+sn_check_dups <- function(df, ...) {
   args <- enquos(...)
   df |>
     group_by(!!!args) |>
@@ -20,7 +20,7 @@ check_dups <- function(df, ...) {
 #' @importFrom dplyr group_by summarise_all ungroup anti_join bind_rows left_join select
 #' @importFrom rlang enquos
 #' @export
-merge_dups <- function(df, ...) {
+sn_clean_dups <- function(df, ...) {
   args <- enquos(...)
   # get dups
   dups <- df |>
@@ -43,4 +43,6 @@ merge_dups <- function(df, ...) {
   # merge dups_to_merge with df
   df <- df |>
     bind_rows(dups_to_merge)
+  
+  return(df)
 }

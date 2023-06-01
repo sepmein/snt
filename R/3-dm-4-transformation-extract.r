@@ -5,7 +5,7 @@
 #' @return tibble
 #' @export
 #' @import dplyr
-odd_or_even <- function(df, odd = TRUE) {
+sn_reduce_odd_or_even <- function(df, odd = TRUE) {
   subset <- seq_len(nrow(df))%%2
   if (odd) {
     result <- df[subset == 1, ]

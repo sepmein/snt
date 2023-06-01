@@ -22,7 +22,7 @@
 #' # 1     1     4     7
 #' # 2     2     5     8
 #' # 3     3     6     9
-to_lower <- function(df) {
+sn_to_lower <- function(df) {
   df <- df |>
     rename_with(
       ~str_to_lower(.x),
@@ -42,7 +42,7 @@ routine_rename <- function(df) {
   country <- config_get_country()
   # filter tibble by country name
   df <- df |>
-    to_lower()
+    sn_to_lower()
   filtered_by_country <- snt::import_routine_rename |>
     filter(.data[["country"]] == country)
   find_and_rename <- function(names) {

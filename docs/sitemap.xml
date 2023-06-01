@@ -25,49 +25,97 @@
     <loc>https://sepmein.github.io/snt/index.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/bind_who_gis_adm2_shp.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/MAP.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/confgi_get_db.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/adjust_incidence_1.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/adjust_incidence_1_dt.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/adjust_incidence_2.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/adjust_incidence_2_dt.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/adjust_incidence_3.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/adjust_incidence_3_dt.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/adm_rename.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/aggregate_by.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/align_plots.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/assemble_meta.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/check_dups.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/check_laps.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/color.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/complementary_color.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/config.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/config_country.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/consistency_check.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/config_data_folder.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/dbq_select.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/config_db.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/dev.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/config_dhs.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/dissect_meta.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/config_get_db.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/expected.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/config_input.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/extract_adm1_adm2_from_who_gis_adm2_shp.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/config_parallel.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/extract_country_from_who_gis_adm2_shp.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/config_raster.html</loc>
-  </url>
-  <url>
-    <loc>https://sepmein.github.io/snt/reference/config_set_db.html</loc>
-  </url>
-  <url>
-    <loc>https://sepmein.github.io/snt/reference/devtools.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/extract_shp_from_gishub.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/faster_mean.html</loc>
   </url>
   <url>
+    <loc>https://sepmein.github.io/snt/reference/find_outliers.html</loc>
+  </url>
+  <url>
     <loc>https://sepmein.github.io/snt/reference/fuzzy_match.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/fuzzy_match_enhanced.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/gen_id_dt.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/gen_id_if_not_exist.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/gen_plot_rainfall.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/generate_default_config.html</loc>
@@ -76,13 +124,22 @@
     <loc>https://sepmein.github.io/snt/reference/generate_default_gitignore.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/get_db.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/get_by_cols.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/get_os.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/get_path.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/get_report_duration.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/gis-reduction.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/gis.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/import.html</loc>
@@ -106,25 +163,88 @@
     <loc>https://sepmein.github.io/snt/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/make_structure.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/merge_dups.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/mkdir.html</loc>
   </url>
   <url>
+    <loc>https://sepmein.github.io/snt/reference/odd_or_even.html</loc>
+  </url>
+  <url>
     <loc>https://sepmein.github.io/snt/reference/pipe.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/plot_adm1_report_rate.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/plot_hf_report_status.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/plot_indicator_report_rate.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/plot_map_by_year.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/plot_outliers.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/remove_and_export_missing.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/remove_outliers.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/report_rate.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/report_rate_dt.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/report_status.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/report_status_dt.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/routine_rename.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/routine_replace.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/scale_numbered.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/setup.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/smart_get_file_list_by_year.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/smart_read_excel_by_year.html</loc>
   </url>
   <url>
-    <loc>https://sepmein.github.io/snt/reference/smart_get_file_list_by_year_and_month.html</loc>
+    <loc>https://sepmein.github.io/snt/reference/sn_check_dups.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/sn_check_fuzzy.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/sn_clean_dups.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/sn_get_dhs.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/sn_get_files.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/sn_to_numeric.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/snt-package.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/star_read.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/str_slice_to_end.html</loc>
@@ -139,16 +259,22 @@
     <loc>https://sepmein.github.io/snt/reference/sum_maltreat_u5_by_sex.html</loc>
   </url>
   <url>
+    <loc>https://sepmein.github.io/snt/reference/sum_without_na.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/theme_snt.html</loc>
+  </url>
+  <url>
     <loc>https://sepmein.github.io/snt/reference/tidyeval.html</loc>
+  </url>
+  <url>
+    <loc>https://sepmein.github.io/snt/reference/to_lower.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/transmute_numeric.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/type_of_path.html</loc>
-  </url>
-  <url>
-    <loc>https://sepmein.github.io/snt/reference/update_database.html</loc>
   </url>
   <url>
     <loc>https://sepmein.github.io/snt/reference/use_relative_or_absolute.html</loc>

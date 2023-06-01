@@ -11,7 +11,7 @@
 #' @import dplyr
 #' @importFrom tibble tibble
 #' @importFrom rlang enquos .data
-find_outliers <- function(df, alpha = 0.99999, both_sides = FALSE, ...) {
+sn_check_outliers <- function(df, alpha = 0.99999, both_sides = FALSE, ...) {
   # 1. Extract the columns we want to analyze from the dataframe.
   args <- rlang::enquos(...)
   df <- df |>
@@ -67,7 +67,7 @@ find_outliers <- function(df, alpha = 0.99999, both_sides = FALSE, ...) {
 
 #' Data.table version of find_outliers
 #'
-remove_outliers <- function(dt) {
+sn_clean_outliers <- function(dt) {
   # Create an empty list to store the outliers removed for each column
   outliers_removed <- list()
 

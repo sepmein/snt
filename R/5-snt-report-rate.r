@@ -86,7 +86,7 @@ report_rate <- function(df, ...) {
 #' adm_by_cols, date_by_cols, rep, exp, rep_rat
 #' @importFrom data.table fifelse .SD
 #' @export
-report_status_dt <- function(dt, adm_by, date_by) {
+sn_ana_report_status <- function(dt, adm_by, date_by) {
   # always exclude those meta columns from the dt
   exclude_cols <- grep(
     "adm1|adm2|hf|year|month|^id", names(dt),
@@ -113,7 +113,7 @@ report_status_dt <- function(dt, adm_by, date_by) {
 #' @param on 'adm' or 'index'
 #' @param col character vector
 #' @importFrom data.table melt .N .SD
-report_rate_dt <- function(dt, adm_by, date_by, on, col = NULL) {
+sn_ana_report_rate <- function(dt, adm_by, date_by, on, col = NULL) {
   stopifnot(on %in% c("adm", "index"))
   # exclude those meta columns from the dt
   exclude_cols <- grep(
@@ -303,4 +303,36 @@ get_report_duration <- function(df, ...) {
     select(!!!args) |>
     distinct(!!!args) |>
     left_join(report_duration)
+}
+
+#' Get the unique values not in compare database
+#'
+#' This function takes a target and compare data.table and returns the unique
+#' values in the target that are not in the compare.
+#' @param target A data.table
+#' @param compare A data.table
+#' @param by A character vector of column names, should not be a list.
+#' @return A data.table
+#' @export
+#' @examples
+#' library(data.table)
+#' target <- data.table(
+#'  adm1 = c("a", "a", "b", "b", "c", "c"),
+#'  adm2 = c("a", "b", "a", "b", "a", "b"),
+#' hf = c("a", "b", "a", "b", "a", "b")
+#' )
+#' compare <- data.table(
+#'  adm1 = c("a", "a", "b", "b", "c"),
+#'  adm2 = c("a", "b", "a", "b", "a"),
+#' hf = c("a", "b", "a", "b", "a")
+#' )
+#' by <- "adm1"
+#' sn_unique_diff(target, compare, by)
+sn_unique_diff <- function(target, compare, by) {
+  # target should be a data.table
+  # compare should be a data.table
+  # by should be a character vector of column names
+  tar <- target[, .SD, .SDcols = by] |> unique()
+  comp <- compare[, .SD, .SDcols = by] |> unique()
+  not_in_compare <- tar[!comp, on = by]
 }

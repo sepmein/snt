@@ -14,7 +14,6 @@
 #' @import readr
 #' @importFrom devtools document
 #' @importFrom devtools load_all
-#' @rdname dev
 update_database <- function() {
   import_routine_rename <- readr::read_csv("inst//extdata//routine//01_rename.csv")
   usethis::use_data(import_routine_rename, overwrite = TRUE)
@@ -43,7 +42,7 @@ update_database <- function() {
   devtools::load_all()
 }
 
-#' Devtools
+#' Devtools: development update function all combined in one command
 #'
 #' This command is a combination of several commands to update the package
 #' It will run the following commands:
@@ -58,7 +57,6 @@ update_database <- function() {
 #' @importFrom devtools document load_all test check build install
 #' @importFrom pkgdown build_site
 #' @seealso update_database
-#' @rdname dev
 dev_update <- function() {
   update_database()
   devtools::document()
@@ -67,7 +65,22 @@ dev_update <- function() {
   devtools::check()
   pkgdown::build_site()
   formatR::tidy_dir(
-    "R", arrow = TRUE, pipe = TRUE, brace.newline = FALSE, indent = 2, width.cutoff = 79,
+    "R",
+    arrow = TRUE, pipe = TRUE, brace.newline = FALSE, indent = 2, width.cutoff = 79,
     args.newline = TRUE
+  )
+}
+
+#' Opinioned formatting function
+#' @param p Path to format
+#' @return NULL
+#' @export
+#' @importFrom formatR tidy_dir
+sn_format <- function(p) {
+  formatR::tidy_dir(p,
+    comment = TRUE,
+    blank = FALSE, indent = 2, wrap = 80,
+    width.cutoff = 60, args.newline = TRUE,
+    pipe = TRUE
   )
 }

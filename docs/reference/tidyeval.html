@@ -12,68 +12,90 @@ The curly-curly operator {{ allows you to tunnel data-variables
 passed from function arguments inside other tidy eval functions.
 {{ is designed for individual arguments. To pass multiple
 arguments contained in dots, use ... in the normal way.
-my_function &amp;lt;- function(data, var, ...) {
-  data |&amp;gt;
-    group_by(...) |&amp;gt;
-    summarise(mean = mean({{ var }}))
-}
+my_function &amp;lt;- function(data, var, ...)
 
-enquo() and enquos() delay the execution of one or several
+
+
+data |&amp;gt;
+group_by(...) |&amp;gt;
+summarise(mean = mean( var ))
+
+* [enquo()] and [enquos()] delay the execution of one or several
 function arguments. The former returns a single expression, the
 latter returns a list of expressions. Once defused, expressions
 will no longer evaluate on their own. They must be injected back
-into an evaluation context with !! (for a single expression) and
-!!! (for a list of expressions).
-my_function &amp;lt;- function(data, var, ...) {
-  # Defuse
-  var &amp;lt;- enquo(var)
-  dots &amp;lt;- enquos(...)
+into an evaluation context with `!!` (for a single expression) and
+`!!!` (for a list of expressions).
 
-  # Inject
-  data |&amp;gt;
-    group_by(!!!dots) |&amp;gt;
-    summarise(mean = mean(!!var))
-}
 
-In this simple case, the code is equivalent to the usage of {{
-and ... above. Defusing with enquo() or enquos() is only
+my_function &amp;lt;- function(data, var, ...)
+
+# Defuse
+var &amp;lt;- enquo(var)
+dots &amp;lt;- enquos(...)# Inject
+data |&amp;gt;
+  group_by(!!!dots) |&amp;gt;
+  summarise(mean = mean(!!var))
+
+
+In this simple case, the code is equivalent to the usage of `{{`
+and `...` above. Defusing with `enquo()` or `enquos()` is only
 needed in more complex cases, for instance if you need to inspect
 or modify the expressions in some way.
-The .data pronoun is an object that represents the current
+
+* The `.data` pronoun is an object that represents the current
 slice of data. If you have a variable name in a string, use the
-.data pronoun to subset that variable with [[.
-my_var &amp;lt;- &quot;disp&quot;
+`.data` pronoun to subset that variable with `[[`.
+
+
+my_var &amp;lt;- 'disp'
 mtcars |&amp;gt; summarise(mean = mean(.data[[my_var]]))
 
-Another tidy eval operator is :=. It makes it possible to use
-glue and curly-curly syntax on the LHS of =. For technical
+* Another tidy eval operator is `:=`. It makes it possible to use
+glue and curly-curly syntax on the LHS of `=`. For technical
 reasons, the R language doesn't support complex expressions on
-the left of =, so we use := as a workaround.
-my_function &amp;lt;- function(data, var, suffix = &quot;foo&quot;) {
-  # Use `{{` to tunnel function arguments and the usual glue
-  # operator `{` to interpolate plain strings.
-  data |&amp;gt;
-    summarise(&quot;{{ var }}_mean_{suffix}&quot; := mean({{ var }}))
-}
+the left of `=`, so we use `:=` as a workaround.
 
-Many tidy eval functions like dplyr::mutate() or
-dplyr::summarise() give an automatic name to unnamed inputs. If
+
+my_function &amp;lt;- function(data, var, suffix = 'foo')
+
+# Use {{ to tunnel function arguments and the usual glue
+# operator { to interpolate plain strings.
+data |&amp;gt;
+summarise(' var meansuffix' := mean( var ))
+
+* Many tidy eval functions like `dplyr::mutate()` or
+`dplyr::summarise()` give an automatic name to unnamed inputs. If
 you need to create the same sort of automatic names by yourself,
-use as_label(). For instance, the glue-tunnelling syntax above
+use `as_label()`. For instance, the glue-tunnelling syntax above
 can be reproduced manually with:
-my_function &amp;lt;- function(data, var, suffix = &quot;foo&quot;) {
-  var &amp;lt;- enquo(var)
-  prefix &amp;lt;- as_label(var)
-  data |&amp;gt;
-    summarise(&quot;{prefix}_mean_{suffix}&quot; := mean(!!var))
-}
 
-Expressions defused with enquo() (or tunnelled with {{) need
+
+my_function &amp;lt;- function(data, var, suffix = 'foo')
+
+var &amp;lt;- enquo(var)
+prefix &amp;lt;- as_label(var)
+data |&amp;gt;
+summarise('prefixmeansuffix' := mean(!!var))
+
+Expressions defused with `enquo()` (or tunnelled with `{{`) need
 not be simple column names, they can be arbitrarily complex.
-as_label() handles those cases gracefully. If your code assumes
-a simple column name, use as_name() instead. This is safer
+`as_label()` handles those cases gracefully. If your code assumes
+a simple column name, use `as_name()` instead. This is safer
 because it throws an error if the input is not a name as expected.
 
+
+[dplyr programming
+vignette]: R:dplyr%20programming%0Avignette
+[ggplot2 in packages
+vignette]: R:ggplot2%20in%20packages%0Avignette
+[Metaprogramming
+section]: R:Metaprogramming%0Asection
+[Advanced
+R]: R:Advanced%0AR
+[enquo()]: R:enquo()
+[enquos()]: R:enquos()
+[my_var]: R:my_var
 "><title>Tidy eval helpers — tidyeval • snt</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Tidy eval helpers — tidyeval"><meta property="og:description" content="This page lists the tidy eval tools reexported in this package from
 rlang. To learn about using tidy eval in scripts and packages at a
 high level, see the dplyr programming vignette
@@ -87,68 +109,90 @@ The curly-curly operator {{ allows you to tunnel data-variables
 passed from function arguments inside other tidy eval functions.
 {{ is designed for individual arguments. To pass multiple
 arguments contained in dots, use ... in the normal way.
-my_function &amp;lt;- function(data, var, ...) {
-  data |&amp;gt;
-    group_by(...) |&amp;gt;
-    summarise(mean = mean({{ var }}))
-}
+my_function &amp;lt;- function(data, var, ...)
 
-enquo() and enquos() delay the execution of one or several
+
+
+data |&amp;gt;
+group_by(...) |&amp;gt;
+summarise(mean = mean( var ))
+
+* [enquo()] and [enquos()] delay the execution of one or several
 function arguments. The former returns a single expression, the
 latter returns a list of expressions. Once defused, expressions
 will no longer evaluate on their own. They must be injected back
-into an evaluation context with !! (for a single expression) and
-!!! (for a list of expressions).
-my_function &amp;lt;- function(data, var, ...) {
-  # Defuse
-  var &amp;lt;- enquo(var)
-  dots &amp;lt;- enquos(...)
+into an evaluation context with `!!` (for a single expression) and
+`!!!` (for a list of expressions).
 
-  # Inject
-  data |&amp;gt;
-    group_by(!!!dots) |&amp;gt;
-    summarise(mean = mean(!!var))
-}
 
-In this simple case, the code is equivalent to the usage of {{
-and ... above. Defusing with enquo() or enquos() is only
+my_function &amp;lt;- function(data, var, ...)
+
+# Defuse
+var &amp;lt;- enquo(var)
+dots &amp;lt;- enquos(...)# Inject
+data |&amp;gt;
+  group_by(!!!dots) |&amp;gt;
+  summarise(mean = mean(!!var))
+
+
+In this simple case, the code is equivalent to the usage of `{{`
+and `...` above. Defusing with `enquo()` or `enquos()` is only
 needed in more complex cases, for instance if you need to inspect
 or modify the expressions in some way.
-The .data pronoun is an object that represents the current
+
+* The `.data` pronoun is an object that represents the current
 slice of data. If you have a variable name in a string, use the
-.data pronoun to subset that variable with [[.
-my_var &amp;lt;- &quot;disp&quot;
+`.data` pronoun to subset that variable with `[[`.
+
+
+my_var &amp;lt;- 'disp'
 mtcars |&amp;gt; summarise(mean = mean(.data[[my_var]]))
 
-Another tidy eval operator is :=. It makes it possible to use
-glue and curly-curly syntax on the LHS of =. For technical
+* Another tidy eval operator is `:=`. It makes it possible to use
+glue and curly-curly syntax on the LHS of `=`. For technical
 reasons, the R language doesn't support complex expressions on
-the left of =, so we use := as a workaround.
-my_function &amp;lt;- function(data, var, suffix = &quot;foo&quot;) {
-  # Use `{{` to tunnel function arguments and the usual glue
-  # operator `{` to interpolate plain strings.
-  data |&amp;gt;
-    summarise(&quot;{{ var }}_mean_{suffix}&quot; := mean({{ var }}))
-}
+the left of `=`, so we use `:=` as a workaround.
 
-Many tidy eval functions like dplyr::mutate() or
-dplyr::summarise() give an automatic name to unnamed inputs. If
+
+my_function &amp;lt;- function(data, var, suffix = 'foo')
+
+# Use {{ to tunnel function arguments and the usual glue
+# operator { to interpolate plain strings.
+data |&amp;gt;
+summarise(' var meansuffix' := mean( var ))
+
+* Many tidy eval functions like `dplyr::mutate()` or
+`dplyr::summarise()` give an automatic name to unnamed inputs. If
 you need to create the same sort of automatic names by yourself,
-use as_label(). For instance, the glue-tunnelling syntax above
+use `as_label()`. For instance, the glue-tunnelling syntax above
 can be reproduced manually with:
-my_function &amp;lt;- function(data, var, suffix = &quot;foo&quot;) {
-  var &amp;lt;- enquo(var)
-  prefix &amp;lt;- as_label(var)
-  data |&amp;gt;
-    summarise(&quot;{prefix}_mean_{suffix}&quot; := mean(!!var))
-}
 
-Expressions defused with enquo() (or tunnelled with {{) need
+
+my_function &amp;lt;- function(data, var, suffix = 'foo')
+
+var &amp;lt;- enquo(var)
+prefix &amp;lt;- as_label(var)
+data |&amp;gt;
+summarise('prefixmeansuffix' := mean(!!var))
+
+Expressions defused with `enquo()` (or tunnelled with `{{`) need
 not be simple column names, they can be arbitrarily complex.
-as_label() handles those cases gracefully. If your code assumes
-a simple column name, use as_name() instead. This is safer
+`as_label()` handles those cases gracefully. If your code assumes
+a simple column name, use `as_name()` instead. This is safer
 because it throws an error if the input is not a name as expected.
 
+
+[dplyr programming
+vignette]: R:dplyr%20programming%0Avignette
+[ggplot2 in packages
+vignette]: R:ggplot2%20in%20packages%0Avignette
+[Metaprogramming
+section]: R:Metaprogramming%0Asection
+[Advanced
+R]: R:Advanced%0AR
+[enquo()]: R:enquo()
+[enquos()]: R:enquos()
+[my_var]: R:my_var
 "><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -156,11 +200,11 @@ because it throws an error if the input is not a name as expected.
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">snt</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.0000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -188,7 +232,7 @@ because it throws an error if the input is not a name as expected.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Tidy eval helpers</h1>
-      <small class="dont-index">Source: <a href="https://github.com/sepmein/snt/blob/HEAD/R/utils-tidy-eval.R" class="external-link"><code>R/utils-tidy-eval.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sepmein/snt/blob/HEAD/R/1-pd-tidy-eval.r" class="external-link"><code>R/1-pd-tidy-eval.r</code></a></small>
       <div class="d-none name"><code>tidyeval.Rd</code></div>
     </div>
 
@@ -205,63 +249,83 @@ operators which you should not have to use in simple cases.</p>
 passed from function arguments inside other tidy eval functions.
 <code>{{</code> is designed for individual arguments. To pass multiple
 arguments contained in dots, use <code>...</code> in the normal way.</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>my_function <span class="ot">&lt;-</span> <span class="cf">function</span>(data, var, ...) {</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="fu">group_by</span>(...) <span class="sc">|&gt;</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>({{ var }}))</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>}</span></code></pre><p></p></div></li>
-<li><p><code>enquo()</code> and <code>enquos()</code> delay the execution of one or several
-function arguments. The former returns a single expression, the
-latter returns a list of expressions. Once defused, expressions
-will no longer evaluate on their own. They must be injected back
-into an evaluation context with <code>!!</code> (for a single expression) and
-<code>!!!</code> (for a list of expressions).</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>my_function <span class="ot">&lt;-</span> <span class="cf">function</span>(data, var, ...) {</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="co"># Defuse</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  var <span class="ot">&lt;-</span> <span class="fu">enquo</span>(var)</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  dots <span class="ot">&lt;-</span> <span class="fu">enquos</span>(...)</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="co"># Inject</span></span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="sc">!!!</span>dots) <span class="sc">|&gt;</span></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(<span class="sc">!!</span>var))</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>}</span></code></pre><p></p></div>
-<p>In this simple case, the code is equivalent to the usage of <code>{{</code>
-and <code>...</code> above. Defusing with <code>enquo()</code> or <code>enquos()</code> is only
-needed in more complex cases, for instance if you need to inspect
-or modify the expressions in some way.</p></li>
-<li><p>The <code>.data</code> pronoun is an object that represents the current
-slice of data. If you have a variable name in a string, use the
-<code>.data</code> pronoun to subset that variable with <code>[[</code>.</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>my_var <span class="ot">&lt;-</span> <span class="st">"disp"</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(.data[[my_var]]))</span></code></pre><p></p></div></li>
-<li><p>Another tidy eval operator is <code>:=</code>. It makes it possible to use
-glue and curly-curly syntax on the LHS of <code>=</code>. For technical
-reasons, the R language doesn't support complex expressions on
-the left of <code>=</code>, so we use <code>:=</code> as a workaround.</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>my_function <span class="ot">&lt;-</span> <span class="cf">function</span>(data, var, <span class="at">suffix =</span> <span class="st">"foo"</span>) {</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="co"># Use `{{` to tunnel function arguments and the usual glue</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="co"># operator `{` to interpolate plain strings.</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="st">"{{ var }}_mean_{suffix}"</span> <span class="sc">:=</span> <span class="fu">mean</span>({{ var }}))</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>}</span></code></pre><p></p></div></li>
-<li><p>Many tidy eval functions like <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code> or
-<code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">dplyr::summarise()</a></code> give an automatic name to unnamed inputs. If
-you need to create the same sort of automatic names by yourself,
-use <code>as_label()</code>. For instance, the glue-tunnelling syntax above
-can be reproduced manually with:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>my_function <span class="ot">&lt;-</span> <span class="cf">function</span>(data, var, <span class="at">suffix =</span> <span class="st">"foo"</span>) {</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  var <span class="ot">&lt;-</span> <span class="fu">enquo</span>(var)</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  prefix <span class="ot">&lt;-</span> <span class="fu">as_label</span>(var)</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="st">"{prefix}_mean_{suffix}"</span> <span class="sc">:=</span> <span class="fu">mean</span>(<span class="sc">!!</span>var))</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>}</span></code></pre><p></p></div>
-<p>Expressions defused with <code>enquo()</code> (or tunnelled with <code>{{</code>) need
-not be simple column names, they can be arbitrarily complex.
-<code>as_label()</code> handles those cases gracefully. If your code assumes
-a simple column name, use <code>as_name()</code> instead. This is safer
-because it throws an error if the input is not a name as expected.</p></li>
-</ul></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>my_function <span class="ot">&lt;-</span> <span class="cf">function</span>(data, var, ...)</span></code></pre><p></p></div></li>
+</ul><p>data |&gt;
+group_by(...) |&gt;
+summarise(mean = mean( var ))</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="sc">*</span> [<span class="fu">enquo</span>()] and [<span class="fu">enquos</span>()] delay the execution of one or several</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="cf">function</span> arguments. The former returns a single expression, the</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>latter returns a list of expressions. Once defused, expressions</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>will no longer evaluate on their own. They must be injected back</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>into an evaluation context with <span class="st">`</span><span class="at">!!</span><span class="st">`</span> (<span class="cf">for</span> a single expression) and</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="st">`</span><span class="at">!!!</span><span class="st">`</span> (<span class="cf">for</span> a list of expressions).</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span></code></pre><p></p></div>
+<p>my_function &lt;- function(data, var, ...)
+
+# Defuse
+var &lt;- enquo(var)
+dots &lt;- enquos(...)</p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Inject</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>data <span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="sc">!!!</span>dots) <span class="sc">|&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(<span class="sc">!!</span>var))</span></code></pre></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>In this simple case, the code is equivalent to the usage of <span class="st">`</span><span class="at">{{</span><span class="st">`</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>and <span class="st">`</span><span class="at">...</span><span class="st">`</span> above. Defusing with <span class="st">`</span><span class="at">enquo()</span><span class="st">`</span> or <span class="st">`</span><span class="at">enquos()</span><span class="st">`</span> is only</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>needed <span class="cf">in</span> more complex cases, <span class="cf">for</span> instance <span class="cf">if</span> you need to inspect</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>or modify the expressions <span class="cf">in</span> some way.</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="sc">*</span> The <span class="st">`</span><span class="at">.data</span><span class="st">`</span> pronoun is an object that represents the current</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>slice of data. If you have a variable name <span class="cf">in</span> a string, use the</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="st">`</span><span class="at">.data</span><span class="st">`</span> pronoun to subset that variable with <span class="st">`</span><span class="at">[[</span><span class="st">`</span>.</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span></code></pre><p></p></div>
+<p>my_var &lt;- 'disp'
+mtcars |&gt; summarise(mean = mean(.data[[my_var]]))</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="sc">*</span> Another tidy eval operator is <span class="st">`</span><span class="at">:=</span><span class="st">`</span>. It makes it possible to use</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>glue and curly<span class="sc">-</span>curly syntax on the LHS of <span class="st">`</span><span class="at">=</span><span class="st">`</span>. For technical</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>reasons, the R language doesn<span class="st">'t support complex expressions on</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="st">the left of `=`, so we use `:=` as a workaround.</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span></code></pre><p></p></div>
+<p>my_function &lt;- function(data, var, suffix = 'foo')
+
+# Use <code>{{</code> to tunnel function arguments and the usual glue
+# operator <code>{</code> to interpolate plain strings.
+data |&gt;
+summarise(' var <em>mean</em>suffix' := mean( var ))</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="sc">*</span> Many tidy eval functions like <span class="st">`</span><span class="at">dplyr::mutate()</span><span class="st">`</span> or</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="st">`</span><span class="at">dplyr::summarise()</span><span class="st">`</span> give an automatic name to unnamed inputs. If</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>you need to create the same sort of automatic names by yourself,</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>use <span class="st">`</span><span class="at">as_label()</span><span class="st">`</span>. For instance, the glue<span class="sc">-</span>tunnelling syntax above</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>can be reproduced manually with<span class="sc">:</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span></code></pre><p></p></div>
+<p>my_function &lt;- function(data, var, suffix = 'foo')
+
+var &lt;- enquo(var)
+prefix &lt;- as_label(var)
+data |&gt;
+summarise('prefix<em>mean</em>suffix' := mean(!!var))</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>Expressions defused with <span class="st">`</span><span class="at">enquo()</span><span class="st">`</span> (or tunnelled with <span class="st">`</span><span class="at">{{</span><span class="st">`</span>) need</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>not be simple column names, they can be arbitrarily complex.</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="st">`</span><span class="at">as_label()</span><span class="st">`</span> handles those cases gracefully. If your code assumes</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>a simple column name, use <span class="st">`</span><span class="at">as_name()</span><span class="st">`</span> instead. This is safer</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>because it throws an error <span class="cf">if</span> the input is not a name as expected.</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>[dplyr programming</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>vignette]<span class="sc">:</span> R<span class="sc">:</span>dplyr<span class="sc">%20programming%</span>0Avignette</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>[ggplot2 <span class="cf">in</span> packages</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>vignette]<span class="sc">:</span> R<span class="sc">:</span>ggplot2<span class="sc">%20in%</span>20packages%0Avignette</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>[Metaprogramming</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>section]<span class="sc">:</span> R<span class="sc">:</span>Metaprogramming%0Asection</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>[Advanced</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>R]<span class="sc">:</span> R<span class="sc">:</span>Advanced%0AR</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>[<span class="fu">enquo</span>()]<span class="sc">:</span> R<span class="sc">:</span><span class="fu">enquo</span>()</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>[<span class="fu">enquos</span>()]<span class="sc">:</span> R<span class="sc">:</span><span class="fu">enquos</span>()</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>[my_var]<span class="sc">:</span> R<span class="sc">:</span>my_var</span></code></pre><p></p></div>
+    </div>
 
 
 
