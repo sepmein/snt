@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">snt</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="data-integration">Data Integration<a class="anchor" aria-label="anchor" href="#data-integration"></a></h2>
       
       
 
@@ -58,167 +58,22 @@
         <dd>Importation of data from MAP</dd>
       </dl><dl><dt>
           
-          <code><a href="adjust_incidence_1.html">adjust_incidence_1()</a></code> 
+          <code><a href="sn_get_dhs.html">sn_get_dhs()</a></code> 
         </dt>
-        <dd>Adjust incidence 1</dd>
+        <dd>Import DHS data from API</dd>
       </dl><dl><dt>
           
-          <code><a href="adjust_incidence_1_dt.html">adjust_incidence_1_dt()</a></code> 
+          <code><a href="sn_get_files.html">sn_get_files()</a></code> 
         </dt>
-        <dd>Calculate the adjusted incidence 1</dd>
+        <dd>Smart file reader</dd>
       </dl><dl><dt>
           
-          <code><a href="adjust_incidence_2.html">adjust_incidence_2()</a></code> 
+          <code><a href="sn_get_who_gis_adm2_shp.html">sn_get_who_gis_adm2_shp()</a></code> 
         </dt>
-        <dd>Adjust incidence 2</dd>
+        <dd>Generate ADM2 shapefiles from WHO GIS Hub</dd>
       </dl><dl><dt>
           
-          <code><a href="adjust_incidence_2_dt.html">adjust_incidence_2_dt()</a></code> 
-        </dt>
-        <dd>Calculate the adjusted incidence 2</dd>
-      </dl><dl><dt>
-          
-          <code><a href="adjust_incidence_3.html">adjust_incidence_3()</a></code> 
-        </dt>
-        <dd>Adjust incidence 3</dd>
-      </dl><dl><dt>
-          
-          <code><a href="adjust_incidence_3_dt.html">adjust_incidence_3_dt()</a></code> 
-        </dt>
-        <dd>Calculate the adjusted incidence 3</dd>
-      </dl><dl><dt>
-          
-          <code><a href="adm_rename.html">adm_rename()</a></code> 
-        </dt>
-        <dd>rename the administrative zone names</dd>
-      </dl><dl><dt>
-          
-          <code><a href="aggregate_by.html">aggregate_by()</a></code> 
-        </dt>
-        <dd>Aggregate data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="align_plots.html">align_plots()</a></code> 
-        </dt>
-        <dd>align plots Align plots in a grid, with the same width and height in the plot area. Use methods from the cowplot package.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="assemble_meta.html">assemble_meta()</a></code> 
-        </dt>
-        <dd>Assemble data 🈴</dd>
-      </dl><dl><dt>
-          
-          <code><a href="check_laps.html">check_laps()</a></code> 
-        </dt>
-        <dd>Check laps</dd>
-      </dl><dl><dt>
-          
-          <code><a href="color.html">color</a></code> 
-        </dt>
-        <dd>color palette</dd>
-      </dl><dl><dt>
-          
-          <code><a href="complementary_color.html">complementary_color()</a></code> 
-        </dt>
-        <dd>compute complementary color</dd>
-      </dl><dl><dt>
-          
-          <code><a href="config.html">config_set_db()</a></code> <code><a href="config.html">config_get_db()</a></code> <code><a href="config.html">config_parallel()</a></code> <code><a href="config.html">config_get_country()</a></code> 
-        </dt>
-        <dd>Config database</dd>
-      </dl><dl><dt>
-          
-          <code><a href="consistency_check.html">consistency_check()</a></code> 
-        </dt>
-        <dd>Consistency check</dd>
-      </dl><dl><dt>
-          
-          <code><a href="dbq_select.html">dbq_select()</a></code> 
-        </dt>
-        <dd>dbp select</dd>
-      </dl><dl><dt>
-          
-          <code><a href="dev.html">update_database()</a></code> <code><a href="dev.html">dev_update()</a></code> 
-        </dt>
-        <dd>Devtools : Update SNT databases</dd>
-      </dl><dl><dt>
-          
-          <code><a href="dissect_meta.html">dissect_meta()</a></code> 
-        </dt>
-        <dd>Dissect data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="expected.html">expected()</a></code> 
-        </dt>
-        <dd>Calculate the expected reports</dd>
-      </dl><dl><dt>
-          
-          <code><a href="faster_mean.html">faster_mean()</a></code> 
-        </dt>
-        <dd>Faster Mean</dd>
-      </dl><dl><dt>
-          
-          <code><a href="find_outliers.html">find_outliers()</a></code> 
-        </dt>
-        <dd>Find outlier</dd>
-      </dl><dl><dt>
-          
-          <code><a href="fuzzy_match_enhanced.html">fuzzy_match_enhanced()</a></code> 
-        </dt>
-        <dd>Fuzzy match result Identify and remove duplicate reports</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gen_id_dt.html">gen_id_dt()</a></code> 
-        </dt>
-        <dd>Generate ID if not exist data.table version</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gen_id_if_not_exist.html">gen_id_if_not_exist()</a></code> 
-        </dt>
-        <dd>Generate ID if not exist</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gen_plot_rainfall.html">gen_plot_rainfall()</a></code> 
-        </dt>
-        <dd>Generate a rainfall plot</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_default_config.html">generate_default_config()</a></code> 
-        </dt>
-        <dd>Generate Default Config</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_default_gitignore.html">generate_default_gitignore()</a></code> 
-        </dt>
-        <dd>Generate Default .gitignore</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_by_cols.html">get_by_cols()</a></code> 
-        </dt>
-        <dd>Get group by columns</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_os.html">get_os()</a></code> 
-        </dt>
-        <dd>Get OS</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_path.html">get_path()</a></code> 
-        </dt>
-        <dd>Get path</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_report_duration.html">get_report_duration()</a></code> 
-        </dt>
-        <dd>Calculate the report duration Get the min max report year and month for each group based on the report status This code filters the data by the reported column to only include data that is reported, then groups the data by the variables specified in the function call. It then calculates the min and max year and month for each group, and then filters out any groups that have NA for the min year.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gis-reduction.html">star_aggregate()</a></code> <code><a href="gis-reduction.html">stars_crop()</a></code> 
-        </dt>
-        <dd>stars aggregate function</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gis.html">star_read()</a></code> <code><a href="gis.html">star_aggregate()</a></code> <code><a href="gis.html">stars_crop()</a></code> <code><a href="gis.html">bind_who_gis_adm2_shp()</a></code> <code><a href="gis.html">extract_country_from_who_gis_adm2_shp()</a></code> <code><a href="gis.html">extract_adm1_adm2_from_who_gis_adm2_shp()</a></code> <code><a href="gis.html">extract_shp_from_gishub()</a></code> 
+          <code><a href="sn_read_star.html">sn_read_star()</a></code> 
         </dt>
         <dd>Read a list of raster data</dd>
       </dl><dl><dt>
@@ -248,14 +103,422 @@
         <dd>Database for Set Adm2 Cluster in Routine Data</dd>
       </dl><dl><dt>
           
+          <code><a href="gis.html">bind_who_gis_adm2_shp()</a></code> <code><a href="gis.html">extract_country_from_who_gis_adm2_shp()</a></code> <code><a href="gis.html">extract_adm1_adm2_from_who_gis_adm2_shp()</a></code> <code><a href="gis.html">extract_shp_from_gishub()</a></code> 
+        </dt>
+        <dd>Generate ADM2 shapefiles from WHO GIS Hub</dd>
+      </dl><dl><dt>
+          
+          <code><a href="smart_read_excel_by_year.html">smart_read_excel_by_year()</a></code> 
+        </dt>
+        <dd>Read excel files by year</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-cleaning">Data Cleaning<a class="anchor" aria-label="anchor" href="#data-cleaning"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="sn_check_dups.html">sn_check_dups()</a></code> 
+        </dt>
+        <dd>Check for duplicates in a data frame</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_check_fuzzy.html">sn_check_fuzzy()</a></code> 
+        </dt>
+        <dd>Fuzzy match</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_check_laps.html">sn_check_laps()</a></code> 
+        </dt>
+        <dd>Check laps</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_check_outliers.html">sn_check_outliers()</a></code> 
+        </dt>
+        <dd>Find outlier</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_clean_dups.html">sn_clean_dups()</a></code> 
+        </dt>
+        <dd>Merge duplicates in a data frame</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_clean_missing.html">sn_clean_missing()</a></code> 
+        </dt>
+        <dd>Remove and export missing data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_clean_outliers.html">sn_clean_outliers()</a></code> 
+        </dt>
+        <dd>Data.table version of find_outliers</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_clean_str_slice_to_end.html">sn_clean_str_slice_to_end()</a></code> 
+        </dt>
+        <dd>String Util Slice a pattern and append it to the end</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_clean_str_trim_space.html">sn_clean_str_trim_space()</a></code> 
+        </dt>
+        <dd>Replace double space replace two or more spaces with one space</dd>
+      </dl><dl><dt>
+          
+          <code><a href="adm_rename.html">adm_rename()</a></code> 
+        </dt>
+        <dd>rename the administrative zone names</dd>
+      </dl><dl><dt>
+          
+          <code><a href="routine_rename.html">routine_rename()</a></code> 
+        </dt>
+        <dd>Rename Columns in Routine data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="routine_replace.html">routine_replace()</a></code> 
+        </dt>
+        <dd>Replace routine database</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-transformation">Data Transformation<a class="anchor" aria-label="anchor" href="#data-transformation"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="sn_to_lower.html">sn_to_lower()</a></code> 
+        </dt>
+        <dd>Renaming the dataset to lower case</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_to_numeric.html">sn_to_numeric()</a></code> 
+        </dt>
+        <dd>Transmute numeric columns to the correct type</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_gen_assemble.html">sn_gen_assemble()</a></code> 
+        </dt>
+        <dd>Assemble data 🈴</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_gen_dissect.html">sn_gen_dissect()</a></code> 
+        </dt>
+        <dd>Dissect data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_gen_id.html">sn_gen_id()</a></code> 
+        </dt>
+        <dd>Generate ID if not exist data.table version</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gen_id_if_not_exist.html">gen_id_if_not_exist()</a></code> 
+        </dt>
+        <dd>Generate ID if not exist</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sum_maltreat_ov5_by_sex.html">sum_maltreat_ov5_by_sex()</a></code> 
+        </dt>
+        <dd>Sum maltreat over 5 years old by female and male</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sum_maltreat_u5_by_sex.html">sum_maltreat_u5_by_sex()</a></code> 
+        </dt>
+        <dd>Sum maltreat under 5 years old by female and male</dd>
+      </dl><dl><dt>
+          
+          <code><a href="scale_numbered.html">scale_numbered()</a></code> 
+        </dt>
+        <dd>Numbered axis</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_extract_month_from_year_week.html">sn_extract_month_from_year_week()</a></code> 
+        </dt>
+        <dd>Extract month from year and week</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_keep_na_sum.html">sn_keep_na_sum()</a></code> 
+        </dt>
+        <dd>Sum but keep NA</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-reduction">Data Reduction<a class="anchor" aria-label="anchor" href="#data-reduction"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="gis-reduction.html">sn_st_aggregate()</a></code> <code><a href="gis-reduction.html">sn_st_crop()</a></code> 
+        </dt>
+        <dd>stars aggregate function</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_reduce_odd_or_even.html">sn_reduce_odd_or_even()</a></code> 
+        </dt>
+        <dd>Get odd or even rows from a tibble</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fuzzy_match_enhanced.html">fuzzy_match_enhanced()</a></code> 
+        </dt>
+        <dd>Fuzzy match result Identify and remove duplicate reports</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_check_fuzzy.html">sn_check_fuzzy()</a></code> 
+        </dt>
+        <dd>Fuzzy match</dd>
+      </dl></div><div class="section level2">
+      <h2 id="databases">Databases<a class="anchor" aria-label="anchor" href="#databases"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="dbq_select.html">dbq_select()</a></code> 
+        </dt>
+        <dd>dbp select</dd>
+      </dl></div><div class="section level2">
+      <h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="sn_ana_adj1.html">sn_ana_adj1()</a></code> 
+        </dt>
+        <dd>Calculate the adjusted incidence 1</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_ana_adj2.html">sn_ana_adj2()</a></code> 
+        </dt>
+        <dd>Calculate the adjusted incidence 2</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_ana_adj3.html">sn_ana_adj3()</a></code> 
+        </dt>
+        <dd>Calculate the adjusted incidence 3</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_ana_report_rate.html">sn_ana_report_rate()</a></code> 
+        </dt>
+        <dd>report rate</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_ana_report_status.html">sn_ana_report_status()</a></code> 
+        </dt>
+        <dd>Calculate the reporting rate</dd>
+      </dl><dl><dt>
+          
+          <code><a href="adjust_incidence_1.html">adjust_incidence_1()</a></code> 
+        </dt>
+        <dd>Adjust incidence 1</dd>
+      </dl><dl><dt>
+          
+          <code><a href="adjust_incidence_2.html">adjust_incidence_2()</a></code> 
+        </dt>
+        <dd>Adjust incidence 2</dd>
+      </dl><dl><dt>
+          
+          <code><a href="adjust_incidence_3.html">adjust_incidence_3()</a></code> 
+        </dt>
+        <dd>Adjust incidence 3</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_outbreak.html">sn_outbreak()</a></code> 
+        </dt>
+        <dd>Outbreak detection</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_report_duration.html">get_report_duration()</a></code> 
+        </dt>
+        <dd>Calculate the report duration Get the min max report year and month for each group based on the report status This code filters the data by the reported column to only include data that is reported, then groups the data by the variables specified in the function call. It then calculates the min and max year and month for each group, and then filters out any groups that have NA for the min year.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="expected.html">expected()</a></code> 
+        </dt>
+        <dd>Calculate the expected reports</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_by_cols.html">get_by_cols()</a></code> 
+        </dt>
+        <dd>Get group by columns</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_aggregate_by.html">sn_aggregate_by()</a></code> 
+        </dt>
+        <dd>Aggregate_by, a helper function for generating the aggregation information</dd>
+      </dl><dl><dt>
+          
+          <code><a href="report_rate.html">report_rate()</a></code> 
+        </dt>
+        <dd>Calculate the reporting rate for each indicator</dd>
+      </dl><dl><dt>
+          
+          <code><a href="report_status.html">report_status()</a></code> 
+        </dt>
+        <dd>Calculate the report status</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_antijoin.html">sn_antijoin()</a></code> 
+        </dt>
+        <dd>Get the anti-join from two dbs</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_intersect.html">sn_intersect()</a></code> 
+        </dt>
+        <dd>Get the intersect from two dbs</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_unique_diff.html">sn_unique_diff()</a></code> 
+        </dt>
+        <dd>Get the unique values not in compare database</dd>
+      </dl></div><div class="section level2">
+      <h2 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="dev_update.html">dev_update()</a></code> 
+        </dt>
+        <dd>Devtools: development update function all combined in one command</dd>
+      </dl><dl><dt>
+          
+          <code><a href="update_database.html">update_database()</a></code> 
+        </dt>
+        <dd>Devtools : Update SNT databases</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_format.html">sn_format()</a></code> 
+        </dt>
+        <dd>Opinioned formatting function</dd>
+      </dl><dl><dt>
+          
+          <code><a href="generate_default_gitignore.html">generate_default_gitignore()</a></code> 
+        </dt>
+        <dd>Generate Default .gitignore</dd>
+      </dl><dl><dt>
+          
           <code><a href="mkdir.html">mkdir()</a></code> 
         </dt>
         <dd>Make Directory</dd>
       </dl><dl><dt>
           
-          <code><a href="odd_or_even.html">odd_or_even()</a></code> 
+          <code><a href="type_of_path.html">type_of_path()</a></code> 
         </dt>
-        <dd>Get odd or even rows from a tibble</dd>
+        <dd>Check type of path</dd>
+      </dl><dl><dt>
+          
+          <code><a href="use_relative_or_absolute.html">use_relative_or_absolute()</a></code> 
+        </dt>
+        <dd>Check to use relative or absolute path</dd>
+      </dl></div><div class="section level2">
+      <h2 id="math">Math<a class="anchor" aria-label="anchor" href="#math"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="sn_math_mean.html">sn_math_mean()</a></code> 
+        </dt>
+        <dd>Faster Mean</dd>
+      </dl></div><div class="section level2">
+      <h2 id="plot">Plot<a class="anchor" aria-label="anchor" href="#plot"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="sn_theme.html">sn_theme()</a></code> 
+        </dt>
+        <dd>theme default theme for plots</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_plot_consistency.html">sn_plot_consistency()</a></code> 
+        </dt>
+        <dd>Consistency check plot</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_plot_incidence_by_year.html">sn_plot_incidence_by_year()</a></code> 
+        </dt>
+        <dd>Plot incidences</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_plot_outliers.html">sn_plot_outliers()</a></code> 
+        </dt>
+        <dd>Plot outliers by year</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_plot_rainfall.html">sn_plot_rainfall()</a></code> 
+        </dt>
+        <dd>Generate a rainfall plot</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_plot_reprat_by_adm.html">sn_plot_reprat_by_adm()</a></code> 
+        </dt>
+        <dd>Plot report rate by adm1</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_plot_reprat_by_index.html">sn_plot_reprat_by_index()</a></code> 
+        </dt>
+        <dd>Plot report rate by index</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_color_false.html">sn_color_false</a></code> 
+        </dt>
+        <dd>color False</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sn_color_true.html">sn_color_true</a></code> 
+        </dt>
+        <dd>color True</dd>
+      </dl><dl><dt>
+          
+          <code><a href="align_plots.html">align_plots()</a></code> 
+        </dt>
+        <dd>align plots Align plots in a grid, with the same width and height in the plot area. Use methods from the cowplot package.</dd>
       </dl><dl><dt>
           
           <code><a href="plot_adm1_report_rate.html">plot_adm1_report_rate()</a></code> 
@@ -283,136 +546,53 @@
         <dd>Plot outliers</dd>
       </dl><dl><dt>
           
-          <code><a href="remove_and_export_missing.html">remove_and_export_missing()</a></code> 
+          <code><a href="color.html">color</a></code> 
         </dt>
-        <dd>Remove and export missing data</dd>
+        <dd>color palette</dd>
       </dl><dl><dt>
           
-          <code><a href="remove_outliers.html">remove_outliers()</a></code> 
+          <code><a href="complementary_color.html">complementary_color()</a></code> 
         </dt>
-        <dd>Data.table version of find_outliers</dd>
+        <dd>compute complementary color</dd>
+      </dl></div><div class="section level2">
+      <h2 id="config">Config<a class="anchor" aria-label="anchor" href="#config"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="config.html">config_set_db()</a></code> <code><a href="config.html">config_get_db()</a></code> <code><a href="config.html">config_parallel()</a></code> <code><a href="config.html">config_get_country()</a></code> 
+        </dt>
+        <dd>Config database</dd>
       </dl><dl><dt>
           
-          <code><a href="report_rate.html">report_rate()</a></code> 
+          <code><a href="generate_default_config.html">generate_default_config()</a></code> 
         </dt>
-        <dd>Calculate the reporting rate for each indicator</dd>
+        <dd>Generate Default Config</dd>
       </dl><dl><dt>
           
-          <code><a href="report_rate_dt.html">report_rate_dt()</a></code> 
+          <code><a href="get_os.html">get_os()</a></code> 
         </dt>
-        <dd>report rate</dd>
+        <dd>Get OS</dd>
       </dl><dl><dt>
           
-          <code><a href="report_status.html">report_status()</a></code> 
+          <code><a href="get_path.html">get_path()</a></code> 
         </dt>
-        <dd>Calculate the report status</dd>
-      </dl><dl><dt>
-          
-          <code><a href="report_status_dt.html">report_status_dt()</a></code> 
-        </dt>
-        <dd>Calculate the reporting rate</dd>
-      </dl><dl><dt>
-          
-          <code><a href="routine_rename.html">routine_rename()</a></code> 
-        </dt>
-        <dd>Rename Columns in Routine data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="routine_replace.html">routine_replace()</a></code> 
-        </dt>
-        <dd>Replace routine database</dd>
-      </dl><dl><dt>
-          
-          <code><a href="scale_numbered.html">scale_numbered()</a></code> 
-        </dt>
-        <dd>Numbered axis</dd>
+        <dd>Get path</dd>
       </dl><dl><dt>
           
           <code><a href="setup.html">setup()</a></code> 
         </dt>
         <dd>Make Structure</dd>
-      </dl><dl><dt>
-          
-          <code><a href="smart_read_excel_by_year.html">smart_read_excel_by_year()</a></code> 
-        </dt>
-        <dd>Read excel files by year</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sn_check_dups.html">sn_check_dups()</a></code> 
-        </dt>
-        <dd>Check for duplicates in a data frame</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sn_check_fuzzy.html">sn_check_fuzzy()</a></code> 
-        </dt>
-        <dd>Fuzzy match</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sn_clean_dups.html">sn_clean_dups()</a></code> 
-        </dt>
-        <dd>Merge duplicates in a data frame</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sn_get_dhs.html">sn_get_dhs()</a></code> 
-        </dt>
-        <dd>Import DHS data from API</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sn_get_files.html">sn_get_files()</a></code> 
-        </dt>
-        <dd>Smart file reader</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sn_to_numeric.html">sn_to_numeric()</a></code> 
-        </dt>
-        <dd>Transmute numeric columns to the correct type</dd>
-      </dl><dl><dt>
-          
-          <code><a href="str_slice_to_end.html">str_slice_to_end()</a></code> 
-        </dt>
-        <dd>String Util Slice a pattern and append it to the end</dd>
-      </dl><dl><dt>
-          
-          <code><a href="str_trim_space.html">str_trim_space()</a></code> 
-        </dt>
-        <dd>Replace double space replace two or more spaces with one space</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sum_maltreat_ov5_by_sex.html">sum_maltreat_ov5_by_sex()</a></code> 
-        </dt>
-        <dd>Sum maltreat over 5 years old by female and male</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sum_maltreat_u5_by_sex.html">sum_maltreat_u5_by_sex()</a></code> 
-        </dt>
-        <dd>Sum maltreat under 5 years old by female and male</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sum_without_na.html">sum_without_na()</a></code> 
-        </dt>
-        <dd>Sum without NA</dd>
-      </dl><dl><dt>
-          
-          <code><a href="theme_snt.html">theme_snt()</a></code> 
-        </dt>
-        <dd>theme default theme for plots</dd>
-      </dl><dl><dt>
-          
-          <code><a href="to_lower.html">to_lower()</a></code> 
-        </dt>
-        <dd>Renaming the dataset to lower case</dd>
-      </dl><dl><dt>
-          
-          <code><a href="type_of_path.html">type_of_path()</a></code> 
-        </dt>
-        <dd>Check type of path</dd>
-      </dl><dl><dt>
-          
-          <code><a href="use_relative_or_absolute.html">use_relative_or_absolute()</a></code> 
-        </dt>
-        <dd>Check to use relative or absolute path</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

@@ -8,32 +8,79 @@ reference:
   contents:
   - starts_with("sn_get_")
   - starts_with("sn_read_")
+  - starts_with("import")
+  - bind_who_gis_adm2_shp
+  - starts_with("smart_")
 
 - title: Data Cleaning
   contents:
   - starts_with("sn_check_")
   - starts_with("sn_clean_")
+  - adm_rename
+  - routine_rename
+  - routine_replace
 
 - title: Data Transformation
   contents:
   - starts_with("sn_to_")
   - starts_with("sn_gen_")
+  - contains("gen_")
+  - contains("sum_")
+  - scale_numbered
+  - starts_with("sn_extract")
+  - sn_keep_na_sum
 
 - title: Data Reduction
   contents:
   - sn_st_aggregate
   - sn_st_crop
   - starts_with("sn_reduce_")
+  - contains("fuzzy")
+
+- title: Databases
+  contents:
+  - starts_with("dbq_")
 
 - title: Analysis
   contents:
   - starts_with("sn_ana_")
+  - starts_with("adjust_")
+  - sn_outbreak
+  - get_report_duration
+  - expected
+  - get_by_cols
+  - sn_aggregate_by
+  - report_rate
+  - report_status
+  - sn_antijoin
+  - sn_intersect
+  - sn_unique_diff
 
 - title: Development
   contents:
   - dev_update
   - update_database
+  - sn_format
+  - generate_default_gitignore
+  - mkdir
+  - type_of_path
+  - use_relative_or_absolute
 
 - title: Math
   contents:
   - starts_with("sn_math_")
+
+- title: Plot
+  contents:
+  - sn_theme
+  - starts_with("sn_plot_")
+  - starts_with("sn_color_")
+  - contains("plot")
+  - contains("color")
+
+- title: Config
+  contents:
+  - contains("config")
+  - get_os
+  - get_path
+  - setup
