@@ -7,7 +7,7 @@ expected <- function(df) {
   min_year <- min(df$year)
   max_year <- max(df$year)
   year <- tibble(year = min_year:max_year)
-  month <- tibble(month = 1:12)
+  month <- tibble(month = 1:13)
   target_list_ym <- target_list |>
     cross_join(year) |>
     cross_join(month)
@@ -80,17 +80,19 @@ report_rate <- function(df, ...) {
 #' adm_by_cols, date_by_cols, rep, exp, rep_rat
 #' @importFrom data.table fifelse .SD
 #' @export
-sn_ana_report_status <- function(dt, adm_by, date_by) {
+sn_ana_report_status <- function(dt, adm_by = NULL, date_by = NULL, exclude_cols = "adm1|adm2|hf|year|month|^id", by_cols = NULL) {
   # always exclude those meta columns from the dt
   exclude_cols <- grep(
-    "adm1|adm2|hf|year|month|^id", names(dt),
+    exclude_cols, names(dt),
     value = TRUE
   )
-  by_cols <- get_by_cols(adm_by, date_by)
+  if (is.null(by_cols)) {
+    # get the by columns
+    by_cols <- get_by_cols(adm_by, date_by)
+  }
   report_rate <- dt[, .(
     rep = fifelse(
-      sum(.SD, na.rm = TRUE) ==
-        0, 0, 1
+      sum(.SD, na.rm = TRUE) == 0, 0, 1
     )
   ),
     by = by_cols, .SDcols = -exclude_cols]
@@ -106,15 +108,17 @@ sn_ana_report_status <- function(dt, adm_by, date_by) {
 #' @param on 'adm' or 'index'
 #' @param col character vector
 #' @importFrom data.table melt .N .SD
-sn_ana_report_rate <- function(dt, adm_by, date_by, on, col = NULL) {
+sn_ana_report_rate <- function(dt, adm_by = NULL, date_by = NULL, on, col = NULL, exclude_cols = "adm1|adm2|hf|year|month|^id", by_cols = NULL) {
   stopifnot(on %in% c("adm", "index"))
   # exclude those meta columns from the dt
   exclude_cols <- grep(
-    "adm1|adm2|hf|year|month|^id", names(dt),
+    exclude_cols, names(dt),
     value = TRUE
   )
   # get the by columns
-  by_cols <- get_by_cols(adm_by, date_by)
+  if (is.null(by_cols)) {
+    by_cols <- get_by_cols(adm_by, date_by)
+  }
   # calculate the expected reports
   measure.vars <- setdiff(
     names(dt),
@@ -133,14 +137,9 @@ sn_ana_report_rate <- function(dt, adm_by, date_by, on, col = NULL) {
     melt_dt <- melt(dt, id.vars = by_cols, measure.vars = measure.vars)
     # then group by the by_cols, plus the pivot index
     # column and calculate the sum of expected and reported
-    rep_rat <- melt_dt[, .(
-      rep = sum(
-        !is.na(value),
-        na.rm = TRUE
-      ),
-      exp = .N
-    ),
-      by = c(by_cols, "variable")]
+    melt_dt[, `:=`(rep = !is.na(value), exp = 1) ]
+    rep_rat <- melt_dt[, .(rep = sum(rep), exp = sum(exp)), by = c(by_cols, "variable")]
+
   } else if (on == "adm") {
     # if col is not null, then only calculate the reporting
     # rate for those columns first test those cols, they
@@ -169,11 +168,11 @@ sn_ana_report_rate <- function(dt, adm_by, date_by, on, col = NULL) {
       ),
         by = by_cols, .SDcols = -exclude_cols]
     }
+  }
     rep_rat[, rep_rat := rep/exp]
     # after that calculate the reporting rate as the sum of
     # reported divided by the sum of expected
     return(rep_rat)
-  }
 }
 #' Get group by columns
 #'

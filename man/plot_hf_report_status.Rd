@@ -4,7 +4,11 @@
 \alias{plot_hf_report_status}
 \title{Plot Report Status}
 \usage{
-plot_hf_report_status(report_status)
+plot_hf_report_status(
+  report_status,
+  x_check_overlap = FALSE,
+  date_breaks = "1 year"
+)
 }
 \arguments{
 \item{df}{A data frame}

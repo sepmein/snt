@@ -102,5 +102,6 @@ sn_plot_consistency <- function(df, index_a, index_b) {
     )
   ) +
     geom_abline(slope = 1) +
-    theme_snt()
+    sn_theme()
 }
+

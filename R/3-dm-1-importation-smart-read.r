@@ -35,7 +35,12 @@
 #' @export
 #' @importFrom stringr str_detect str_replace
 #' @importFrom lubridate make_date day month year
-sn_get_files <- function(smart_path) {
+sn_get_files <- function(smart_path, ...) {
+  # ... will be some custom patterns
+  # for example, could be c("code" = "\\*ccc\\*)
+  # we need to extract args from ...
+  args <- list(...)
+
   # detect country code find special character in special
   # path parameter loop through file path in the path.list
   # return valid file

@@ -85,7 +85,7 @@ color <- list(
 #' default theme for plots
 #' @export
 #' @importFrom cowplot theme_cowplot
-theme_snt <- function(font_size = 12, font_family = "sans") {
+sn_theme <- function(font_size = 12, font_family = "sans") {
   theme_cowplot(font_size = font_size, font_family = font_family)
 }
 # align plots ------
@@ -117,3 +117,11 @@ scale_numbered <- function(axis = "x") {
     scale_y_continuous(labels = label_comma())
   }
 }
+#' @title color True
+#' @description color True
+#' @export
+sn_color_true <- wes_palette("Darjeeling1", 5)[2]
+#' @title color False
+#' @description color False
+#' @export
+sn_color_false <- wes_palette("Darjeeling1", 5)[1]

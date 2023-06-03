@@ -33,7 +33,7 @@ sn_check_fuzzy <- function(
     # get the first column name and the second column name
     col.x <- names(fuzzy)[1]
     col.y <- names(fuzzy)[2]
-    fuzzy <- fuzzy[col.x != col.y, env = list(col.x = col.x, col.y = col.y)]
+    fuzzy <- fuzzy[.(col.x) != .(col.y), env = list(col.x = col.x, col.y = col.y)]
     col.x.in.target <- fuzzy[target_col, on = c(col.x = col),
       nomatch = NULL]
     col.y.in.target <- fuzzy[target_col, on = c(col.y = col),
