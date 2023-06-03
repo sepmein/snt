@@ -6,13 +6,15 @@
 #' @import ggplot2
 #' @importFrom lubridate make_date
 #' @export
-plot_hf_report_status <- function(report_status, x_check_overlap = FALSE, date_breaks = "1 year") {
+plot_hf_report_status <- function(
+  report_status, x_check_overlap = FALSE, date_breaks = "1 year"
+) {
   # TODO how to solve the problem of month is not included
   # in args TODO how to solve the problem of hf not
   # included in args TODO solve the preset argument
-  # problem, hfname, reported, year, month
-  # make robust hfname, year and month are required check
-  # if hfname is present
+  # problem, hfname, reported, year, month make robust
+  # hfname, year and month are required check if hfname is
+  # present
   stopifnot("hf" %in% names(report_status))
   # check if year is present
   stopifnot("year" %in% names(report_status))
@@ -23,7 +25,10 @@ plot_hf_report_status <- function(report_status, x_check_overlap = FALSE, date_b
     rep = fifelse(rep == 0, "N", "Y")
   )] |>
     ggplot(aes(x = date, y = hf, fill = rep)) +
-    geom_tile() + scale_x_date(date_labels = "%Y", guide = guide_axis(check.overlap = x_check_overlap), date_breaks = date_breaks) +
+    geom_tile() + scale_x_date(
+    date_labels = "%Y", guide = guide_axis(check.overlap = x_check_overlap),
+    date_breaks = date_breaks
+  ) +
     labs(
       title = "Report Status", y = "Health Facilities",
       x = "Date"

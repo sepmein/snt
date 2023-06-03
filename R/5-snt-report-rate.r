@@ -80,7 +80,10 @@ report_rate <- function(df, ...) {
 #' adm_by_cols, date_by_cols, rep, exp, rep_rat
 #' @importFrom data.table fifelse .SD
 #' @export
-sn_ana_report_status <- function(dt, adm_by = NULL, date_by = NULL, exclude_cols = "adm1|adm2|hf|year|month|^id", by_cols = NULL) {
+sn_ana_report_status <- function(
+  dt, adm_by = NULL, date_by = NULL, exclude_cols = "adm1|adm2|hf|year|month|^id",
+  by_cols = NULL
+) {
   # always exclude those meta columns from the dt
   exclude_cols <- grep(
     exclude_cols, names(dt),
@@ -92,7 +95,8 @@ sn_ana_report_status <- function(dt, adm_by = NULL, date_by = NULL, exclude_cols
   }
   report_rate <- dt[, .(
     rep = fifelse(
-      sum(.SD, na.rm = TRUE) == 0, 0, 1
+      sum(.SD, na.rm = TRUE) ==
+        0, 0, 1
     )
   ),
     by = by_cols, .SDcols = -exclude_cols]
@@ -108,7 +112,10 @@ sn_ana_report_status <- function(dt, adm_by = NULL, date_by = NULL, exclude_cols
 #' @param on 'adm' or 'index'
 #' @param col character vector
 #' @importFrom data.table melt .N .SD
-sn_ana_report_rate <- function(dt, adm_by = NULL, date_by = NULL, on, col = NULL, exclude_cols = "adm1|adm2|hf|year|month|^id", by_cols = NULL) {
+sn_ana_report_rate <- function(
+  dt, adm_by = NULL, date_by = NULL, on, col = NULL, exclude_cols = "adm1|adm2|hf|year|month|^id",
+  by_cols = NULL
+) {
   stopifnot(on %in% c("adm", "index"))
   # exclude those meta columns from the dt
   exclude_cols <- grep(
@@ -137,9 +144,15 @@ sn_ana_report_rate <- function(dt, adm_by = NULL, date_by = NULL, on, col = NULL
     melt_dt <- melt(dt, id.vars = by_cols, measure.vars = measure.vars)
     # then group by the by_cols, plus the pivot index
     # column and calculate the sum of expected and reported
-    melt_dt[, `:=`(rep = !is.na(value), exp = 1) ]
-    rep_rat <- melt_dt[, .(rep = sum(rep), exp = sum(exp)), by = c(by_cols, "variable")]
-
+    melt_dt[, `:=`(
+      rep = !is.na(value),
+      exp = 1
+    )]
+    rep_rat <- melt_dt[, .(
+      rep = sum(rep),
+      exp = sum(exp)
+    ),
+      by = c(by_cols, "variable")]
   } else if (on == "adm") {
     # if col is not null, then only calculate the reporting
     # rate for those columns first test those cols, they
@@ -169,10 +182,10 @@ sn_ana_report_rate <- function(dt, adm_by = NULL, date_by = NULL, on, col = NULL
         by = by_cols, .SDcols = -exclude_cols]
     }
   }
-    rep_rat[, rep_rat := rep/exp]
-    # after that calculate the reporting rate as the sum of
-    # reported divided by the sum of expected
-    return(rep_rat)
+  rep_rat[, rep_rat := rep/exp]
+  # after that calculate the reporting rate as the sum of
+  # reported divided by the sum of expected
+  return(rep_rat)
 }
 #' Get group by columns
 #'
@@ -320,4 +333,5 @@ sn_unique_diff <- function(target, compare, by) {
   comp <- compare[, .SD, .SDcols = by] |>
     unique()
   not_in_compare <- tar[!comp, on = by]
+  return(not_in_compare)
 }
