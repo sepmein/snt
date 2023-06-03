@@ -30,6 +30,7 @@ sn_intersect <- function(d1, d2, col) {
   m_d1[m_d2, on = c(col),
     nomatch = NULL]
 }
+#' Get the anti-join from two dbs
 #' @inheritParams sn_intersect
 #' @return A data.table which is the unique combination value of the
 #' columns provided from two data.tables.
