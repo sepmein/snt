@@ -46,3 +46,23 @@ sn_antijoin <- function(d1, d2, col) {
     unique()
   m_d1[!m_d2, on = c(col)]
 }
+
+#' Pre-merge checks for two dbs
+#'
+#' This function is desinged for generate a data.table list
+#' which contains three data.tables, the first one is the
+#' intersect of the two data.tables, the second one is the
+#' rows only in the first data.table, the third one is the
+#' rows only in the second data.table. The columns provided
+#' must be the same in two data.tables.
+sn_pre_merge <- function(d1, d2, col) {
+  m_d1 <- d1[, .SD, .SDcols = c(col)] |>
+    unique()
+  m_d2 <- d2[, .SD, .SDcols = c(col)] |>
+    unique()
+  joined <- m_d1[m_d2, on = c(col),
+    nomatch = NULL]
+  d1_only <- m_d1[!m_d2, on = c(col)]
+  d2_only <- m_d2[!m_d1, on = c(col)]
+  return(list(joined, d1_only, d2_only))
+}

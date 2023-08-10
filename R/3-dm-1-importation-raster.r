@@ -58,11 +58,11 @@ sn_read_star <- function(smart_list, index) {
     2) {
     stop("`smart_list` does not have two elements")
   }
-  if (!is.list(smart_list$files)) {
+  if (!("files" %in% names(smart_list))) {
     stop("`smart_list` does not have a list element called `files`")
   }
-  if (!is.list(smart_list$years)) {
-    stop("`smart_list` does not have a list element called `years`")
+  if (!("dates" %in% names(smart_list))) {
+    stop("`smart_list` does not have a list element called `dates`")
   }
   # Read all the files in the list
   star <- read_stars(smart_list$files, proxy = TRUE) |>
