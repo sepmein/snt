@@ -72,7 +72,7 @@ sn_read_star <- function(smart_list, index) {
   setNames(index) |>
     # Set the band dimension to be the year
   st_set_dimensions(
-    "band", values = smart_list$year, names = "year", point = TRUE
+    "band", values = smart_list$dates, names = "dates", point = TRUE
   )
   # Return the stacked image
   return(star)
