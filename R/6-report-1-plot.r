@@ -119,11 +119,11 @@ sn_plot_consistency <- function(df, var_small, var_big) {
 sn_plot_reprat_by_index <- function(d, save_to) {
   # test if all required columns are present
   if (!all(
-    c("year", "month", "variable", "value", "rep_rat") %in%
+    c("year", "month", "variable", "rep_rat") %in%
       names(d)
   )) {
     stop(
-      "The data should contain at least the following columns: year, month, variable, value, rep_rat"
+      "The data should contain at least the following columns: year, month, variable, rep_rat"
     )
   }
   # year and month should be numeric
