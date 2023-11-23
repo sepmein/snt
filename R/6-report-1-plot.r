@@ -77,24 +77,24 @@ sn_plot_incidence_by_year <- function(
 #' @export
 #' @import dplyr
 #' @import ggplot2
-sn_plot_consistency <- function(df, var_small, var_big) {
-  d <- d[!is.na(get(var_small)) &
-    !is.na(get(var_big))]
+sn_plot_consistency <- function(d, var_small, var_big) {
+  d <- d[!is.na(base::get(var_small)) &
+    !is.na(base::get(var_big))]
   d[, comparison := fifelse(
-    get(var_small) <=
-      get(var_big),
+    base::get(var_small) <=
+      base::get(var_big),
     TRUE, FALSE
   )]
   d |>
     ggplot() + geom_point(
     aes(
-      y = get(var_big),
-      x = get(var_small),
+      y = base::get(var_big),
+      x = base::get(var_small),
       color = .data$comparison
     )
   ) +
-    xlab(var_big) +
-    ylab(var_small) +
+    xlab(var_small) +
+    ylab(var_big) +
     scale_color_manual(
       values = c(`TRUE` = sn_color_true, `FALSE` = sn_color_false)
     ) +
