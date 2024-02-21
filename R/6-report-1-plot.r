@@ -7,14 +7,39 @@
 #' @importFrom ggplot2 aes geom_boxplot labs theme
 #' @importFrom cowplot theme_cowplot
 #' @importFrom wesanderson wes_palette
+#' TODO: remove the unnessary rainfall analysis codes
 sn_plot_rainfall <- function(rainfall) {
   result <- rainfall |>
-    mutate(month = factor(month, labels = month.abb)) |>
+    mutate(month = factor(month, labels = month.abb)) %>%
     ggplot(aes(month, rainfall, group = month)) +
     geom_boxplot(fill = wesanderson::wes_palette("Darjeeling1")[3]) +
-    labs(x = "Month", y = "Rainfall (mm)") +
-    cowplot::theme_cowplot() + theme(axis.text = element_text(size = 6.6))
+    # labs(x = "Month", y = "Rainfall (mm)") +
+    cowplot::theme_cowplot() +
+    theme(
+      plot.margin = unit(c(0, 0, 0, 6.3), "mm"),
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      legend.position = "none",
+      axis.text = element_text(size = 6.6)
+    )
+
+  if ("adm1" %in% names(rainfall)) {
+    filename <- rainfall$adm1 |> unique()
+  } else {
+    filename <- "National"
+  }
+
+  ggsave(
+    filename = paste0(filename, " - 09 - rainfall", ".eps"),
+    plot = result,
+    path = "result/plot",
+    height = 1.8 * 2 * 0.6,
+    width = 6 * 0.6
+  )
+  return(result)
 }
+
+
 #' @title Plot outliers by year
 #' @description Generate a plot for outliers, with year as color
 #' and index as x-axis, value as y-axis
