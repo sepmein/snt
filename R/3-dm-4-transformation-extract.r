@@ -37,3 +37,47 @@ sn_extract_month_from_year_week <- function(year, week) {
   week(date) <- week
   return(month(date))
 }
+
+#' Calculate Population within 5km Radius of Health Facilities
+#'
+#' @param health_facilities_sf An sf object containing the locations of health facilities.
+#' @param population_raster A RasterLayer or SpatRaster object with population data.
+#' @param distance distance in meters, default is 5000
+#' @param method method to aggregate the raster, default is sum
+#' @return A data frame with health facility identifiers and the corresponding population within a 5km radius.
+#' @importFrom sf st_buffer crs
+#' @importFrom terra extract
+sn_extract_radius <- function(
+    health_facilities_sf,
+    population_raster,
+    area_sf,
+    distance = 5000,
+    method = sum) {
+  # Ensure CRS compatibility
+  if (st_crs(health_facilities_sf) != st_crs(area_sf)) {
+    health_facilities_sf <- st_transform(health_facilities_sf, st_crs(area_sf))
+  }
+  # if (crs(population_raster) != st_crs(area_sf)) {
+  crs_target <- st_crs(area_sf)$proj4string
+
+  population_raster <- project(population_raster, crs_target)
+  # }
+
+  # Clip the population raster with the area shapefile
+  population_raster_clipped <- terra::crop(population_raster, terra::vect(area_sf))
+  population_raster_clipped <- terra::mask(population_raster_clipped, terra::vect(area_sf))
+
+  # Buffer the health facility locations to a 5km radius, ensuring they are within the area of interest
+  health_facilities_buffered <- st_buffer(health_facilities_sf, dist = distance)
+
+  # Extract the population data for each buffered area within the clipped raster
+  populations <- terra::extract(population_raster_clipped, health_facilities_buffered, fun = method, na.rm = TRUE)
+
+  # Compile the results
+  results_df <- data.frame(
+    health_facility_id = health_facilities_sf$id, # Assuming there's an 'id' column in your health_facilities_sf
+    population_5km_radius = populations[, 2] # Extracting the summed population values
+  )
+
+  return(results_df)
+}
