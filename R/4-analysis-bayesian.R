@@ -1,16 +1,17 @@
 sn_sample_conf_in_tested <- function(n_sample, n_conf, n_test) {
   p_conf = n_conf / (n_conf + n_test)
   sample(c("T", "F"),
-         size = n_sample,
-         replace = TRUE,
-         c(p_conf, 1 - p_conf))
+    size = n_sample,
+    replace = TRUE,
+    c(p_conf, 1 - p_conf)
+  )
 }
 
 sn_posterior_conf_in_tested <- function(sample, n) {
   sum_conf <- sum(sample == "T")
   sum_negative <- sum(sample == "F")
   p <- 0:n / n
-  ways <- sapply(p, function(x) (x)^sum_conf * ((1-x))^sum_negative)
+  ways <- sapply(p, function(x) (x)^sum_conf * ((1 - x))^sum_negative)
   sum_ways <- sum(ways)
   posterior <- ways / sum_ways
   result <- cbind(p, posterior)

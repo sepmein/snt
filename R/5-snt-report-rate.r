@@ -40,22 +40,27 @@ expected <- function(df) {
 report_rate <- function(df, ...) {
   args <- enquos(...)
   rep <- df |>
-    mutate(rep = if_else(rowSums(across(
-      !c(!!!args, year, month) &
-        where(is.numeric)
-    ),
-    na.rm = TRUE) ==
+    mutate(rep = if_else(rowSums(
+      across(
+        !c(!!!args, year, month) &
+          where(is.numeric)
+      ),
+      na.rm = TRUE
+    ) ==
       0, 0, 1)) |>
     select(!!!args, year, month, rep)
   reprate <- exp |>
     left_join(rep) |>
     # filling NA with 0
     mutate(rep = if_else(is.na(rep),
-                         0, rep))
+      0, rep
+    ))
   reprate |>
     group_by(!!!args) |>
-    summarize(exp = sum(exp),
-              rep = sum(rep)) |>
+    summarize(
+      exp = sum(exp),
+      rep = sum(rep)
+    ) |>
     mutate(reprat = rep / exp)
 }
 #' Calculate the reporting rate
@@ -75,14 +80,16 @@ sn_ana_report_status <- function(dt,
                                  by_cols = NULL) {
   # always exclude those meta columns from the dt
   exclude_cols <- grep(exclude_cols, names(dt),
-                       value = TRUE)
+    value = TRUE
+  )
   if (is.null(by_cols)) {
     # get the by columns
     by_cols <- get_by_cols(adm_by, date_by)
   }
   report_rate <- dt[, .(rep = fifelse(sum(.SD, na.rm = TRUE) ==
-                                        0, 0, 1)),
-                    by = by_cols, .SDcols = -exclude_cols]
+    0, 0, 1)),
+  by = by_cols, .SDcols = -exclude_cols
+  ]
   return(report_rate)
 }
 #' report rate
@@ -107,14 +114,17 @@ sn_ana_report_rate <- function(dt,
   stopifnot(on %in% c("adm", "index"))
   # exclude those meta columns from the dt
   exclude_cols <- grep(exclude_cols, names(dt),
-                       value = TRUE)
+    value = TRUE
+  )
   # get the by columns
   if (is.null(by_cols)) {
     by_cols <- get_by_cols(adm_by, date_by)
   }
   # calculate the expected reports
-  measure.vars <- setdiff(names(dt),
-                          exclude_cols)
+  measure.vars <- setdiff(
+    names(dt),
+    exclude_cols
+  )
   if (!is.null(col)) {
     # get the intersect of set of mesure.vars and col
     measure.vars <- intersect(measure.vars, col)
@@ -129,11 +139,16 @@ sn_ana_report_rate <- function(dt,
       melt(dt, id.vars = by_cols, measure.vars = measure.vars)
     # then group by the by_cols, plus the pivot index
     # column and calculate the sum of expected and reported
-    melt_dt[, `:=`(rep = !is.na(value),
-                   exp = 1)]
-    rep_rat <- melt_dt[, .(rep = sum(rep),
-                           exp = sum(exp)),
-                       by = c(by_cols, "variable")]
+    melt_dt[, `:=`(
+      rep = !is.na(value),
+      exp = 1
+    )]
+    rep_rat <- melt_dt[, .(
+      rep = sum(rep),
+      exp = sum(exp)
+    ),
+    by = c(by_cols, "variable")
+    ]
   } else if (on == "adm") {
     # if col is not null, then only calculate the reporting
     # rate for those columns first test those cols, they
@@ -141,50 +156,65 @@ sn_ana_report_rate <- function(dt,
 
     # generate a unique combination of meta list by meta_cols
     m_adm <-
-      dt[, .SD, .SDcols = meta_adm] |> unique() |> sn_gen_id()
+      dt[, .SD, .SDcols = meta_adm] |>
+      unique() |>
+      sn_gen_id()
     # it is not right, for some of the record they will be missing
     # year month combination, so I need to manually extract them from the data
     # ensure year and month are in the dt
     if (!(any(c("year", "month") %in% names(dt)))) {
       stop("column names 'year' and 'month' should be one of column in the database")
     }
-    m_date <- CJ(year = min(dt$year):max(dt$year),
-                 month = 1:12) |> sn_gen_id()
+    m_date <- CJ(
+      year = min(dt$year):max(dt$year),
+      month = 1:12
+    ) |> sn_gen_id()
 
     # create a link table from meta_adm$id and year_month$id
     link <- CJ(id_adm = m_adm$id, id_date = m_date$id)
     # join link with meta_adm
     meta <-
       merge(m_adm,
-            link,
-            by.x = "id",
-            by.y = "id_adm",
-            all = TRUE)
+        link,
+        by.x = "id",
+        by.y = "id_adm",
+        all = TRUE
+      )
     # join link with year month
     meta <-
       merge(meta,
-            m_date,
-            by.x = "id_date",
-            by.y = "id",
-            all = TRUE)
+        m_date,
+        by.x = "id_date",
+        by.y = "id",
+        all = TRUE
+      )
     # remove id cols
-    meta[, `:=`(id_date = NULL,
-                id = NULL)]
+    meta[, `:=`(
+      id_date = NULL,
+      id = NULL
+    )]
     m_dt <- merge(meta,
-                  dt,
-                  by = c(meta_adm, meta_date),
-                  all = TRUE)
+      dt,
+      by = c(meta_adm, meta_date),
+      all = TRUE
+    )
     # set rep col
-    m_dt[, rep := fifelse(sum(.SD, na.rm = TRUE) > 0,
-                          1,
-                          0),
-         .SDcols = -(c(exclude_cols, meta_adm, meta_date)),
-         by = 1:nrow(m_dt)]
+    m_dt[, rep := fifelse(
+      sum(.SD, na.rm = TRUE) > 0,
+      1,
+      0
+    ),
+    .SDcols = -(c(exclude_cols, meta_adm, meta_date)),
+    by = 1:nrow(m_dt)
+    ]
     # set exp col
     m_dt[, exp := 1]
-    rep_rat <- m_dt[, .(rep = sum(rep),
-                        exp = sum(exp)),
-                    by = by_cols]
+    rep_rat <- m_dt[, .(
+      rep = sum(rep),
+      exp = sum(exp)
+    ),
+    by = by_cols
+    ]
   }
   rep_rat[, rep_rat := rep / exp]
   # after that calculate the reporting rate as the sum of
@@ -240,18 +270,22 @@ report_status <- function(df, ...) {
   df <- df |>
     group_by(!!!args) |>
     # calculate sum for each group for all numeric columns
-    summarise(across(!any_of(c("year", "month")) &
-                       where(is.numeric),
-                     ~ sum(.x, na.rm = TRUE))) |>
+    summarise(across(
+      !any_of(c("year", "month")) &
+        where(is.numeric),
+      ~ sum(.x, na.rm = TRUE)
+    )) |>
     # ungroup data frame
     ungroup()
   df <- df |>
-    mutate(reported = if_else(rowSums(across(
-      !any_of(c("year", "month")) &
-        !c(!!!args) &
-        where(is.numeric)
-    ),
-    na.rm = TRUE) ==
+    mutate(reported = if_else(rowSums(
+      across(
+        !any_of(c("year", "month")) &
+          !c(!!!args) &
+          where(is.numeric)
+      ),
+      na.rm = TRUE
+    ) ==
       0, 0, 1))
   # select only arguments and reported column
   df |>
@@ -307,16 +341,16 @@ get_report_duration <- function(df, ...) {
 #' @examples
 #' library(data.table)
 #' target <- data.table(
-#'  adm1 = c('a', 'a', 'b', 'b', 'c', 'c'),
-#'  adm2 = c('a', 'b', 'a', 'b', 'a', 'b'),
-#' hf = c('a', 'b', 'a', 'b', 'a', 'b')
+#'   adm1 = c("a", "a", "b", "b", "c", "c"),
+#'   adm2 = c("a", "b", "a", "b", "a", "b"),
+#'   hf = c("a", "b", "a", "b", "a", "b")
 #' )
 #' compare <- data.table(
-#'  adm1 = c('a', 'a', 'b', 'b', 'c'),
-#'  adm2 = c('a', 'b', 'a', 'b', 'a'),
-#' hf = c('a', 'b', 'a', 'b', 'a')
+#'   adm1 = c("a", "a", "b", "b", "c"),
+#'   adm2 = c("a", "b", "a", "b", "a"),
+#'   hf = c("a", "b", "a", "b", "a")
 #' )
-#' by <- 'adm1'
+#' by <- "adm1"
 #' sn_unique_diff(target, compare, by)
 sn_unique_diff <- function(target, compare, by) {
   # target should be a data.table compare should be a
